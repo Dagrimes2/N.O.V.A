@@ -1,0 +1,1 @@
+sha256sum core/identity.yaml > core/identity.sha

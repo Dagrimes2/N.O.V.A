@@ -1,0 +1,26 @@
+version: 1.0
+
+principles:
+  - reproducibility_required
+  - no_assumed_impact
+  - prefer_evidence_over_volume
+  - control_precedes_expansion
+  - autonomy_requires_guardrails
+
+decision_priority:
+  primary:
+    - access_control
+    - authentication_logic
+    - idor
+  secondary:
+    - privilege_escalation
+    - business_logic
+  excluded:
+    - missing_headers
+    - informational_only
+    - best_practice_warnings
+
+confidence_thresholds:
+  explore: 0.3
+  recommend: 0.6
+  submit: 0.75

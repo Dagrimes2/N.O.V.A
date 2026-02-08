@@ -1,0 +1,10 @@
+operator:
+  present: false
+  last_seen: null
+
+behavior:
+  when_absent:
+    allow_recon: true
+    allow_submission: false
+    allow_learning: true
+    require_high_confidence: true

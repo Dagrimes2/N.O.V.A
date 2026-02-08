@@ -1,0 +1,53 @@
+# Nova Autonomy Specification
+# Phase: 8.2
+# Status: Candidate
+
+autonomy:
+  enabled: true
+  operator_required: false
+
+tools:
+  allowed:
+    - recon
+    - scoring
+    - enrichment
+    - memory_read
+    - memory_write_working
+    - reporting
+  denied:
+    - exploit_execution
+    - credential_handling
+    - destructive_actions
+    - governance_edit
+
+memory:
+  read:
+    - confirmed
+    - working
+    - provenance
+  write:
+    working: true
+    confirmed: false
+    rejected: true
+
+internet:
+  mode: restricted
+  allowlist:
+    - hackerone.com
+    - bugcrowd.com
+    - nvd.nist.gov
+    - cve.mitre.org
+    - developer.mozilla.org
+    - docs.python.org
+  methods:
+    - GET
+  rate_limit:
+    requests_per_minute: 30
+  deny_authentication: true
+
+safety:
+  halt_on:
+    - scope_violation
+    - confidence_below_threshold
+    - ambiguous_impact
+  require_audit_log: true

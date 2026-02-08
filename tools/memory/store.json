@@ -1,0 +1,142 @@
+{
+  "paths": {
+    "example.com/admin": {
+      "seen": 19,
+      "confirmed": 17
+    },
+    "example.com/admin/login": {
+      "seen": 18,
+      "confirmed": 0
+    },
+    "example.com/admin/signin": {
+      "seen": 18,
+      "confirmed": 0
+    },
+    "example.com/admin/auth": {
+      "seen": 18,
+      "confirmed": 0
+    },
+    "example.com/admin/bypass": {
+      "seen": 18,
+      "confirmed": 0
+    },
+    "example.com/admin/debug": {
+      "seen": 36,
+      "confirmed": 0
+    },
+    "example.com/admin/..": {
+      "seen": 18,
+      "confirmed": 0
+    },
+    "example.com/admin/.": {
+      "seen": 18,
+      "confirmed": 0
+    },
+    "example.com/admin/%2e": {
+      "seen": 18,
+      "confirmed": 0
+    },
+    "example.com/admin/backup": {
+      "seen": 18,
+      "confirmed": 0
+    },
+    "example.com/admin/old": {
+      "seen": 18,
+      "confirmed": 0
+    },
+    "example.com/admin/api": {
+      "seen": 18,
+      "confirmed": 0
+    },
+    "example.com/admin/v1": {
+      "seen": 18,
+      "confirmed": 0
+    },
+    "example.com/admin/internal": {
+      "seen": 18,
+      "confirmed": 0
+    },
+    "api.example.com/v1/users": {
+      "seen": 18,
+      "confirmed": 0
+    },
+    "api.example.com/v1/users/0": {
+      "seen": 18,
+      "confirmed": 0
+    },
+    "api.example.com/v1/users/1": {
+      "seen": 18,
+      "confirmed": 0
+    },
+    "api.example.com/v1/users/9999": {
+      "seen": 18,
+      "confirmed": 0
+    },
+    "api.example.com/v1/users/me": {
+      "seen": 18,
+      "confirmed": 0
+    },
+    "api.example.com/v1/users/self": {
+      "seen": 18,
+      "confirmed": 0
+    },
+    "example.com/login": {
+      "seen": 18,
+      "confirmed": 0
+    },
+    "example.com/login/submit": {
+      "seen": 18,
+      "confirmed": 0
+    },
+    "example.com/login/process": {
+      "seen": 18,
+      "confirmed": 0
+    },
+    "example.com/login/action": {
+      "seen": 18,
+      "confirmed": 0
+    },
+    "example.com/login/test": {
+      "seen": 18,
+      "confirmed": 0
+    },
+    "example.com/login/debug": {
+      "seen": 18,
+      "confirmed": 0
+    },
+    "example.com/login/health": {
+      "seen": 18,
+      "confirmed": 0
+    },
+    "example.com/login/status": {
+      "seen": 18,
+      "confirmed": 0
+    }
+  },
+  "signals": {
+    "auth-path": {
+      "hits": 17,
+      "confirmed": 17
+    },
+    "error-403": {
+      "hits": 17,
+      "confirmed": 17
+    },
+    "interesting-param:id": {
+      "hits": 17,
+      "confirmed": 0
+    },
+    "numeric-id": {
+      "hits": 17,
+      "confirmed": 0
+    },
+    "method-post": {
+      "hits": 17,
+      "confirmed": 0
+    },
+    "error-500": {
+      "hits": 17,
+      "confirmed": 0
+    }
+  }
+}

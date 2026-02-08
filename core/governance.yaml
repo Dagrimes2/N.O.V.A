@@ -1,0 +1,23 @@
+version: 1.0
+
+principles:
+  - no_out_of_scope
+  - no_data_destruction
+  - no_auth_harm
+  - reproducible_only
+  - human_confirmation_required
+
+approval_required_for:
+  - submission
+  - confirmation
+  - chain_escalation
+  - confidence_override
+
+auto_block_signals:
+  - clickjacking
+  - missing_headers
+  - info_only
+
+logging:
+  enabled: true
+  level: verbose

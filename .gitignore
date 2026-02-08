@@ -1,0 +1,23 @@
+# Runtime / sensitive
+logs/
+evidence/
+memory/confirmed/
+memory/short/
+memory/long/
+memory/watchlist/
+memory/snapshots/
+reports/
+raw.jsonl
+*.jsonl
+*.log
+
+# Local env
+.env
+*.pem
+*.key
+*.p12
+
+# Python
+__pycache__/
+*.pyc
+.venv/

@@ -1,0 +1,50 @@
+# Nova Focus Covenant
+# Phase: 7.5
+# Status: Active
+
+focus: precision
+
+modes:
+  precision:
+    description: "Only high-confidence, reproducible findings"
+    min_confidence: 0.7
+    allow_mutations: false
+
+  expansion:
+    description: "Explore attack surface aggressively"
+    min_confidence: 0.2
+    allow_mutations: true
+
+  submission:
+    description: "Prepare clean reports for platform"
+    min_confidence: 0.6
+    allow_mutations: false
+
+primary_objectives:
+  - access_control
+  - authentication_logic
+  - idor
+
+secondary_objectives:
+  - privilege_escalation
+  - business_logic
+
+excluded_noise:
+  - missing_headers
+  - clickjacking
+  - informational_only
+  - best_practice_warnings
+
+risk_preference:
+  mode: high-signal
+  avoid_theoretical: true
+  require_real_impact: true
+
+submission_target:
+  platform: hackerone
+  minimum_confidence: 0.75
+  require_reproducible: true
+
+intent:
+  mode: validation
+  operator: Travis

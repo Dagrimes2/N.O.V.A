@@ -1,0 +1,38 @@
+version: 1.0
+
+inputs:
+  - urls
+  - parameters
+  - headers
+  - response_codes
+  - response_sizes
+  - technologies
+
+priorities:
+  high:
+    - idor
+    - auth_bypass
+    - privilege_escalation
+    - token_leak
+    - logic_flaw
+  medium:
+    - xss
+    - sqli
+    - ssrf
+  low:
+    - open_redirect
+    - missing_headers
+
+signals:
+  rare_parameter: +3
+  auth_related_param: +4
+  numeric_id_param: +4
+  uuid_param: +3
+  inconsistent_status_codes: +2
+  large_response_delta: +2
+  undocumented_endpoint: +5
+
+outputs:
+  - ranked_findings
+  - suggested_tests
+  - confidence_score

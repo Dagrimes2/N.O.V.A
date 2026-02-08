@@ -1,0 +1,8 @@
+network:
+  enabled: false
+  mode: offline
+  allowed_domains: []
+  allow_auth_headers: false
+  allow_cookies: false
+  rate_limit_per_minute: 0
+  require_human_approval: true

@@ -1,0 +1,11 @@
+offline_core: true
+memory_persistent: true
+identity_locked: true
+network_disabled: true
+
+deployment_readiness:
+  local_llm: compatible
+  sandboxed_tools: required
+  human_approval: mandatory
+
+status: dormant_ready

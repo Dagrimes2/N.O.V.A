@@ -1,0 +1,22 @@
+platform: hackerone
+
+filters:
+  min_score: 12
+  min_confidence: 0.7
+
+boost_signals:
+  - auth-path
+  - numeric-id
+  - idor
+  - access-control
+  - privilege-escalation
+
+deprioritize_signals:
+  - clickjacking
+  - missing-headers
+  - rate-limit
+
+rules:
+  require_reproducible: true
+  require_clear_impact: true
+  avoid_theoretical: true
