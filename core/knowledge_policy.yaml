@@ -1,0 +1,23 @@
+knowledge_policy:
+  default_state: quarantine
+  require_provenance: true
+  allowed_sources:
+    - local_operator_notes
+    - program_scope_docs
+    - official_docs
+  forbidden_sources:
+    - anonymous_pastes
+    - unverified_social_posts
+
+  aging:
+    default_ttl_days: 45
+    high_risk_ttl_days: 14
+    evergreen_tags:
+      - protocol_spec
+      - standard_library
+      - core_architecture
+
+  promotion:
+    require_human_approval: true
+    require_snapshot_hash: true
+    require_reproducible_evidence: true
