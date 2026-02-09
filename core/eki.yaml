@@ -1,0 +1,10 @@
+eki:
+  enabled: false
+  mode: read_only
+  requires:
+    - meta_reason
+    - snapshot
+    - human_approval
+  forbidden:
+    - self_modification
+    - memory_overwrite

@@ -18,6 +18,7 @@ import json
 import sys
 from urllib.parse import urlparse, parse_qs
 from typing import Dict, Any
+r["source"] = r.get("source", "clawdbot")
 
 
 def normalize_record(record: Dict[str, Any]) -> Dict[str, Any]:

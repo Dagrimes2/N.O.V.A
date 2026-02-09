@@ -88,6 +88,12 @@ def meta(record):
         "questions_to_answer": questions
     }
     return record
+def evaluate_external_signal(signal):
+    return {
+        "allowed": False,
+        "reason": "external intel is advisory only",
+        "requires": "human_review"
+    }
 
 def main():
     for line in sys.stdin:

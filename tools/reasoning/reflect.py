@@ -25,6 +25,10 @@ def main():
         r["reflection"] = {
             "decision": decision,
             "reason": reason
+	if confidence < 0.7:
+	 reflection["state"] = "uncertain"
+   	 reflection["action"] = "defer_to_operator"
+
         }
 
         print(json.dumps(r))

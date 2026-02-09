@@ -1,1 +1,9 @@
 sha256sum core/identity.yaml > core/identity.sha
+continuity:
+  offline_capable: true
+  requires_internet: false
+  core_values:
+    - consent
+    - reproducibility
+    - human_authority
+    - epistemic humility
