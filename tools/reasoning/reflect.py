@@ -11,26 +11,31 @@ def main():
 
         decision = "hold"
         reason = "insufficient signal"
+        state = "stable"
+        action = "none"
 
         if dead_end.get("status") == "confirmed":
             decision = "suppress"
             reason = "confirmed dead end"
+            state = "resolved"
         elif confidence >= 0.75:
             decision = "act"
             reason = "high confidence path"
         elif confidence >= 0.5:
             decision = "observe"
             reason = "needs validation"
+            state = "uncertain"
+            action = "defer_to_operator"
+        else:
+            state = "uncertain"
+            action = "defer_to_operator"
 
         r["reflection"] = {
             "decision": decision,
-            "reason": reason
-	}
-	if confidence < 0.7:
-	 reflection["state"] = "uncertain"
-   	 reflection["action"] = "defer_to_operator"
-
-
+            "reason": reason,
+            "state": state,
+            "action": action
+        }
 
         print(json.dumps(r))
 
