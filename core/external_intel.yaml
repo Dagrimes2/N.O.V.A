@@ -1,20 +1,25 @@
 external_intel:
-  enabled: true
-
   sources:
     clawdbot:
-      url: https://openclaw.ai/
-      role: signal_only
-      trust_level: low
-      persistence: false
-      memory_write: false
-      action_authority: none
-
-  rules:
-    - external_intel_must_pass: meta_reason
-    - external_intel_cannot_trigger: act
-    - external_intel_requires: human_confirmation
-
-  violations:
-    on_breach: disable_source
-
+      enabled: true
+      role: observer
+      trust: unverified
+      rate_limit:
+        requests_per_minute: 10
+      allowed_fields:
+        - host
+        - path
+        - method
+        - params
+        - headers
+        - status
+      forbidden:
+        - confidence
+        - decision
+        - promotion
+        - memory_write
+        - eki_write
+      tagging:
+        source: clawdbot
+        confidence: 0.0
+        quarantine: true

@@ -1,0 +1,310 @@
+#!/usr/bin/env python3
+import sys
+import subprocess
+import json
+import socket
+from pathlib import Path
+import fnmatch
+
+BASE = Path.home() / "Nova"
+CORE = BASE / "core"
+REPORTS = BASE / "reports"
+STATE = BASE / "state"
+
+QUEUE = CORE / "queue.json"
+WHITELIST = CORE / "whitelist.json"
+ACTIVE_PROGRAM = STATE / "active_program.json"
+
+
+# -----------------------------
+# Utility
+# -----------------------------
+
+def ensure_structure():
+    CORE.mkdir(parents=True, exist_ok=True)
+    REPORTS.mkdir(parents=True, exist_ok=True)
+    STATE.mkdir(parents=True, exist_ok=True)
+
+    if not QUEUE.exists():
+        QUEUE.write_text("[]")
+
+    if not WHITELIST.exists():
+        WHITELIST.write_text("[]")
+
+
+def load_json(path):
+    if not path.exists():
+        return None
+    return json.loads(path.read_text())
+
+
+def save_json(path, data):
+    path.write_text(json.dumps(data, indent=2))
+
+
+def usage():
+    print("Usage:")
+    print("  nova -u <url> [--light|--deep]")
+    print("  nova profile <url>")
+    print("  nova list")
+    print("  nova whitelist <domain>")
+    print("  nova whitelist-list")
+    print("  nova program <name>")
+    sys.exit(1)
+
+
+# -----------------------------
+# Program Scope
+# -----------------------------
+
+def load_active_program():
+    if not ACTIVE_PROGRAM.exists():
+        return None
+    return json.loads(ACTIVE_PROGRAM.read_text())
+
+
+def in_scope(target):
+    program = load_active_program()
+    if not program:
+        return False
+
+    target = target.replace("https://", "").replace("http://", "").strip("/")
+
+    for allowed in program.get("in_scope", []):
+        if fnmatch.fnmatch(target, allowed):
+            return True
+
+    return False
+
+
+def set_program(name):
+    programs = list((BASE / "programs").rglob(f"{name}.json"))
+    if not programs:
+        print("Program not found.")
+        return
+
+    data = json.loads(programs[0].read_text())
+    save_json(ACTIVE_PROGRAM, data)
+    print(f"[✓] Active program set to: {data['name']}")
+
+
+# -----------------------------
+# Queue / Whitelist
+# -----------------------------
+
+def add_to_queue(entry):
+    data = load_json(QUEUE)
+    data.append(entry)
+    save_json(QUEUE, data)
+
+
+def list_queue():
+    data = load_json(QUEUE)
+    if not data:
+        print("Queue empty.")
+        return
+    for i, item in enumerate(data):
+        print(f"[{i}] {item}")
+
+
+def whitelist_add(domain):
+    data = load_json(WHITELIST)
+    if domain not in data:
+        data.append(domain)
+        save_json(WHITELIST, data)
+        print(f"[✓] {domain} added to whitelist")
+    else:
+        print("[i] Already whitelisted")
+
+
+def whitelist_list():
+    data = load_json(WHITELIST)
+    print("Whitelisted Domains:")
+    for d in data:
+        print(" -", d)
+
+
+# -----------------------------
+# Profiling
+# -----------------------------
+
+def profile_target(target):
+    print(f"[+] Profiling {target}")
+
+    profile = {}
+
+    # DNS
+    try:
+        profile["ip"] = socket.gethostbyname(target)
+    except:
+        profile["ip"] = "resolution_failed"
+
+    # Headers
+    headers = subprocess.run(
+        ["curl", "-I", f"http://{target}"],
+        capture_output=True,
+        text=True
+    )
+
+    profile["headers"] = headers.stdout
+
+    report_file = REPORTS / f"{target.replace('.', '_')}_profile.json"
+    report_file.write_text(json.dumps(profile, indent=2))
+
+    print(f"[✓] Profile saved to {report_file}")
+
+
+# -----------------------------
+# Recon Engine
+# -----------------------------
+
+def safe_probe(target, mode="light"):
+    if not in_scope(target):
+        print(f"[!] Target {target} is OUT OF SCOPE.")
+        sys.exit(1)
+
+    print(f"[+] Safe probe ({mode}): {target}")
+
+    clean_target = target.replace("https://", "").replace("http://", "").strip("/")
+
+    report = {
+        "target": clean_target,
+        "status": None,
+        "server": None,
+        "waf_detected": False,
+        "allowed_methods": [],
+        "auth_surface": [],
+        "api_surface": [],
+        "security_headers": [],
+        "risk_score": 0
+    }
+
+    # Base status check
+    status = subprocess.run(
+        ["curl", "-s", "-o", "/dev/null", "-w", "%{http_code}", f"http://{clean_target}"],
+        capture_output=True,
+        text=True
+    ).stdout.strip()
+
+    report["status"] = status
+
+    # Header grab
+    headers = subprocess.run(
+        ["curl", "-s", "-I", f"http://{clean_target}"],
+        capture_output=True,
+        text=True
+    ).stdout
+
+    # Server detection
+    for line in headers.splitlines():
+        if line.lower().startswith("server:"):
+            report["server"] = line.split(":", 1)[1].strip()
+
+        if "cloudflare" in line.lower():
+            report["waf_detected"] = True
+            report["risk_score"] += 5
+
+        if line.lower().startswith("allow:"):
+            methods = line.split(":", 1)[1].strip()
+            report["allowed_methods"] = methods.split(",")
+
+        # Basic security header detection
+        if any(h in line.lower() for h in [
+            "content-security-policy",
+            "strict-transport-security",
+            "x-frame-options",
+            "x-content-type-options"
+        ]):
+            report["security_headers"].append(line.strip())
+
+    # Deep checks
+    if mode == "deep":
+        common_paths = ["admin", "login", "api", "dashboard"]
+        for path in common_paths:
+            resp = subprocess.run(
+                ["curl", "-s", "-o", "/dev/null", "-w", "%{http_code}", f"http://{clean_target}/{path}"],
+                capture_output=True,
+                text=True
+            ).stdout.strip()
+
+            if resp not in ["404", "000"]:
+                if path in ["admin", "login", "dashboard"]:
+                    report["auth_surface"].append(f"/{path}")
+                    report["risk_score"] += 10
+                if path == "api":
+                    report["api_surface"].append("/api")
+                    report["risk_score"] += 5
+
+    # Risk adjustments
+    if status.startswith("5"):
+        report["risk_score"] += 15
+
+    if not report["security_headers"]:
+        report["risk_score"] += 5
+
+    # Save structured recon
+    report_file = REPORTS / f"{clean_target.replace('.', '_')}_recon.json"
+    report_file.write_text(json.dumps(report, indent=2))
+
+    # Queue summary
+    queue_entry = {
+        "target": clean_target,
+        "status": status,
+        "mode": mode,
+        "risk_score": report["risk_score"]
+    }
+
+    add_to_queue(queue_entry)
+
+    print(f"[✓] Recon complete. Risk score: {report['risk_score']}")
+    print(f"[✓] Report saved to {report_file}")
+
+# -----------------------------
+# Main
+# -----------------------------
+
+def main():
+    ensure_structure()
+
+    if len(sys.argv) < 2:
+        usage()
+
+    cmd = sys.argv[1]
+
+    if cmd == "-u":
+        if len(sys.argv) < 3:
+            usage()
+
+        target = sys.argv[2]
+        mode = "light"
+
+        if len(sys.argv) >= 4:
+            if sys.argv[3] in ["--light", "--deep"]:
+                mode = sys.argv[3].replace("--", "")
+            else:
+                print("Invalid mode. Use --light or --deep")
+                sys.exit(1)
+
+        safe_probe(target, mode)
+
+    elif cmd == "profile" and len(sys.argv) == 3:
+        profile_target(sys.argv[2])
+
+    elif cmd == "list":
+        list_queue()
+
+    elif cmd == "whitelist" and len(sys.argv) == 3:
+        whitelist_add(sys.argv[2])
+
+    elif cmd == "whitelist-list":
+        whitelist_list()
+
+    elif cmd == "program" and len(sys.argv) == 3:
+        set_program(sys.argv[2])
+
+    else:
+        usage()
+
+
+if __name__ == "__main__":
+    main()

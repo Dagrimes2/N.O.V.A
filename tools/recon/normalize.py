@@ -12,16 +12,20 @@ Output fields:
 - headers
 - status
 - length
+- source
 """
 
 import json
 import sys
 from urllib.parse import urlparse, parse_qs
 from typing import Dict, Any
-r["source"] = r.get("source", "clawdbot")
 
+DEFAULT_SOURCE = "unknown"
 
 def normalize_record(record: Dict[str, Any]) -> Dict[str, Any]:
+    # Source tagging (external tools should set this; otherwise default)
+    source = record.get("source", DEFAULT_SOURCE)
+
     # URL parsing
     url = record.get("url") or record.get("uri")
     host = record.get("host")
@@ -32,36 +36,17 @@ def normalize_record(record: Dict[str, Any]) -> Dict[str, Any]:
         parsed = urlparse(url)
         host = host or parsed.hostname
         path = path or parsed.path or "/"
-        params = {
-            k: v[0] if len(v) == 1 else v
-            for k, v in parse_qs(parsed.query).items()
-        }
+        params = {k: (v[0] if len(v) == 1 else v) for k, v in parse_qs(parsed.query).items()}
 
-    # Method
-    method = (
-        record.get("method")
-        or record.get("verb")
-        or "GET"
-    ).upper()
+    method = (record.get("method") or record.get("verb") or "GET").upper()
 
-    # Headers
     headers = {}
     raw_headers = record.get("headers") or {}
     if isinstance(raw_headers, dict):
         headers = {k.lower(): str(v) for k, v in raw_headers.items()}
 
-    # Status & length (safe, optional)
-    status = (
-        record.get("status")
-        or record.get("status_code")
-        or record.get("code")
-    )
-
-    length = (
-        record.get("length")
-        or record.get("size")
-        or record.get("content_length")
-    )
+    status = record.get("status") or record.get("status_code") or record.get("code")
+    length = record.get("length") or record.get("size") or record.get("content_length")
 
     return {
         "host": host,
@@ -71,8 +56,8 @@ def normalize_record(record: Dict[str, Any]) -> Dict[str, Any]:
         "headers": headers,
         "status": status,
         "length": length,
+        "source": source,
     }
-
 
 def main() -> int:
     for line in sys.stdin:
@@ -83,12 +68,8 @@ def main() -> int:
             record = json.loads(line)
         except json.JSONDecodeError:
             continue
-
-        normalized = normalize_record(record)
-        print(json.dumps(normalized))
-
+        print(json.dumps(normalize_record(record)))
     return 0
-
 
 if __name__ == "__main__":
     raise SystemExit(main())

@@ -1,0 +1,59 @@
+{
+  "timestamp": 1771032286.161622,
+  "host": "api.example.com",
+  "path": "/v1/users",
+  "confidence": 0.17,
+  "decision": "hold",
+  "reason": "insufficient signal",
+  "source": "unknown",
+  "fingerprint": "574641375d310ea3c58b62310b8c30dfec5cf90b9e22848b2a4a56dac6ff5100",
+  "raw": {
+    "host": "api.example.com",
+    "path": "/v1/users",
+    "method": "GET",
+    "params": {},
+    "headers": {},
+    "status": 200,
+    "length": null,
+    "source": "unknown",
+    "score": 0,
+    "signals": [],
+    "confidence": 0.2,
+    "note": "The endpoint `/v1/users` on `api.example.com` triggered the following signals: none. The server responded with HTTP 200. This behavior suggests a potential access control, logic flaw, or unexplored surface worthy of manual testing.",
+    "markdown": "### \ud83d\udd0e api.example.com/v1/users\n\n**Method:** GET\n**Status:** 200\n**Priority:** LOW\n**Confidence:** 0.20\n\n**Signals:** none\n\n**Description:**\nThe endpoint `/v1/users` on `api.example.com` triggered the following signals: none. The server responded with HTTP 200. This behavior suggests a potential access control, logic flaw, or unexplored surface worthy of manual testing.\n\n**Proof of Concept:**\n_No automated PoC generated yet._\n",
+    "hypotheses": [
+      {
+        "signal": "none",
+        "title": "Unclassified surface \u2014 requires manual classification",
+        "category": "surface_mapping",
+        "what_to_validate": [
+          "Confirm endpoint existence and status",
+          "Identify whether auth/session changes response",
+          "Identify whether response content hints at functionality"
+        ],
+        "impact_examples": [
+          "N/A until classified"
+        ]
+      }
+    ],
+    "triage": {
+      "target": "api.example.com/v1/users",
+      "status": 200,
+      "priority": "LOW",
+      "confidence_base": 0.2,
+      "confidence_adjusted": 0.17,
+      "signals": [
+        "none"
+      ],
+      "suggestion": "map_surface"
+    },
+    "reflection": {
+      "decision": "hold",
+      "reason": "insufficient signal",
+      "state": "uncertain",
+      "action": "defer_to_operator"
+    }
+  },
+  "accepted": false,
+  "status": "awaiting_human_review"
+}
