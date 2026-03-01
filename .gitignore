@@ -21,3 +21,7 @@ raw.jsonl
 __pycache__/
 *.pyc
 .venv/
+reports/
+core/queue.json
+core/whitelist.json
+state/active_program.json
