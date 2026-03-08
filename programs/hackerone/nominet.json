@@ -1,0 +1,12 @@
+{
+  "name": "Nominet",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.nic.uk",
+    "*.nominet.org.uk",
+    "*.nominet.uk"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/nominet",
+  "synced_at": "2026-03-08T00:14:08.731477"
+}

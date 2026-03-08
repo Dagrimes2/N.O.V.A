@@ -1,0 +1,13 @@
+{
+  "name": "Kubernetes",
+  "platform": "hackerone",
+  "in_scope": [
+    "k8s.io",
+    "kubernetes-csi.github.io",
+    "kubernetes.io",
+    "prow.k8s.io"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/kubernetes",
+  "synced_at": "2026-03-08T00:14:08.752848"
+}

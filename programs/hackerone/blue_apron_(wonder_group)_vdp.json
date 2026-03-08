@@ -1,0 +1,29 @@
+{
+  "name": "Blue Apron (Wonder Group) VDP",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.grubhub.com",
+    "*.jo30.com",
+    "*.seamless.com",
+    "*.tapingo.com",
+    "*.tastemade.com",
+    "auth.grubhub.com",
+    "www.blueapron.com/api",
+    "www.blueapron.com/graphql",
+    "*.wonder.com",
+    "blog.blueapron.com",
+    "order.wonder.com",
+    "restaurant.grubhub.com",
+    "sensor.grubhub.com",
+    "tastemade.com",
+    "www.blueapron.com",
+    "www.grubhub.com",
+    "www.jo30.com",
+    "www.menupages.com",
+    "www.seamless.com",
+    "www.tapingo.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/wonder-vdp",
+  "synced_at": "2026-03-08T00:14:08.716926"
+}

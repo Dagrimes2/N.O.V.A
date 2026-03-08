@@ -1,0 +1,19 @@
+{
+  "name": "Ping Identity",
+  "platform": "hackerone",
+  "in_scope": [
+    "api.ort-one-pingone.com",
+    "apps.ort-one-pingone.com",
+    "auth.ort-one-pingone.com",
+    "console.ort-one-pingone.com",
+    "console.ort-one-pingone.com/?env=361b34ef-2725-4fd9-af1b-a2b189df3d05",
+    "console.ort-one-pingone.com/?env=7f327541-54e0-4ba4-8335-65eac2a25b5e",
+    "openam-bug-bounty-stag.forgeblocks.com/*",
+    "ort-admin.pingone.com/*",
+    "ort-authenticator.pingone.com/*",
+    "ort-desktop.pingone.com/*"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/pingidentity",
+  "synced_at": "2026-03-08T00:14:08.758075"
+}

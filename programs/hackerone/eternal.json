@@ -1,0 +1,28 @@
+{
+  "name": "Eternal",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.district.in",
+    "*.edition.in",
+    "*.eternal.com",
+    "*.hyperpure.com",
+    "*.insider.in",
+    "*.runnr.in",
+    "*.ticketnew.com",
+    "*.tktnew.com",
+    "*.zdev.net",
+    "*.zomans.com",
+    "*.zomato.com",
+    "api.grofers.com",
+    "api2.grofers.com",
+    "bistro-api.blinkit.com",
+    "blinkit.com",
+    "*.grofer.io",
+    "*.grofers.com",
+    "mcp-server.zomato.com/mcp",
+    "winecellar.zomato.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/eternal",
+  "synced_at": "2026-03-08T00:14:08.762606"
+}

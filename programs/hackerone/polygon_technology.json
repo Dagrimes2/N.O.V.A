@@ -1,0 +1,13 @@
+{
+  "name": "Polygon Technology",
+  "platform": "hackerone",
+  "in_scope": [
+    "faucet.polygon.technology",
+    "portal.polygon.technology",
+    "staking-api.polygon.technology",
+    "staking.polygon.technology"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/polygon-technology",
+  "synced_at": "2026-03-08T00:14:08.748769"
+}

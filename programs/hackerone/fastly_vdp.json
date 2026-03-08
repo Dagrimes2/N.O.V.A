@@ -1,0 +1,15 @@
+{
+  "name": "Fastly VDP",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.fanout.io",
+    "*.signalsciences.com",
+    "api.fastly.com",
+    "docs.fastly.com",
+    "*.fastly.com",
+    "manage.fastly.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/fastly-vdp",
+  "synced_at": "2026-03-08T00:14:08.730436"
+}

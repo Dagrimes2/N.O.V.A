@@ -1,0 +1,18 @@
+{
+  "name": "Capital One",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.bluetarp.com",
+    "*.capitalone.ca",
+    "*.capitalone.co.uk",
+    "*.capitalone.com",
+    "*.capitaloneshopping.com",
+    "*.luma.co.uk",
+    "*.teamstercardnow.com",
+    "*.theunioncard.com",
+    "*.wikibuy.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/capital-one",
+  "synced_at": "2026-03-08T00:14:08.754299"
+}

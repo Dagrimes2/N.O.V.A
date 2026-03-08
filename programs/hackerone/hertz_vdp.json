@@ -1,0 +1,11 @@
+{
+  "name": "Hertz VDP",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.hertz.com",
+    "*hertz.io"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/hertz",
+  "synced_at": "2026-03-08T00:14:08.702286"
+}

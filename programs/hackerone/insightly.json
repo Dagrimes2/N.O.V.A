@@ -1,0 +1,18 @@
+{
+  "name": "Insightly",
+  "platform": "hackerone",
+  "in_scope": [
+    "accounts.insightly.com",
+    "crm.na1.insightly.com",
+    "api.insightly.com/v3.1",
+    "api.na1.insightly.com/v3.1",
+    "login.insightly.com",
+    "marketing.na1.insightly.com",
+    "mobileapi.insightly.com",
+    "mobileapi.na1.insightly.com",
+    "outlook.insightly.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/insightly",
+  "synced_at": "2026-03-08T00:14:08.749065"
+}

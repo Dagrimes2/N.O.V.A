@@ -1,0 +1,13 @@
+{
+  "name": "Callsign",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.s02.callsign.com",
+    "app.s02.callsign.com",
+    "b2b.s02.callsign.com",
+    "southfields-v2.s02.t00-csglobal.a2develop.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/callsign",
+  "synced_at": "2026-03-08T00:14:08.726469"
+}

@@ -1,0 +1,20 @@
+{
+  "name": "Tools for Humanity",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.consumer.worldcoin.org",
+    "*.toolsforhumanity.com",
+    "*.worldcoin-distributors.com",
+    "*.worldcoin.dev",
+    "*.worldcoin.org",
+    "developer.worldcoin.org",
+    "getworldcoin.com",
+    "id.worldcoin.org",
+    "toolsforhumanity.com",
+    "world.org",
+    "worldcoin.org"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/toolsforhumanity",
+  "synced_at": "2026-03-08T00:14:08.717896"
+}

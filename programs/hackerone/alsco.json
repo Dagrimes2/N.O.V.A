@@ -1,0 +1,11 @@
+{
+  "name": "ALSCO",
+  "platform": "hackerone",
+  "in_scope": [
+    "sandbox-royal.securegateway.com",
+    "sandbox.securegateway.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/alsco",
+  "synced_at": "2026-03-08T00:14:08.722329"
+}

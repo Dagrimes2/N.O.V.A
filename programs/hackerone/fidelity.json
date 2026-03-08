@@ -1,0 +1,17 @@
+{
+  "name": "Fidelity",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.advisorchannel.com",
+    "*.fidelity.com",
+    "*.mystreetscape.com",
+    "*.streetscape.com",
+    "*.wealthscape.com",
+    "web.fidsafe.com",
+    "www.fidelityprivateshares.com",
+    "www.fidsafe.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/fidelity",
+  "synced_at": "2026-03-08T00:14:08.727087"
+}

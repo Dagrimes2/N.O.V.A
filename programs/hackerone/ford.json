@@ -1,0 +1,15 @@
+{
+  "name": "Ford",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.ford.com",
+    "*.lincoln.com",
+    "*.motorcraft.com",
+    "*.omnicraftautoparts.com",
+    "*.quicklane.com",
+    "ford.ca"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/ford",
+  "synced_at": "2026-03-08T00:14:08.754784"
+}

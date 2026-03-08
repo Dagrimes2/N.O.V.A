@@ -1,0 +1,17 @@
+{
+  "name": "Rockstar Games",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.rockstargames.com",
+    "circolocorecords.com",
+    "prod.ros.rockstargames.com",
+    "rockstarnorth.com",
+    "socialclub.rockstargames.com",
+    "store.rockstargames.com",
+    "support.rockstargames.com",
+    "www.rockstargames.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/rockstargames",
+  "synced_at": "2026-03-08T00:14:08.762320"
+}

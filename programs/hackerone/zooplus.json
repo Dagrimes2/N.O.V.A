@@ -1,0 +1,13 @@
+{
+  "name": "Zooplus",
+  "platform": "hackerone",
+  "in_scope": [
+    "www.zooplus.co.uk",
+    "www.zooplus.com",
+    "www.zooplus.de",
+    "zooplus.net"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/zooplus",
+  "synced_at": "2026-03-08T00:14:08.730147"
+}

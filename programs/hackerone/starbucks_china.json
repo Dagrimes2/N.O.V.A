@@ -1,0 +1,10 @@
+{
+  "name": "Starbucks China",
+  "platform": "hackerone",
+  "in_scope": [
+    "www.starbucks.com.cn"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/starbucks_china",
+  "synced_at": "2026-03-08T00:14:08.705829"
+}

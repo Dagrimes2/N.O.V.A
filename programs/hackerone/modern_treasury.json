@@ -1,0 +1,11 @@
+{
+  "name": "Modern Treasury",
+  "platform": "hackerone",
+  "in_scope": [
+    "app.moderntreasury.com",
+    "cdn.moderntreasury.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/modern_treasury",
+  "synced_at": "2026-03-08T00:14:08.722832"
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Faraday, Inc.",
+  "platform": "hackerone",
+  "in_scope": [
+    "api.faraday.ai",
+    "app.faraday.ai",
+    "vault2.faraday.ai"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/faraday_inc",
+  "synced_at": "2026-03-08T00:14:08.750822"
+}

@@ -1,0 +1,26 @@
+{
+  "name": "Nutanix",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.nutanix.com",
+    "beam.nutanix.com",
+    "bootcamp.nutanix.com",
+    "cpq.nutanix.com",
+    "gp.nutanix.com",
+    "idp.nutanix.com",
+    "install.nutanix.com",
+    "iot.nutanix.com",
+    "jira.nutanix.com",
+    "my.nutanix.com",
+    "nutanix.com",
+    "productsizer.nutanix.com",
+    "stage-billing.nutanix.com",
+    "support.nutanix.com",
+    "testdrive.nutanix.com",
+    "ticket.nutanix.com",
+    "www.nutanix.dev"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/nutanix",
+  "synced_at": "2026-03-08T00:14:08.755940"
+}

@@ -1,0 +1,11 @@
+{
+  "name": "PUBG",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.pubg.com",
+    "*.pubgesports.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/pubg",
+  "synced_at": "2026-03-08T00:14:08.751429"
+}

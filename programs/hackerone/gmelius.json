@@ -1,0 +1,12 @@
+{
+  "name": "Gmelius",
+  "platform": "hackerone",
+  "in_scope": [
+    "api.gmelius.com",
+    "app.gmelius.com",
+    "gmelius.io"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/gmelius",
+  "synced_at": "2026-03-08T00:14:08.752028"
+}

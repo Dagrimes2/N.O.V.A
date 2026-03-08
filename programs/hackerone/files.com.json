@@ -1,0 +1,12 @@
+{
+  "name": "Files.com",
+  "platform": "hackerone",
+  "in_scope": [
+    "app.files.com",
+    "www.files.com",
+    "your-assigned-subdomain.files.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/files",
+  "synced_at": "2026-03-08T00:14:08.761719"
+}

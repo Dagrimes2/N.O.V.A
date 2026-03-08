@@ -1,0 +1,26 @@
+{
+  "name": "USPS - United States Postal Service",
+  "platform": "hackerone",
+  "in_scope": [
+    "gateway.usps.com",
+    "about.usps.com/what/government-services/election-mail",
+    "holdmail.usps.com/holdmail",
+    "redelivery.usps.com/redelivery",
+    "www.usps.com/postalone",
+    "id.usps.com",
+    "internationalclaims.usps.com",
+    "iv.usps.com",
+    "moversguide.usps.com",
+    "ncoa.usps.gov",
+    "pi.usps.com",
+    "reg.usps.com",
+    "retail-pi.usps.com",
+    "store.usps.com",
+    "www.liteblue.usps.gov",
+    "www.usps.com",
+    "www.usps.gov"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/usps",
+  "synced_at": "2026-03-08T00:14:08.750063"
+}

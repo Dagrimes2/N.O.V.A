@@ -1,0 +1,15 @@
+{
+  "name": "Judge.me ",
+  "platform": "hackerone",
+  "in_scope": [
+    "bigcommerce-adapter.judge.me",
+    "cache.judge.me",
+    "judge.me/reviews",
+    "judge.me",
+    "shop.judge.me",
+    "woocommerce-adapter.judge.me"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/judgeme",
+  "synced_at": "2026-03-08T00:14:08.742203"
+}

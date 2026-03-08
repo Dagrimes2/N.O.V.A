@@ -1,0 +1,11 @@
+{
+  "name": "Python Cryptographic Authority",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.cryptography.io",
+    "*.pyopenssl.org"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/pyca",
+  "synced_at": "2026-03-08T00:14:08.755085"
+}

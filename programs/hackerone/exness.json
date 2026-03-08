@@ -1,0 +1,19 @@
+{
+  "name": "EXNESS",
+  "platform": "hackerone",
+  "in_scope": [
+    "api.excalls.mobi",
+    "exness.com",
+    "exnessaffiliates.com",
+    "my.exness.com/pa/pim/manager",
+    "my.exness.com/pa/socialtrading",
+    "my.exness.com/webtrading",
+    "my.exness.com",
+    "pay.ibex.exchange",
+    "pwapi.ex2b.com",
+    "social-trading.exness.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/exness",
+  "synced_at": "2026-03-08T00:14:08.761814"
+}

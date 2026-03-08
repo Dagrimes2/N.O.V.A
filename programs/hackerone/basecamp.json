@@ -1,0 +1,14 @@
+{
+  "name": "Basecamp",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.hey.com",
+    "3.basecamp.com",
+    "fizzy.do",
+    "launchpad.37signals.com",
+    "world.hey.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/basecamp",
+  "synced_at": "2026-03-08T00:14:08.763556"
+}

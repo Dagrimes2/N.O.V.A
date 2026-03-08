@@ -1,0 +1,10 @@
+{
+  "name": "WisdomTree, Inc.",
+  "platform": "hackerone",
+  "in_scope": [
+    "api.wisdomtreeprimeapp.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/wisdomtree",
+  "synced_at": "2026-03-08T00:14:08.719244"
+}

@@ -1,0 +1,10 @@
+{
+  "name": "N45HT",
+  "platform": "hackerone",
+  "in_scope": [
+    "n45ht.or.id"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/n45ht",
+  "synced_at": "2026-03-08T00:14:08.749753"
+}

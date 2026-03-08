@@ -1,0 +1,25 @@
+{
+  "name": "Crowdstrike",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.adaptive-shield.com",
+    "*.bionic.ai",
+    "*.crowdstrike.com",
+    "*.flowsecurity.app",
+    "*.humio.com",
+    "*.preempt.com",
+    "*.preemptsecurity.com",
+    "*.reposify.com",
+    "*.securecircle.com",
+    "falcon-sandbox.com",
+    "hybrid-analysis.com",
+    "onum-labs.com",
+    "onum.com",
+    "pangea.cloud",
+    "www.crowdstrike.com",
+    "www.crowdstrike.org"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/crowdstrike",
+  "synced_at": "2026-03-08T00:14:08.758496"
+}

@@ -1,0 +1,19 @@
+{
+  "name": "23andMe Bug Bounty",
+  "platform": "hackerone",
+  "in_scope": [
+    "api.23andme.com",
+    "auth.23andme.com",
+    "blog.23andme.com",
+    "education.23andme.com",
+    "mediacenter.23andme.com",
+    "medical.23andme.com",
+    "research.23andme.com",
+    "store.23andme.com",
+    "www.23andme.com",
+    "you.23andme.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/23andme_bbp",
+  "synced_at": "2026-03-08T00:14:08.714946"
+}

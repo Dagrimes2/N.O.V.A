@@ -1,0 +1,30 @@
+{
+  "name": "Adobe",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.acrobat.adobe.com",
+    "account.adobe.com",
+    "account.magento.com",
+    "adobeid-na1.services.adobe.com",
+    "auth.services.adobe.com",
+    "commercemarketplace.adobe.com",
+    "contributor.stock.adobe.com",
+    "firefly.adobe.com",
+    "fonts.adobe.com",
+    "federatedid-na1.services.adobe.com",
+    "ims-na1.adobelogin.com",
+    "contentcredentials.org",
+    "learningmanagerstage4.adobe.com",
+    "magento.com",
+    "net.s2stagehance.com",
+    "new.express.adobe.com",
+    "photos.adobe.io",
+    "photoshop.adobe.com",
+    "portfolio.ccpsx.com",
+    "repo.magento.com",
+    "stock.adobe.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/adobe",
+  "synced_at": "2026-03-08T00:14:08.764207"
+}

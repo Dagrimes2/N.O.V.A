@@ -1,0 +1,14 @@
+{
+  "name": "Brightspeed",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.brightspeed.com",
+    "brightspeed.com",
+    "brightspeed.service-now.com",
+    "brightspeedtsm.service-now.com",
+    "gobrightspeed.net"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/brightspeed",
+  "synced_at": "2026-03-08T00:14:08.717648"
+}

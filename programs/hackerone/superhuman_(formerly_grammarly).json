@@ -1,0 +1,23 @@
+{
+  "name": "Superhuman (formerly Grammarly)",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.coda.io",
+    "*.grammarly.com",
+    "*.grammarly.io",
+    "*.grammarlyaws.com",
+    "*.superhuman.com",
+    "app.grammarly.com",
+    "coda.grammarly.com",
+    "coda.io",
+    "codacontent.io",
+    "codahosted.io",
+    "gateway.superhuman.com",
+    "id.superhuman.com",
+    "settings.superhuman.com",
+    "superhuman.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/superhuman",
+  "synced_at": "2026-03-08T00:14:08.759471"
+}

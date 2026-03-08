@@ -1,0 +1,11 @@
+{
+  "name": "Render",
+  "platform": "hackerone",
+  "in_scope": [
+    "dashboard.render.com",
+    "render.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/render",
+  "synced_at": "2026-03-08T00:14:08.726120"
+}

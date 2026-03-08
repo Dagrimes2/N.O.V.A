@@ -1,0 +1,31 @@
+{
+  "name": "Remitly",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.dev.remitly.com",
+    "*.int.remitly.com",
+    "ablink.info.remitly.com",
+    "access-sandbox.remitly.com",
+    "access.remitly.com",
+    "api.remitly.io",
+    "app.rewire.to",
+    "app3.rewire.to",
+    "auth.remitly.com",
+    "blog.remitly.com",
+    "cardpayments.remitly.io",
+    "cards.remitly.io",
+    "careers.remitly.com",
+    "ir.remitly.com",
+    "media.remitly.io",
+    "metrics.int.remitly.com",
+    "news.remitly.com",
+    "partner-webhook.remitly.io",
+    "rates.rewire.com",
+    "remitly.com",
+    "rewire.com",
+    "site.rewire.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/remitly",
+  "synced_at": "2026-03-08T00:14:08.755723"
+}

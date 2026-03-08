@@ -1,0 +1,16 @@
+{
+  "name": "Acronis",
+  "platform": "hackerone",
+  "in_scope": [
+    "*-api-*.acronis.com",
+    "*.5nine.com",
+    "*.acronis.com",
+    "*.acronis.work",
+    "*.devicelock.com",
+    "account.acronis.com",
+    "beta-cloud.acronis.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/acronis",
+  "synced_at": "2026-03-08T00:14:08.756883"
+}

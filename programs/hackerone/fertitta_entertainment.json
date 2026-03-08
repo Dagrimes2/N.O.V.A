@@ -1,0 +1,31 @@
+{
+  "name": "Fertitta Entertainment",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.rocketball.com",
+    "aqbeerfest.com",
+    "aqwine.com",
+    "boardwalkfantasea.com",
+    "brennersfest.com",
+    "chefsdinners.com",
+    "dungeonofdoomkemah.com",
+    "fertittaentertainmentinc.com",
+    "galvestonholidayinn.com",
+    "goldennugget.com",
+    "hunttinginn.com",
+    "kemahbeerfest.com",
+    "lilliesasiancuisine.com",
+    "muer.com",
+    "pleasurepier.com",
+    "r-u-i.com",
+    "sanluisresort.com",
+    "shoppostoak.com",
+    "thepostoak.com",
+    "thepostoakhotel.com",
+    "tilmanfertitta.com",
+    "wildwoodcasino.net"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/fertitta_entertainment",
+  "synced_at": "2026-03-08T00:14:08.718641"
+}

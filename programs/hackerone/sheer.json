@@ -1,0 +1,11 @@
+{
+  "name": "Sheer",
+  "platform": "hackerone",
+  "in_scope": [
+    "my.sheer.com",
+    "www.sheer.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/sheer_bbp",
+  "synced_at": "2026-03-08T00:14:08.720036"
+}

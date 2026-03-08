@@ -1,0 +1,10 @@
+{
+  "name": "Hyland Software",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.experience.hyland.com,*.app.hyland.eu"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/hyland_software",
+  "synced_at": "2026-03-08T00:14:08.702033"
+}

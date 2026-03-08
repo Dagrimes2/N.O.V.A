@@ -1,0 +1,25 @@
+{
+  "name": "OPPO",
+  "platform": "hackerone",
+  "in_scope": [
+    "cloud.oppo.com",
+    "drp.myoppo.com",
+    "e.oppo.com",
+    "gcsm.oppoit.com",
+    "safe.heytap.com",
+    "u.oppomobile.com",
+    "www.oppo.com/id/store",
+    "www.oppo.com/in/store",
+    "www.oppo.com/my/store",
+    "www.oppo.com/th",
+    "www.oppo.com/th/store",
+    "www.opposhop.cn",
+    "www.opposhop.cn/m",
+    "id.heytap.com",
+    "id.oppo.com",
+    "opposhop.cn"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/oppo_bbp",
+  "synced_at": "2026-03-08T00:14:08.704375"
+}

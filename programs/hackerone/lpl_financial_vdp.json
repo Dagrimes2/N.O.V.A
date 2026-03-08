@@ -1,0 +1,11 @@
+{
+  "name": "LPL Financial VDP",
+  "platform": "hackerone",
+  "in_scope": [
+    "advisoryworld.com",
+    "lpl.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/lpl_financial-vdp",
+  "synced_at": "2026-03-08T00:14:08.709321"
+}

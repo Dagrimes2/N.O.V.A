@@ -1,0 +1,10 @@
+{
+  "name": "UserTesting",
+  "platform": "hackerone",
+  "in_scope": [
+    "www.usertesting.com/*"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/usertesting",
+  "synced_at": "2026-03-08T00:14:08.759566"
+}

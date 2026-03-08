@@ -1,0 +1,33 @@
+{
+  "name": "Nextcloud",
+  "platform": "hackerone",
+  "in_scope": [
+    "apps.nextcloud.com",
+    "auth.nextcloud.com",
+    "crm.nextcloud.com",
+    "customerupdates.nextcloud.com",
+    "docs.nextcloud.com",
+    "download.nextcloud.com",
+    "help.nextcloud.com",
+    "knowledge.nextcloud.com",
+    "lists.nextcloud.com",
+    "logs.nextcloud.com",
+    "lookup.nextcloud.com",
+    "newsletter.nextcloud.com",
+    "nextcloud.com",
+    "portal.nextcloud.com",
+    "projects.nextcloud.com",
+    "push-notifications.nextcloud.com",
+    "pushfeed.nextcloud.com",
+    "scan.nextcloud.com",
+    "static.apps.nextcloud.com",
+    "stats.nextcloud.com",
+    "support.nextcloud.com",
+    "surveyserver.nextcloud.com",
+    "updates.nextcloud.com",
+    "usercontent.apps.nextcloud.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/nextcloud",
+  "synced_at": "2026-03-08T00:14:08.762128"
+}

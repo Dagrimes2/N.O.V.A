@@ -1,0 +1,12 @@
+{
+  "name": "SEGA",
+  "platform": "hackerone",
+  "in_scope": [
+    "community.twopointcounty.com",
+    "games2gether.com",
+    "redeem.footballmanager.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/sega",
+  "synced_at": "2026-03-08T00:14:08.730242"
+}

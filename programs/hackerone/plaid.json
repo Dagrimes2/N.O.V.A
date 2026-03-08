@@ -1,0 +1,16 @@
+{
+  "name": "Plaid",
+  "platform": "hackerone",
+  "in_scope": [
+    "cdn.plaid.com",
+    "dashboard.plaid.com",
+    "demo.plaid.com",
+    "my.plaid.com",
+    "plaid.com",
+    "production.plaid.com",
+    "secure.plaid.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/plaid",
+  "synced_at": "2026-03-08T00:14:08.761154"
+}

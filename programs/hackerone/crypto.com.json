@@ -1,0 +1,24 @@
+{
+  "name": "Crypto.com",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.crypto.com",
+    "*.mona.co",
+    "app.mona.co",
+    "developer-api.crypto.com",
+    "developer-platform-api.crypto.com",
+    "developer.crypto.com",
+    "crypto.com/exchange",
+    "crypto.com/nft",
+    "crypto.com/price",
+    "js.crypto.com",
+    "merchant.crypto.com",
+    "nadex.com",
+    "og.com",
+    "tax.crypto.com",
+    "web.crypto.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/crypto",
+  "synced_at": "2026-03-08T00:14:08.757884"
+}

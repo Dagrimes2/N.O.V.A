@@ -1,0 +1,12 @@
+{
+  "name": "SHEIN",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.romwe.com",
+    "*.shein.com",
+    "*.sheingsp.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/shein",
+  "synced_at": "2026-03-08T00:14:08.750166"
+}

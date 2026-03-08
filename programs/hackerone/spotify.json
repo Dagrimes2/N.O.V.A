@@ -1,0 +1,23 @@
+{
+  "name": "Spotify",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.atspotify.com",
+    "*.avecspotify.com",
+    "*.byspotify.com",
+    "*.enspotify.com",
+    "*.forspotify.com",
+    "*.fromspotify.com",
+    "*.spotify.com",
+    "*.spotify.net",
+    "*.tospotify.com",
+    "*.withspotify.com",
+    "api.spotify.com",
+    "assets.spotify.com",
+    "backstage.io",
+    "www.whosampled.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/spotify",
+  "synced_at": "2026-03-08T00:14:08.760095"
+}

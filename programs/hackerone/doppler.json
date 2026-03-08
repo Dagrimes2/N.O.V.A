@@ -1,0 +1,13 @@
+{
+  "name": "Doppler",
+  "platform": "hackerone",
+  "in_scope": [
+    "api.doppler.com",
+    "dashboard.doppler.com",
+    "doppler.team",
+    "share.doppler.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/doppler",
+  "synced_at": "2026-03-08T00:14:08.746953"
+}

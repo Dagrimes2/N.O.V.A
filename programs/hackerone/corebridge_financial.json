@@ -1,0 +1,29 @@
+{
+  "name": "Corebridge Financial",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.corebridgefinancial.com",
+    "*.valic.com",
+    "corebridgefinancial.com",
+    "www.myretirementmanager.com",
+    "agentportal.live.web.corebridgefinancial.com/im/ssagent/public/login#",
+    "ca-optout.live.web.corebridgefinancial.com/optout/login.jsp",
+    "consultant.live.web.corebridgefinancial.com/valic/consultantdirect/public/login#",
+    "diy.corebridgedirect.com/term/home",
+    "ica.live.web.corebridgefinancial.com/distribution/ica/public/login#",
+    "live.fo.annuities.crbgf.net",
+    "myaccount.valic.com/auth/public/login#",
+    "myaccount.valic.com/enroll/public/get-started",
+    "myplan.myretirementmanager.com/participant/public/login#",
+    "portal.annuities.corebridgefinancial.com/annuities/book-of-business/public/login#",
+    "rsenablers.live.web.corebridgefinancial.com/valic/nonparticipant/auth/public/login?appname=pso#",
+    "tools.valic.com/agilenet5",
+    "www.corebridgefinancial.com/rs/dropsolutions",
+    "rapid-rater.live.web.corebridgefinancial.com",
+    "www.connext.corebridgefinancial.com",
+    "www.corebridgedirect.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/corebridge_financial",
+  "synced_at": "2026-03-08T00:14:08.713452"
+}

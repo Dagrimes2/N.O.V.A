@@ -1,0 +1,11 @@
+{
+  "name": "Temu",
+  "platform": "hackerone",
+  "in_scope": [
+    "seller.temu.com",
+    "www.temu.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/temu",
+  "synced_at": "2026-03-08T00:14:08.715407"
+}

@@ -1,0 +1,10 @@
+{
+  "name": "MongoDB",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.mongodb.com/*"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/mongodb",
+  "synced_at": "2026-03-08T00:14:08.726794"
+}

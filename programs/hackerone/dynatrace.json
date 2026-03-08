@@ -1,0 +1,14 @@
+{
+  "name": "Dynatrace",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.sprint.apps.dynatracelabs.com",
+    "*.sprint.dynatracelabs.com",
+    "account-sprint.dynatracelabs.com",
+    "myaccount-hardening.dynatracelabs.com",
+    "sso-sprint.dynatracelabs.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/dynatrace",
+  "synced_at": "2026-03-08T00:14:08.753879"
+}

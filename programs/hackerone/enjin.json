@@ -1,0 +1,11 @@
+{
+  "name": "Enjin",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.enjinusercontent.com",
+    "nft.io"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/enjin",
+  "synced_at": "2026-03-08T00:14:08.761054"
+}

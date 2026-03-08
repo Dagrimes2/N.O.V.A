@@ -1,0 +1,11 @@
+{
+  "name": "Lovable VDP",
+  "platform": "hackerone",
+  "in_scope": [
+    "lovable.dev",
+    "oauth.lovable.dev"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/lovable-vdp",
+  "synced_at": "2026-03-08T00:14:08.701622"
+}

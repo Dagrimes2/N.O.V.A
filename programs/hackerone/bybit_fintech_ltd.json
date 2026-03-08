@@ -1,0 +1,16 @@
+{
+  "name": "Bybit Fintech Ltd",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.bybit.com",
+    "*.bybit.eu",
+    "*.bybit.tr",
+    "testnet.bybit.eu",
+    "www.bybit.com/en/alpha/overview",
+    "www.bybit.com/trade/tradfi",
+    "www.byreal.io"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/bybit_fintech",
+  "synced_at": "2026-03-08T00:14:08.715838"
+}

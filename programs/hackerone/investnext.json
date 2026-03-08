@@ -1,0 +1,13 @@
+{
+  "name": "InvestNext",
+  "platform": "hackerone",
+  "in_scope": [
+    "altogroup.investnextdemo.co",
+    "app.investnext.com",
+    "app.investnextdemo.co",
+    "mg3.investnext.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/investnext",
+  "synced_at": "2026-03-08T00:14:08.751248"
+}

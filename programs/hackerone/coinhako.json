@@ -1,0 +1,11 @@
+{
+  "name": "Coinhako",
+  "platform": "hackerone",
+  "in_scope": [
+    "help.coinhako.com",
+    "www.coinhako.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/coinhako",
+  "synced_at": "2026-03-08T00:14:08.721241"
+}

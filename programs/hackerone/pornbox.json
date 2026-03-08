@@ -1,0 +1,13 @@
+{
+  "name": "PornBox",
+  "platform": "hackerone",
+  "in_scope": [
+    "www.analvids.com",
+    "www.ddfcontent.com",
+    "www.pornbox.com",
+    "www.pornworld.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/pornbox",
+  "synced_at": "2026-03-08T00:14:08.719338"
+}

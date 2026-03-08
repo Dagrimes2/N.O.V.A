@@ -1,0 +1,11 @@
+{
+  "name": "Tines (VDP)",
+  "platform": "hackerone",
+  "in_scope": [
+    "tines.com",
+    "tines.io"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/tines_automation_vdp",
+  "synced_at": "2026-03-08T00:14:08.698642"
+}

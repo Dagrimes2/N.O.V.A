@@ -1,0 +1,12 @@
+{
+  "name": "TomTom",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.tomtom-global.com",
+    "*.tomtom.com",
+    "*.tomtomgroup.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/tomtom",
+  "synced_at": "2026-03-08T00:14:08.712523"
+}

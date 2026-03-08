@@ -1,0 +1,10 @@
+{
+  "name": "Braze, Inc.",
+  "platform": "hackerone",
+  "in_scope": [
+    "bug-bounty-dashboard.k8s.tools-001.d-use-1.braze-dev.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/braze_inc",
+  "synced_at": "2026-03-08T00:14:08.701755"
+}

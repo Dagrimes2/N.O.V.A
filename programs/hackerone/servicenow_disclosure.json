@@ -1,0 +1,12 @@
+{
+  "name": "ServiceNow Disclosure",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.lightstep.com",
+    "*.service-now.com",
+    "*.servicenow.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/servicenow-disclosure",
+  "synced_at": "2026-03-08T00:14:08.730547"
+}

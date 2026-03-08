@@ -1,0 +1,24 @@
+{
+  "name": "GoCardless Bug Bounty Program",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.gocardless-cicd.io",
+    "*.gocardless-lab.io",
+    "*.gocardless-staging.io",
+    "*.gocardless.com",
+    "*.gocardless.dev",
+    "*.gocardless.io,*.gocardless-banking.io",
+    "api-sandbox.gocardless.com",
+    "auth0.gocardless.com",
+    "connect-sandbox.gocardless.com",
+    "manage-sandbox.gocardless.com",
+    "oauth-sandbox.gocardless.com",
+    "ob.gocardless.com",
+    "pay-sandbox.gocardless.com",
+    "payer-details-sandbox.gocardless.com",
+    "www.gocardless.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/gocardless_bbp",
+  "synced_at": "2026-03-08T00:14:08.753041"
+}

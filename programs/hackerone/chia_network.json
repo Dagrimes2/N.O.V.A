@@ -1,0 +1,11 @@
+{
+  "name": "Chia Network",
+  "platform": "hackerone",
+  "in_scope": [
+    "api.vault.chiatest.net",
+    "vault.chiatest.net"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/chia_network",
+  "synced_at": "2026-03-08T00:14:08.713283"
+}

@@ -1,0 +1,32 @@
+{
+  "name": "Airbnb",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.airbnb-aws.com",
+    "*.airbnb.com",
+    "*.airbnb.org",
+    "*.airbnbcitizen.com",
+    "*.airbnbpayments.com",
+    "*.atairbnb.com",
+    "*.byairbnb.com",
+    "*.hoteltonight-test.com",
+    "*.hoteltonight.com",
+    "*.luxuryretreats.com",
+    "*.muscache.com",
+    "*.musta.ch",
+    "*.withairbnb.com",
+    "api.airbnb.com",
+    "assets.airbnb.com",
+    "callbacks.airbnb.com",
+    "m.airbnb.com",
+    "next.airbnb.com",
+    "one.airbnb.com",
+    "open.airbnb.com",
+    "support-api.airbnb.com",
+    "www.airbnb.com",
+    "www.hoteltonight.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/airbnb",
+  "synced_at": "2026-03-08T00:14:08.763866"
+}

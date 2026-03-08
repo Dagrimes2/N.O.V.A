@@ -1,0 +1,14 @@
+{
+  "name": "Wallet on Telegram",
+  "platform": "hackerone",
+  "in_scope": [
+    "pay.wallet.tg",
+    "wallet.tg",
+    "walletbot.me",
+    "wallettg.com",
+    "wallettg.net"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/wallet_on_telegram",
+  "synced_at": "2026-03-08T00:14:08.712306"
+}

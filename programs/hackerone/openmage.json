@@ -1,0 +1,11 @@
+{
+  "name": "OpenMage",
+  "platform": "hackerone",
+  "in_scope": [
+    "demo-admin.openmage.com",
+    "demo.openmage.org"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/openmage",
+  "synced_at": "2026-03-08T00:14:08.747696"
+}

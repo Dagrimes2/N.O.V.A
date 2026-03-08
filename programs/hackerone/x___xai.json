@@ -1,0 +1,23 @@
+{
+  "name": "X / xAI",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.grok.com",
+    "*.twimg.com",
+    "*.twitter.biz",
+    "*.twitter.com",
+    "*.vine.co",
+    "*.x.ai",
+    "*.x.com",
+    "chat.x.com",
+    "gnip.com",
+    "grok.com",
+    "grokipedia.com",
+    "t.co",
+    "x.com",
+    "xadsacademy.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/x",
+  "synced_at": "2026-03-08T00:14:08.765368"
+}

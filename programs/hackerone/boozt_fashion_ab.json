@@ -1,0 +1,12 @@
+{
+  "name": "Boozt Fashion AB",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.boozt.com",
+    "*.booztlet.com",
+    "kronor.io"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/boozt",
+  "synced_at": "2026-03-08T00:14:08.719834"
+}

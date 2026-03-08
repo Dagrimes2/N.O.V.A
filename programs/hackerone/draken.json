@@ -1,0 +1,15 @@
+{
+  "name": "Draken",
+  "platform": "hackerone",
+  "in_scope": [
+    "draken.aero",
+    "pip-azu2-sec-paf-001-mgmt.ukwest.cloudapp.azure.com",
+    "vpn.drakeneurope.network",
+    "pip-azu1-sec-paf-001-mgmt.uksouth.cloudapp.azure.com",
+    "pip-azu1-sec-paf-002-mgmt.uksouth.cloudapp.azure.com",
+    "pip-azu1-sec-pan-001.uksouth.cloudapp.azure.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/draken_aero",
+  "synced_at": "2026-03-08T00:14:08.706134"
+}

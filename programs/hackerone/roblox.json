@@ -1,0 +1,13 @@
+{
+  "name": "Roblox",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.ra.roblox.com",
+    "*.rbx.com",
+    "*.roblox.com",
+    "blox.link"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/roblox",
+  "synced_at": "2026-03-08T00:14:08.760193"
+}

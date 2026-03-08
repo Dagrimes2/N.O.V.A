@@ -1,0 +1,27 @@
+{
+  "name": "BankUnited",
+  "platform": "hackerone",
+  "in_scope": [
+    "buconnectfl.bankunited.com",
+    "buconnectny.bankunited.com",
+    "ccr.bankunited.com",
+    "customer.bankunited.com",
+    "exadprd.bankunited.com",
+    "exadqa.bankunited.com",
+    "iccweb.bankunited.com",
+    "lockboxir.bankunited.com",
+    "osao.bankunited.com",
+    "pronto.bankunited.com",
+    "roc.bankunited.com",
+    "snowapiprd.bankunited.com",
+    "snowapiqa.bankunited.com",
+    "wls.bankunited.com",
+    "wlsqa.bankunited.com",
+    "www.bankunited.com",
+    "www.bridgefundinggroupinc.com",
+    "www.pinnaclepublicfinance.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/bankunited",
+  "synced_at": "2026-03-08T00:14:08.699117"
+}

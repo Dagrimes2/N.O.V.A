@@ -1,0 +1,22 @@
+{
+  "name": "WordPress",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.buddypress.org,bbpress.org,profiles.wordpress.org",
+    "*.wordcamp.org",
+    "*.wordpress.net",
+    "*.wordpress.org",
+    "api.wordpress.org",
+    "codex.wordpress.org,codex.bbpress.org,codex.buddypress.org",
+    "doaction.org",
+    "irclogs.wordpress.org",
+    "lists.wordpress.org",
+    "mercantile.wordpress.org",
+    "munin-*.wordpress.org",
+    "planet.wordpress.org",
+    "wordpressfoundation.org"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/wordpress",
+  "synced_at": "2026-03-08T00:14:08.762005"
+}

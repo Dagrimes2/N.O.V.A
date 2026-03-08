@@ -1,0 +1,16 @@
+{
+  "name": "OakNorth Bank",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.oaknorth-it.com",
+    "*.oaknorth-prod.com",
+    "*.oaknorth.co.uk",
+    "*.oaknorth.com",
+    "*.oaknorth.us",
+    "*.oaknorthbank.co.uk",
+    "api.deposits.oaknorth.co.uk"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/oaknorth_bank",
+  "synced_at": "2026-03-08T00:14:08.716762"
+}

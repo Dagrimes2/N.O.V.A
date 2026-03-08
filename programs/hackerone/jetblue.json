@@ -1,0 +1,21 @@
+{
+  "name": "JetBlue",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.jetblue.com",
+    "accounts.jetblue.com",
+    "api.jetblue.com",
+    "azrest.jetblue.com",
+    "book.jetblue.com",
+    "checkin.jetblue.com",
+    "experience.jetblue.com",
+    "help.jetblue.com",
+    "magnolia.jetblue.com",
+    "mobile.jetblue.com",
+    "movil.jetblue.com",
+    "www.jetblue.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/jetblue",
+  "synced_at": "2026-03-08T00:14:08.731386"
+}

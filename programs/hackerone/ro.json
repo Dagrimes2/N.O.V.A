@@ -1,0 +1,24 @@
+{
+  "name": "Ro",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.getroman.com",
+    "*.hellorory.com",
+    "*.kit.ro.co",
+    "*.modernfertility.com",
+    "*.myplenity.com",
+    "*.ro.co",
+    "*.ropharmacy.com",
+    "ro.co/derm",
+    "ro.co/mind",
+    "ro.co/pharmacy",
+    "ro.co/spermkit",
+    "*.ro.co/svc/auth-verifications/start.public/phone",
+    "login.ro.co",
+    "my.ro.co",
+    "start.ro.co"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/ro",
+  "synced_at": "2026-03-08T00:14:08.726589"
+}

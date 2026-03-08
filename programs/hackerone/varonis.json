@@ -1,0 +1,12 @@
+{
+  "name": "Varonis",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.varonis.com",
+    "*.varonis.io",
+    "*.varonis.net"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/varonis",
+  "synced_at": "2026-03-08T00:14:08.709594"
+}

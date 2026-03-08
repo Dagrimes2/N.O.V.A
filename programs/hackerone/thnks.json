@@ -1,0 +1,11 @@
+{
+  "name": "Thnks",
+  "platform": "hackerone",
+  "in_scope": [
+    "api.thnks.com",
+    "app.thnks.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/thnks",
+  "synced_at": "2026-03-08T00:14:08.750638"
+}

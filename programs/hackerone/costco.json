@@ -1,0 +1,21 @@
+{
+  "name": "Costco",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.costco.ca",
+    "*.costco.com",
+    "*.costcobusinesscentre.ca",
+    "*.costcobusinessdelivery.com",
+    "*.costcotravel.ca",
+    "*.costcotravel.com",
+    "www.costco.ca",
+    "www.costco.com",
+    "www.costcobusinesscentre.ca",
+    "www.costcobusinessdelivery.com",
+    "www.costcotravel.ca",
+    "www.costcotravel.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/costco",
+  "synced_at": "2026-03-08T00:14:08.741149"
+}

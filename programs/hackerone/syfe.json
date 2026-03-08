@@ -1,0 +1,16 @@
+{
+  "name": "Syfe",
+  "platform": "hackerone",
+  "in_scope": [
+    "alfred-uat-31.nonprod.syfe.com",
+    "alfred.syfe.com",
+    "api-uat-bugbounty.nonprod.syfe.com",
+    "api.syfe.com",
+    "mark8.syfe.com",
+    "uat-bugbounty.nonprod.syfe.com",
+    "www.syfe.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/syfe_bbp",
+  "synced_at": "2026-03-08T00:14:08.706416"
+}

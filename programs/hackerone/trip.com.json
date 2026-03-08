@@ -1,0 +1,22 @@
+{
+  "name": "Trip.com",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.budgetair.com",
+    "*.cheaptickets.nl",
+    "*.flugladen.de",
+    "*.trainpal.com,*.mytrainpal.com",
+    "*.travix.com",
+    "*.travix.io",
+    "*.trip.biz",
+    "*.trip.com",
+    "*.triplinkintl.com",
+    "*.tyo-masters.co.jp",
+    "*.vayama.com",
+    "*.vliegwinkel.nl",
+    "app.blueskytravelvietnam.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/trip_com",
+  "synced_at": "2026-03-08T00:14:08.715985"
+}

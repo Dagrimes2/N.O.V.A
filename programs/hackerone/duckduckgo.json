@@ -1,0 +1,10 @@
+{
+  "name": "DuckDuckGo",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.duckduckgo.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/duckduckgo",
+  "synced_at": "2026-03-08T00:14:08.757689"
+}

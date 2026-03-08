@@ -1,0 +1,13 @@
+{
+  "name": "The Browser Company of NYC",
+  "platform": "hackerone",
+  "in_scope": [
+    "arc.net",
+    "bcny.com",
+    "diabrowser.com",
+    "thebrowser.company"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/bcny",
+  "synced_at": "2026-03-08T00:14:08.704969"
+}

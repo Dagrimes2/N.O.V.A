@@ -1,0 +1,17 @@
+{
+  "name": "Cloudflare Public Bug Bounty",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.cloudflare.com",
+    "*.teams.cloudflare.com",
+    "api.cloudflare.com",
+    "cloudflareworkers.com",
+    "dash.cloudflare.com",
+    "github.com/cloudflare",
+    "one.dash.cloudflare.com",
+    "waf.cumulusfire.net"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/cloudflare",
+  "synced_at": "2026-03-08T00:14:08.765473"
+}

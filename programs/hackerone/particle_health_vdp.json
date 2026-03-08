@@ -1,0 +1,18 @@
+{
+  "name": "Particle Health VDP",
+  "platform": "hackerone",
+  "in_scope": [
+    "admin.particlehealth.com",
+    "api.particlehealth.com",
+    "carequality.particlehealth.com",
+    "ehealthexchange.particlehealth.com",
+    "ia.particlehealth.com",
+    "management.particlehealth.com",
+    "partner.particlehealth.com",
+    "portal.particlehealth.com",
+    "sandbox.particlehealth.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/particle-health-vdp",
+  "synced_at": "2026-03-08T00:14:08.730769"
+}

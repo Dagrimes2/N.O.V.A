@@ -1,0 +1,23 @@
+{
+  "name": "PlayStation",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.api.playstation.com",
+    "*.playstation.net",
+    "*.sonyentertainmentnetwork.com",
+    "api.direct.playstation.com",
+    "ca.account.sony.com",
+    "checkout.playstation.com",
+    "direct.playstation.com",
+    "my.account.sony.com",
+    "my.playstation.com",
+    "ps5.np.playstation.net",
+    "social.playstation.com",
+    "store.playstation.com",
+    "transact.playstation.com",
+    "wallets.api.playstation.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/playstation",
+  "synced_at": "2026-03-08T00:14:08.750936"
+}

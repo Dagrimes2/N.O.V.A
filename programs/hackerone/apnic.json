@@ -1,0 +1,23 @@
+{
+  "name": "APNIC",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.apidt.org",
+    "*.apnic.foundation",
+    "*.apnic.net",
+    "*.isif.asia",
+    "*.seedalliance.net",
+    "aso.apnic.net",
+    "ftp.apnic.net",
+    "nori.apnic.net",
+    "orbit.apnic.net",
+    "registry-testbed.apnic.net",
+    "rpki.apnic.net",
+    "rsync.apnic.net",
+    "stats.labs.apnic.net",
+    "submission.apnic.net"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/apnic",
+  "synced_at": "2026-03-08T00:14:08.729689"
+}

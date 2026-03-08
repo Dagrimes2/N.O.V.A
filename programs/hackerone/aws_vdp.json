@@ -1,0 +1,13 @@
+{
+  "name": "AWS VDP",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.lostark.games.aws.dev",
+    "forums.newworld.com",
+    "github.com/aws-samples",
+    "www.awseducate.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/aws_vdp",
+  "synced_at": "2026-03-08T00:14:08.707226"
+}

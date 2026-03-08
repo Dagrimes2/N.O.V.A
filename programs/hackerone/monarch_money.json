@@ -1,0 +1,11 @@
+{
+  "name": "Monarch Money",
+  "platform": "hackerone",
+  "in_scope": [
+    "app.monarchmoney.com",
+    "www.monarchmoney.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/monarch_money",
+  "synced_at": "2026-03-08T00:14:08.723462"
+}

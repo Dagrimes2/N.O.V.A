@@ -1,0 +1,32 @@
+{
+  "name": "U.S. Department of State",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.AMERICA.GOV",
+    "*.DEVTESTFAN1.GOV",
+    "*.ELGUARDIA.NET",
+    "*.FAN.GOV",
+    "*.FSGB.GOV",
+    "*.IAWG.GOV",
+    "*.IBWC.GOV",
+    "*.OSAC.GOV",
+    "*.PEPFAR.GOV",
+    "*.PREPRODFAN.GOV",
+    "*.REWARDSFORJUSTICE.NET",
+    "*.SECURITYTESTFAN.GOV",
+    "*.STATE.GOV",
+    "*.SUPPORTFAN.GOV",
+    "*.USCONSULATE.GOV",
+    "*.USDOSCLOUD.GOV",
+    "*.USEMBASSY.GOV",
+    "*.USMISSION.GOV",
+    "*.ustraveldocs.com",
+    "*.usvisascheduling.com",
+    "*.usvisaappt.com",
+    "ais.usvisa-info.com",
+    "casadmin.peckham.org"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/us-department-of-state",
+  "synced_at": "2026-03-08T00:14:08.719939"
+}

@@ -1,0 +1,10 @@
+{
+  "name": "Navient Solutions LLC",
+  "platform": "hackerone",
+  "in_scope": [
+    "navient.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/navient_solutions",
+  "synced_at": "2026-03-08T00:14:08.750257"
+}

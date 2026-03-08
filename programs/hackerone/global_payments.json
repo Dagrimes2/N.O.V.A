@@ -1,0 +1,14 @@
+{
+  "name": "Global Payments",
+  "platform": "hackerone",
+  "in_scope": [
+    "bleepplc.co.uk",
+    "developer.globalpay.com",
+    "cloud-sbox.storman.com",
+    "portal-staging.storman.com",
+    "pcamerica.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/global-payments",
+  "synced_at": "2026-03-08T00:14:08.740920"
+}

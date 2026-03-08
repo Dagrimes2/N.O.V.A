@@ -1,0 +1,15 @@
+{
+  "name": "Flipkart",
+  "platform": "hackerone",
+  "in_scope": [
+    "api.myntra.com",
+    "pay.payzippy.com",
+    "payments.myntra.com",
+    "uiscoop.payzippy.com",
+    "www.flipkart.com",
+    "www.myntra.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/flipkart",
+  "synced_at": "2026-03-08T00:14:08.756766"
+}

@@ -1,0 +1,14 @@
+{
+  "name": "Intuit",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.intuit.com",
+    "*.mailchimp.com",
+    "*.mint.com",
+    "*.quickbooks.com",
+    "*.turbotax.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/intuit_rdp",
+  "synced_at": "2026-03-08T00:14:08.720422"
+}

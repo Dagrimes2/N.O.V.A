@@ -1,0 +1,23 @@
+{
+  "name": "Lark Technologies",
+  "platform": "hackerone",
+  "in_scope": [
+    "api.larksuite.com",
+    "app.larksuite.com",
+    "caldav.larksuite.com",
+    "file.larksuite.com",
+    "hackers_chosendomain.larksuite.com",
+    "internal-api-drive-stream.larksuite.com",
+    "internal-api-lark-api.larksuite.com",
+    "internal-api.larksuite.com",
+    "lark-frontier.byteoversea.com",
+    "larksuite.com",
+    "larksuite.us",
+    "open.larksuite.com",
+    "passport.larksuite.com",
+    "status.larksuite.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/lark_technologies",
+  "synced_at": "2026-03-08T00:14:08.753502"
+}

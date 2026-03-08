@@ -1,0 +1,28 @@
+{
+  "name": "Automattic",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.srvcs.tumblr.com",
+    "*.tumblr.com",
+    "akismet.com",
+    "api.tumblr.com",
+    "assets.tumblr.com",
+    "clay.earth",
+    "embed.tumblr.com",
+    "gravatar.com",
+    "intensedebate.com",
+    "mailpoet.com",
+    "my.pressable.com",
+    "safe.tumblr.com",
+    "secure.tumblr.com",
+    "simperium.com",
+    "simplenote.com",
+    "t.umblr.com",
+    "wordpress.com",
+    "wpscan.com",
+    "www.tumblr.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/automattic",
+  "synced_at": "2026-03-08T00:14:08.765573"
+}

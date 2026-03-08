@@ -1,0 +1,12 @@
+{
+  "name": "Worldpay",
+  "platform": "hackerone",
+  "in_scope": [
+    "docs.worldpay.com",
+    "www.accessmyiq.com",
+    "www.virtualterminal.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/worldpay",
+  "synced_at": "2026-03-08T00:14:08.702160"
+}

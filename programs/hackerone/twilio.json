@@ -1,0 +1,22 @@
+{
+  "name": "Twilio",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.sip.*.twilio.com",
+    "api.sendgrid.com",
+    "app.segment.com",
+    "app.sendgrid.com",
+    "help.twilio.com",
+    "tsock.us1.twilio.com",
+    "twilio.com/blog",
+    "segment.com/docs/connections/sources",
+    "www.twilio.com/login?g=%2fconsole%3f&t=2b1c98334b25c1a785ef15b6556396290e3c704a9b57fc40687cbccd79c46a8c",
+    "mc.sendgrid.com",
+    "sendgrid.com",
+    "signup.sendgrid.com",
+    "static*.twilio.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/twilio",
+  "synced_at": "2026-03-08T00:14:08.698817"
+}

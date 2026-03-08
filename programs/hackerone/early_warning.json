@@ -1,0 +1,17 @@
+{
+  "name": "Early Warning",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.earlywarning.com",
+    "*.zelle.com",
+    "*.zellepay.com",
+    "developer*.earlywarning.com",
+    "ews-fusion.my.site.com",
+    "support*.earlywarning.com",
+    "zellepay.force.com",
+    "zelleservice.my.site.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/early_warning",
+  "synced_at": "2026-03-08T00:14:08.754590"
+}

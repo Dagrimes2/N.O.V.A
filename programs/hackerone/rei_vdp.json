@@ -1,0 +1,13 @@
+{
+  "name": "REI VDP",
+  "platform": "hackerone",
+  "in_scope": [
+    "engineering.rei.com",
+    "collaboration.rei.com",
+    "login.rei.com",
+    "rei.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/rei_vdp",
+  "synced_at": "2026-03-08T00:14:08.713130"
+}

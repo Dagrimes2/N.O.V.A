@@ -1,0 +1,33 @@
+{
+  "name": "Reddit",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.memorable.io",
+    "*.reddit.com",
+    "*.redditblog.com",
+    "*.reddithelp.com",
+    "*.redditinc.com",
+    "*.redditmedia.com",
+    "*.snooguts.net",
+    "*.spiketrap.io",
+    "accounts.reddit.com",
+    "ads.reddit.com",
+    "amp.reddit.com",
+    "api.reddit.com",
+    "business.reddithelp.com",
+    "developers.reddit.com",
+    "gateway.reddit.com",
+    "gql.reddit.com",
+    "m.reddit.com",
+    "matrix.redditspace.com",
+    "meta-api.reddit.com",
+    "mod.reddit.com",
+    "new.reddit.com",
+    "redditforbusiness.com",
+    "sh.reddit.com",
+    "strapi.reddit.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/reddit",
+  "synced_at": "2026-03-08T00:14:08.754402"
+}

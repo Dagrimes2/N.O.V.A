@@ -1,0 +1,14 @@
+{
+  "name": "Peloton",
+  "platform": "hackerone",
+  "in_scope": [
+    "cms.onepeloton.com",
+    "cosmos-stage.onepeloton.com",
+    "cosmos.onepeloton.com",
+    "qa1-cms.onepeloton.com",
+    "www.onepeloton.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/peloton",
+  "synced_at": "2026-03-08T00:14:08.709459"
+}

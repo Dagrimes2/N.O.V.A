@@ -1,0 +1,19 @@
+{
+  "name": "Cloud Software Group",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.citrixworkspacesapi.net",
+    "*developer.cloud.com",
+    "accounts.cloud.com",
+    "adm.cloud.com",
+    "ap-s.cloud.com",
+    "api.adm.cloud.com",
+    "eu.cloud.com",
+    "onboarding-*.cloud.com",
+    "onboarding.cloud.com",
+    "us.cloud.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/csg-public",
+  "synced_at": "2026-03-08T00:14:08.747213"
+}

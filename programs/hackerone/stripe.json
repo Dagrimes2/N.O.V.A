@@ -1,0 +1,21 @@
+{
+  "name": "Stripe",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.bridge.xyz",
+    "*.lemonsqueezy.com",
+    "*.link.co",
+    "*.recko.io",
+    "*.reckoproduction.com",
+    "*.reckostaging.com",
+    "*.stripe.com",
+    "api.stripe.com",
+    "api.taxjar.com",
+    "app.taxjar.com",
+    "js.stripe.com",
+    "www.stripe.partners"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/stripe",
+  "synced_at": "2026-03-08T00:14:08.741813"
+}

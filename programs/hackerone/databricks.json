@@ -1,0 +1,12 @@
+{
+  "name": "Databricks",
+  "platform": "hackerone",
+  "in_scope": [
+    "accounts.cloud.databricks.com",
+    "databricks.com",
+    "dbc-9a3f8ed1-7608.cloud.databricks.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/databricks",
+  "synced_at": "2026-03-08T00:14:08.758601"
+}

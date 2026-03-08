@@ -1,0 +1,12 @@
+{
+  "name": "Sorare",
+  "platform": "hackerone",
+  "in_scope": [
+    "api.sorare.com",
+    "sorare.com",
+    "ws.sorare.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/sorare",
+  "synced_at": "2026-03-08T00:14:08.727179"
+}

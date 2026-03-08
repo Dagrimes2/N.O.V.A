@@ -1,0 +1,11 @@
+{
+  "name": "Figma",
+  "platform": "hackerone",
+  "in_scope": [
+    "api.figma.com",
+    "www.figma.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/figma",
+  "synced_at": "2026-03-08T00:14:08.749180"
+}

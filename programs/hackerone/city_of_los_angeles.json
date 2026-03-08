@@ -1,0 +1,11 @@
+{
+  "name": "City of Los Angeles",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.lacity.gov",
+    "*.lacity.org"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/city_of_los_angeles_vdp",
+  "synced_at": "2026-03-08T00:14:08.722519"
+}

@@ -1,0 +1,14 @@
+{
+  "name": "SIX Group",
+  "platform": "hackerone",
+  "in_scope": [
+    "secure-test.six-swiss-exchange.com",
+    "web3.sdx.com",
+    "www.sdx.com",
+    "www.bolsasymercados.es",
+    "www.six-group.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/six-group",
+  "synced_at": "2026-03-08T00:14:08.718435"
+}

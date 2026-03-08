@@ -1,0 +1,15 @@
+{
+  "name": "PortSwigger Web Security",
+  "platform": "hackerone",
+  "in_scope": [
+    "ai.portswigger.net",
+    "collections.portswigger.net",
+    "http1mustdie.com",
+    "links.portswigger.net",
+    "portswigger.net",
+    "share.portswigger.net"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/portswigger",
+  "synced_at": "2026-03-08T00:14:08.761535"
+}

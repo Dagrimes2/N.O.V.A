@@ -1,0 +1,16 @@
+{
+  "name": "Wells Fargo Bounty",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.wellsfargo.com",
+    "*.wf.com",
+    "accountoffers.wellsfargo.com",
+    "connect.secure.wellsfargo.com",
+    "homeloans.wellsfargo.com",
+    "wellsfargo.com",
+    "wf.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/wellsfargo-bbp",
+  "synced_at": "2026-03-08T00:14:08.728145"
+}

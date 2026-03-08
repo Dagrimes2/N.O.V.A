@@ -1,0 +1,19 @@
+{
+  "name": "Starling Bank VDP",
+  "platform": "hackerone",
+  "in_scope": [
+    "api-openbanking.starlingbank.com",
+    "api.starlingbank.com",
+    "app.starlingbank.com",
+    "developer.starlingbank.com",
+    "help.starlingbank.com",
+    "oauth.starlingbank.com",
+    "openbanking.starlingbank.com",
+    "payment-api.starlingbank.com",
+    "token-api.starlingbank.com",
+    "www.starlingbank.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/starling_bank",
+  "synced_at": "2026-03-08T00:14:08.754163"
+}

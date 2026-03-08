@@ -1,0 +1,32 @@
+{
+  "name": "HackerOne",
+  "platform": "hackerone",
+  "in_scope": [
+    "a5s.hackerone-ext-content.com",
+    "api.hackerone.com",
+    "app.pullrequest.com",
+    "b5s.hackerone-ext-content.com",
+    "cover-photos-us-east-2.hackerone-user-content.com",
+    "cover-photos.hackerone-user-content.com",
+    "ctf.hacker101.com",
+    "errors.hackerone.net",
+    "hackathon-photos-us-east-2.hackerone-user-content.com",
+    "hackathon-photos.hackerone-user-content.com",
+    "hackerone-ext-content.com",
+    "hackerone-us-west-2-production-attachments.s3.us-west-2.amazonaws.com",
+    "hackerone-user-content.com",
+    "hackerone.com",
+    "hackerone.live",
+    "*.hackerone-ext-content.com",
+    "*.hackerone-user-content.com",
+    "mta-sts.wearehackerone.com",
+    "profile-photos-us-east-2.hackerone-user-content.com",
+    "profile-photos.hackerone-user-content.com",
+    "reviewer.pullrequest.com",
+    "www.hackerone.com",
+    "www.wearehackerone.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/security",
+  "synced_at": "2026-03-08T00:14:08.765899"
+}

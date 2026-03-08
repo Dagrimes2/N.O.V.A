@@ -1,0 +1,16 @@
+{
+  "name": "Instacart",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.instacart.com",
+    "*.instacart.tools",
+    "admin.instacart.com",
+    "api.instacart.com",
+    "shoppers.instacart.com",
+    "template.uat.foodstorm.com",
+    "www.instacart.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/instacart",
+  "synced_at": "2026-03-08T00:14:08.754684"
+}

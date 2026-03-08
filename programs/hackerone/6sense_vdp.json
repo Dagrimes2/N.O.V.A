@@ -1,0 +1,11 @@
+{
+  "name": "6sense VDP",
+  "platform": "hackerone",
+  "in_scope": [
+    "6sense.com/platform/sales/signup",
+    "chromewebstore.google.com/detail/6sense-si-extension-for-c/mkpoonlmiaknmcdcmdhbnehhglndcolf?hl=en"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/6sense-vdp",
+  "synced_at": "2026-03-08T00:14:08.708815"
+}

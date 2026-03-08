@@ -1,0 +1,21 @@
+{
+  "name": "Krisp",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.krisp.ai",
+    "account.krisp.ai",
+    "analytics.krisp.ai",
+    "api.krisp.ai",
+    "app.krisp.ai",
+    "download.krisp.ai",
+    "help-jp.krisp.ai",
+    "help.krisp.ai",
+    "krisp.ai",
+    "resources.krisp.ai",
+    "teams.krisp.ai",
+    "upld.krisp.ai"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/krisp",
+  "synced_at": "2026-03-08T00:14:08.730874"
+}

@@ -1,0 +1,13 @@
+{
+  "name": "REI BBP",
+  "platform": "hackerone",
+  "in_scope": [
+    "collaboration.rei.com",
+    "www.rei.com/learn/expert-advice",
+    "login.rei.com",
+    "rei.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/rei_bbp",
+  "synced_at": "2026-03-08T00:14:08.721060"
+}

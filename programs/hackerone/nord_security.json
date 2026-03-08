@@ -1,0 +1,11 @@
+{
+  "name": "Nord Security",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.nordvpn.com",
+    "app.nordpass.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/nordsecurity",
+  "synced_at": "2026-03-08T00:14:08.760658"
+}

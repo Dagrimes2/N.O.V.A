@@ -1,0 +1,15 @@
+{
+  "name": "Tinder",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.gotinder.com",
+    "*.tinder.com",
+    "*.tinderops.net",
+    "*.tinderwebstaging.com",
+    "*.tstaging.com",
+    "*.tstaging.tools"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/tinder",
+  "synced_at": "2026-03-08T00:14:08.762805"
+}

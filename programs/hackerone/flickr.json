@@ -1,0 +1,12 @@
+{
+  "name": "Flickr",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.flickr.com",
+    "modefestival.com",
+    "www.whatismode.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/flickr",
+  "synced_at": "2026-03-08T00:14:08.756138"
+}

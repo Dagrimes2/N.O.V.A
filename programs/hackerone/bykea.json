@@ -1,0 +1,22 @@
+{
+  "name": "Bykea",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.bykea.net",
+    "bykea.com",
+    "*test*.bykea.net",
+    "api.bykea.net",
+    "geocode-beta.bykea.net",
+    "googleplace*.bykea.net",
+    "kronos*.bykea.net",
+    "leaflet-map.bykea.net",
+    "loadboard*.bykea.net",
+    "maps.bykea.net",
+    "nominatim.bykea.net",
+    "raptor*.bykea.net",
+    "tomoe.bykea.net"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/bykea",
+  "synced_at": "2026-03-08T00:14:08.716135"
+}

@@ -1,0 +1,14 @@
+{
+  "name": "Starbucks Japan",
+  "platform": "hackerone",
+  "in_scope": [
+    "cart.starbucks.co.jp",
+    "gift.starbucks.co.jp",
+    "login.starbucks.co.jp",
+    "www.cart.starbucks.co.jp",
+    "www.starbucks.co.jp"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/starbucks_japan",
+  "synced_at": "2026-03-08T00:14:08.705687"
+}

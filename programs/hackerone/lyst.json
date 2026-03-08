@@ -1,0 +1,14 @@
+{
+  "name": "Lyst",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.lyst.co",
+    "*.lyst.com",
+    "*.lystit.com",
+    "cdna.lystit.com",
+    "mobileapi.lystit.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/lyst",
+  "synced_at": "2026-03-08T00:14:08.760750"
+}

@@ -1,0 +1,27 @@
+{
+  "name": "ABN AMRO Bank VDP",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.abnamro.be",
+    "*.abnamro.com",
+    "*.abnamro.nl",
+    "*.abnamro.org",
+    "*.abnamrocomfin.com",
+    "*.abnamroinvestmentsolutions.com",
+    "*.abnamrolease.com",
+    "*.alfam.nl",
+    "*.bethmannbank.de",
+    "*.buut.com",
+    "*.bux.com",
+    "*.bux2b.com",
+    "*.getbux.com",
+    "*.new10.com",
+    "*.tikkie.me",
+    "*abnamroprivatebanking.be",
+    "*neuflizeobc.fr",
+    "www.buut.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/abn_amro_vdp",
+  "synced_at": "2026-03-08T00:14:08.719549"
+}

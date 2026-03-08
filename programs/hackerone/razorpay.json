@@ -1,0 +1,15 @@
+{
+  "name": "Razorpay",
+  "platform": "hackerone",
+  "in_scope": [
+    "api.razorpay.com",
+    "checkout.razorpay.com",
+    "dashboard.razorpay.com",
+    "invoices.razorpay.com",
+    "payroll.razorpay.com",
+    "x.razorpay.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/razorpay",
+  "synced_at": "2026-03-08T00:14:08.729872"
+}

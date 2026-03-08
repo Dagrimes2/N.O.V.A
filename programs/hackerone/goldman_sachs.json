@@ -1,0 +1,33 @@
+{
+  "name": "Goldman Sachs",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.ayco.com",
+    "*.claritymoney.com",
+    "*.global-liquidity.gs.com",
+    "*.goldman.com",
+    "*.goldmanpfm.com",
+    "*.goldmansachs.com",
+    "*.gs-mosaic.gs.com",
+    "*.gs-mosaic.qa.gs.com",
+    "*.gs.com",
+    "*.gs.de",
+    "*.gsam.com",
+    "*.gspublishing.com",
+    "*.gsselect.com",
+    "*.honestdollar.com",
+    "*.marcus.co.uk",
+    "*.marcus.com",
+    "*.qaglobal-liquidity.gs.com",
+    "api.foliofn.com",
+    "apigw.foliofn.com",
+    "developer.gs.com",
+    "goldmansachsindices.com",
+    "marquee.gs.com",
+    "research.gs.com",
+    "www.fitvermogen.nl"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/goldmansachs",
+  "synced_at": "2026-03-08T00:14:08.758925"
+}

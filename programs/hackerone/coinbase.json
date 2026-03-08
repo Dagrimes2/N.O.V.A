@@ -1,0 +1,24 @@
+{
+  "name": "Coinbase",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.cbhq.net",
+    "*.coinbase-corp.com",
+    "*.coinbase.com",
+    "api.coinbase.com",
+    "api.custody.coinbase.com",
+    "cloud.coinbase.com",
+    "coinbase.com",
+    "commerce.coinbase.com",
+    "custody.coinbase.com",
+    "coinbase.com",
+    "institutional.coinbase.com",
+    "international.coinbase.com",
+    "nft.coinbase.com",
+    "prime.coinbase.com",
+    "pro.coinbase.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/coinbase",
+  "synced_at": "2026-03-08T00:14:08.765676"
+}

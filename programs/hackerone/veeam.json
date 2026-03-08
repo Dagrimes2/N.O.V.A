@@ -1,0 +1,12 @@
+{
+  "name": "Veeam",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.kasten.io",
+    "*.veeam.com",
+    "*.veeamgov.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/veeam",
+  "synced_at": "2026-03-08T00:14:08.729116"
+}

@@ -1,0 +1,16 @@
+{
+  "name": "Kiwi.com",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.kiwi.com",
+    "*.skypicker.com",
+    "auth.skypicker.com",
+    "www.kiwi.com/stories",
+    "jobs.kiwi.com",
+    "tequila.kiwi.com",
+    "www.kiwi.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/kiwicom",
+  "synced_at": "2026-03-08T00:14:08.760845"
+}

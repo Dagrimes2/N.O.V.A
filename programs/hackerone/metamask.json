@@ -1,0 +1,16 @@
+{
+  "name": "MetaMask",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.api.cx.metamask.io",
+    "api-wallet.web3auth.io",
+    "*.metamask.io",
+    "metamask.io",
+    "signature-insights.api.cx.metamask.io",
+    "snaps.metamask.io",
+    "wallet.web3auth.io"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/metamask",
+  "synced_at": "2026-03-08T00:14:08.726257"
+}

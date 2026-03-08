@@ -1,0 +1,25 @@
+{
+  "name": "Deriv.com",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.deriv.cloud",
+    "*.deriv.com",
+    "*.derivws.com",
+    "academy.deriv.com",
+    "api.deriv.com",
+    "app.deriv.com",
+    "cashier.deriv.com",
+    "ct.deriv.com",
+    "deriv.partners",
+    "derivws.com",
+    "dx-demo.deriv.com",
+    "dx.deriv.com",
+    "oauth.deriv.com",
+    "partners.deriv.com",
+    "secure-dfadmin.deriv.com",
+    "smarttrader.deriv.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/deriv",
+  "synced_at": "2026-03-08T00:14:08.762707"
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Mapbox",
+  "platform": "hackerone",
+  "in_scope": [
+    "api.mapbox.com",
+    "docs.mapbox.com",
+    "www.mapbox.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/mapbox",
+  "synced_at": "2026-03-08T00:14:08.763760"
+}

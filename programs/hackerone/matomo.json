@@ -1,0 +1,11 @@
+{
+  "name": "Matomo",
+  "platform": "hackerone",
+  "in_scope": [
+    "github.com/matomo-org/docker",
+    "matomo.cloud"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/matomo",
+  "synced_at": "2026-03-08T00:14:08.756232"
+}

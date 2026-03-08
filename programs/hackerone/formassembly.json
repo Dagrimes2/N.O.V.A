@@ -1,0 +1,14 @@
+{
+  "name": "FormAssembly",
+  "platform": "hackerone",
+  "in_scope": [
+    "app.formassembly.com",
+    "appsecfa.tfaforms.net",
+    "formassembly.com",
+    "typeahead.formassembly.com",
+    "www.formassembly.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/formassembly",
+  "synced_at": "2026-03-08T00:14:08.764337"
+}

@@ -1,0 +1,20 @@
+{
+  "name": "MoonPay ",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.hypermint.com",
+    "*.moonpay.com",
+    "*.moonpaycloud.com",
+    "api.moonpay.com",
+    "app.moonpay.com",
+    "auth.moonpay.com",
+    "buy.moonpay.com",
+    "hypermint.com",
+    "moonpay.com",
+    "sell.moonpay.com",
+    "web3.moonpay.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/moonpay",
+  "synced_at": "2026-03-08T00:14:08.728929"
+}

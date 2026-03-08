@@ -1,0 +1,17 @@
+{
+  "name": "Ripio",
+  "platform": "hackerone",
+  "in_scope": [
+    "*ripio.com",
+    "*ripiotrade.co",
+    "defi.ripio.com",
+    "auth.ripio.com",
+    "app.ripio.com",
+    "kyc.ripio.com",
+    "sandbox-b2b.ripio.com",
+    "trade.ripio.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/ripio",
+  "synced_at": "2026-03-08T00:14:08.726890"
+}

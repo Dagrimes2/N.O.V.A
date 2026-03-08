@@ -1,0 +1,15 @@
+{
+  "name": "Newegg",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.newegg.ca",
+    "*.newegg.com",
+    "secure.newegg.com",
+    "pmtcards.newegg.com",
+    "secure.newegg.ca",
+    "sellerportal.newegg.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/newegg",
+  "synced_at": "2026-03-08T00:14:08.730333"
+}

@@ -1,0 +1,13 @@
+{
+  "name": "Abercrombie & Fitch Management Co.",
+  "platform": "hackerone",
+  "in_scope": [
+    "abercrombie.com",
+    "anfcorp.com",
+    "corporate.abercrombie.com",
+    "hollisterco.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/abercrombie_fitch",
+  "synced_at": "2026-03-08T00:14:08.722425"
+}

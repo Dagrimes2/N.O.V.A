@@ -1,0 +1,11 @@
+{
+  "name": "HYPR",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.gethypr.com",
+    "*.hypr.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/hypr-corp",
+  "synced_at": "2026-03-08T00:14:08.741441"
+}

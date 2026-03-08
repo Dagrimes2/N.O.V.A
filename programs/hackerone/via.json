@@ -1,0 +1,14 @@
+{
+  "name": "Via",
+  "platform": "hackerone",
+  "in_scope": [
+    "eu.remix.com",
+    "global-api.citymapper.com",
+    "metroconnect.app.ridewithvia.com",
+    "pt-runner.app.ridewithvia.com",
+    "platform.remix.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/ridewithvia",
+  "synced_at": "2026-03-08T00:14:08.753972"
+}

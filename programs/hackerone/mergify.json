@@ -1,0 +1,11 @@
+{
+  "name": "Mergify",
+  "platform": "hackerone",
+  "in_scope": [
+    "api.mergify.com",
+    "dashboard.mergify.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/mergify",
+  "synced_at": "2026-03-08T00:14:08.721150"
+}

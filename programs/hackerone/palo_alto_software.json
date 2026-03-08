@@ -1,0 +1,13 @@
+{
+  "name": "Palo Alto Software",
+  "platform": "hackerone",
+  "in_scope": [
+    "app.liveplan.com",
+    "www.bplans.com",
+    "www.liveplan.com",
+    "www.paloalto.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/palo_alto_software",
+  "synced_at": "2026-03-08T00:14:08.752305"
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Baird",
+  "platform": "hackerone",
+  "in_scope": [
+    "bairdwealth.com",
+    "*.rwbaird.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/baird_vdp",
+  "synced_at": "2026-03-08T00:14:08.703185"
+}

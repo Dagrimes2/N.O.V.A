@@ -1,0 +1,13 @@
+{
+  "name": "Exodus",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.a.exodus.io",
+    "*.exodus.com",
+    "*.exodus.io",
+    "*.grateful.me"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/exodus",
+  "synced_at": "2026-03-08T00:14:08.751821"
+}

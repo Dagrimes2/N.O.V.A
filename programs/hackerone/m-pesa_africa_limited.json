@@ -1,0 +1,15 @@
+{
+  "name": "M-Pesa Africa Limited",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.m-pesa.com",
+    "m-pesa.africa",
+    "mpa.ekyc.backoffice.m-pesa.com",
+    "mpa.ekyc.selfregister.m-pesa.com",
+    "openapi.m-pesa.com",
+    "openapiportal.m-pesa.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/mpesa",
+  "synced_at": "2026-03-08T00:14:08.723024"
+}

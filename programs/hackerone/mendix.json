@@ -1,0 +1,32 @@
+{
+  "name": "Mendix",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.mendix.com",
+    "*.timeseries.com",
+    "*.timeseries.nl",
+    "3dvis.mendixcloud.com",
+    "3s.mendixcloud.com",
+    "alm.mendixcloud.com",
+    "contributor.mendixcloud.com",
+    "datalake-sync.apps.mendix.com",
+    "dataprivacy.mendixcloud.com",
+    "dealservice.mendixcloud.com",
+    "deskallocation.mendixcloud.com",
+    "employees.mendix.com",
+    "gateway.us-east-1.sws.siemens.com",
+    "k8s-licbrk-licenseb-11d216e80e-384217420.eu-central-1.elb.amazonaws.com",
+    "marketplaceadmin.mendixcloud.com",
+    "mxbpconfig.mendixcloud.com",
+    "mxpeople.mendixcloud.com",
+    "notification.billing.appservices.mendix.com",
+    "provisioning.servicemanagement.mendix.com",
+    "revenuedatahub.mendixcloud.com",
+    "servicemanagement-accp.mendixcloud.com",
+    "simplate.mendixcloud.com",
+    "slm.store.mendix.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/mendix",
+  "synced_at": "2026-03-08T00:14:08.749304"
+}

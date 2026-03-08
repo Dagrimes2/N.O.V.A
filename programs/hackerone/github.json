@@ -1,0 +1,19 @@
+{
+  "name": "GitHub",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.github.net",
+    "*.githubapp.com",
+    "*.githubusercontent.com",
+    "api.github.com",
+    "classroom.github.com",
+    "education.github.com",
+    "gist.github.com",
+    "github.com",
+    "npmjs.com",
+    "npmjs.org"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/github",
+  "synced_at": "2026-03-08T00:14:08.762417"
+}

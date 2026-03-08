@@ -1,0 +1,12 @@
+{
+  "name": "Myndr",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.myndr.net",
+    "*.myndr.nl",
+    "www.myndr.nl"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/myndr",
+  "synced_at": "2026-03-08T00:14:08.750730"
+}

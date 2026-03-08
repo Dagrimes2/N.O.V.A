@@ -1,0 +1,11 @@
+{
+  "name": "Stripo Inc",
+  "platform": "hackerone",
+  "in_scope": [
+    "my.stripo.email",
+    "stripo.email"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/stripo",
+  "synced_at": "2026-03-08T00:14:08.751729"
+}

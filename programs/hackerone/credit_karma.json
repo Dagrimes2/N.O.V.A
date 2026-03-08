@@ -1,0 +1,19 @@
+{
+  "name": "Credit Karma",
+  "platform": "hackerone",
+  "in_scope": [
+    "accounts.creditkarma.com",
+    "api.creditkarma.com",
+    "blog.creditkarma.com",
+    "*.creditkarma.co.uk",
+    "*.creditkarma.ca",
+    "*.creditkarma.com",
+    "www.creditkarma.com/reviews",
+    "www.creditkarma.com/savings",
+    "support.creditkarma.ca",
+    "www.creditkarma.ca"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/creditkarma",
+  "synced_at": "2026-03-08T00:14:08.755383"
+}

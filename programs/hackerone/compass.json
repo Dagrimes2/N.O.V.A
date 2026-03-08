@@ -1,0 +1,10 @@
+{
+  "name": "Compass",
+  "platform": "hackerone",
+  "in_scope": [
+    "www.compass.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/compass-bbp",
+  "synced_at": "2026-03-08T00:14:08.727964"
+}

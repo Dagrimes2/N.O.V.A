@@ -1,0 +1,12 @@
+{
+  "name": "Whoop Bug Bounty",
+  "platform": "hackerone",
+  "in_scope": [
+    "api.prod.whoop.com",
+    "app.whoop.com",
+    "shop.whoop.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/whoop_bug_bounty",
+  "synced_at": "2026-03-08T00:14:08.703640"
+}

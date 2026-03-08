@@ -1,0 +1,25 @@
+{
+  "name": "SingleStore",
+  "platform": "hackerone",
+  "in_scope": [
+    "ai.*.svc.singlestore.com",
+    "api.singlestore.com",
+    "apps.*.svc.singlestore.com",
+    "auth.singlestore.com",
+    "authsvc.singlestore.com",
+    "backend.singlestore.com",
+    "bottle-api.*.svc.singlestore.com",
+    "bottle-dup.*.svc.singlestore.com",
+    "cell-agent.*.svc.singlestore.com",
+    "portal.singlestore.com",
+    "portal.singlestore.com/admin",
+    "nimbus-gateway.singlestore.com",
+    "notebook-gateway.*.svc.singlestore.com",
+    "nova-gateway.*.svc.singlestore.com",
+    "phone-home.singlestore.com",
+    "singlestore.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/singlestore",
+  "synced_at": "2026-03-08T00:14:08.712830"
+}

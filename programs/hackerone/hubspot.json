@@ -1,0 +1,17 @@
+{
+  "name": "HubSpot",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.hs-sites(-eu1)?.com",
+    "*.hubspotemail.net",
+    "*.hubspotpagebuilder.com",
+    "*.hubspotpagebuilder.eu",
+    "api*.hubapi.com",
+    "api*.hubspot.com",
+    "app*.hubspot.com",
+    "chatspot.ai"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/hubspot",
+  "synced_at": "2026-03-08T00:14:08.703922"
+}

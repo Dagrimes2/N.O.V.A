@@ -1,0 +1,11 @@
+{
+  "name": "Notion Labs, Inc.",
+  "platform": "hackerone",
+  "in_scope": [
+    "calendar.notion.so",
+    "mail.notion.so"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/notion",
+  "synced_at": "2026-03-08T00:14:08.722928"
+}

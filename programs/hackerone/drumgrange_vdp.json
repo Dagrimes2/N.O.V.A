@@ -1,0 +1,20 @@
+{
+  "name": "Drumgrange VDP",
+  "platform": "hackerone",
+  "in_scope": [
+    "drumgrange.com",
+    "localhost.drumgrange.com",
+    "localhost.drumgrange.com",
+    "support.drumgrange.co.uk",
+    "support.drumgrange.com",
+    "support.drumgrange.com",
+    "webmail.drumgrange.com",
+    "webmail.drumgrange.com",
+    "support.drumgrange.co.uk",
+    "vpnchertsey.drumgrange.com",
+    "vpnportland.drumgrange.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/drumgrange-vdp",
+  "synced_at": "2026-03-08T00:14:08.719148"
+}

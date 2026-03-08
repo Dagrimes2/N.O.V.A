@@ -1,0 +1,11 @@
+{
+  "name": "Simple Poll",
+  "platform": "hackerone",
+  "in_scope": [
+    "simplegoals.app",
+    "simplepoll.rocks"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/simple_poll",
+  "synced_at": "2026-03-08T00:14:08.751338"
+}

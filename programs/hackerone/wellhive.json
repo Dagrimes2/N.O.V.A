@@ -1,0 +1,13 @@
+{
+  "name": "WellHive",
+  "platform": "hackerone",
+  "in_scope": [
+    "analytics.wellhive.com",
+    "app.wellhive.com",
+    "corporate-okta.wellhive.com",
+    "login.wellhive.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/wellhive",
+  "synced_at": "2026-03-08T00:14:08.714778"
+}

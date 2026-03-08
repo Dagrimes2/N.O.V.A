@@ -1,0 +1,15 @@
+{
+  "name": "Starbucks",
+  "platform": "hackerone",
+  "in_scope": [
+    "app.starbucks.com",
+    "openapi.starbucks.com",
+    "secureui.starbucks.com",
+    "www.starbucks.ca",
+    "www.starbucks.com",
+    "www.starbucksreserve.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/starbucks",
+  "synced_at": "2026-03-08T00:14:08.762225"
+}

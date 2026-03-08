@@ -1,0 +1,12 @@
+{
+  "name": "Consensys",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.web3factory.consensys.net",
+    "staking.consensys.io",
+    "consensys.io"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/consensys",
+  "synced_at": "2026-03-08T00:14:08.741249"
+}

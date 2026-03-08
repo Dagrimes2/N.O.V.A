@@ -1,0 +1,12 @@
+{
+  "name": "FetLife",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.fetlife.com",
+    "fetlife.com",
+    "fetlifemail.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/fetlife",
+  "synced_at": "2026-03-08T00:14:08.762894"
+}

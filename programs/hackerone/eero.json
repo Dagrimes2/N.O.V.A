@@ -1,0 +1,11 @@
+{
+  "name": "eero",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.e2ro.com",
+    "*.eero.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/eero",
+  "synced_at": "2026-03-08T00:14:08.718538"
+}

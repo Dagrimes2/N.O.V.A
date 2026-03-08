@@ -1,0 +1,11 @@
+{
+  "name": "Wickr",
+  "platform": "hackerone",
+  "in_scope": [
+    "admin.wickr.com",
+    "www.wickr.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/wickr",
+  "synced_at": "2026-03-08T00:14:08.728370"
+}

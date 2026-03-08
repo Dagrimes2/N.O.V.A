@@ -1,0 +1,24 @@
+{
+  "name": "Shopify",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.pci.shopifyinc.com",
+    "*.shopify.com",
+    "*.shopify.io",
+    "*.shopifycloud.com",
+    "*.shopifycs.com",
+    "*.shopifykloud.com",
+    "accounts.shopify.com",
+    "admin.shopify.com",
+    "arrive-server.shopifycloud.com",
+    "linkpop.com",
+    "partners.shopify.com",
+    "shop.app",
+    "shopify.plus",
+    "shopifyinbox.com",
+    "your-store.myshopify.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/shopify",
+  "synced_at": "2026-03-08T00:14:08.763666"
+}

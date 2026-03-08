@@ -1,0 +1,17 @@
+{
+  "name": "Penn Entertainment",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.thescore.com",
+    "about.thescore.bet",
+    "hollywoodcasino.com",
+    "pennentertainment.com",
+    "pennplaycasino.com",
+    "thescore.bet",
+    "thescore.com",
+    "thescoreesports.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/penn_entertainment",
+  "synced_at": "2026-03-08T00:14:08.705112"
+}

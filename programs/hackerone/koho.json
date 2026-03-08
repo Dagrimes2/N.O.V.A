@@ -1,0 +1,16 @@
+{
+  "name": "KOHO",
+  "platform": "hackerone",
+  "in_scope": [
+    "app.koho.ca",
+    "api.koho.ca/1.0",
+    "api.koho.ca/partner",
+    "usercontent.koho.ca",
+    "web.koho.ca",
+    "webgateway.koho.ca",
+    "www.koho.ca"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/koho",
+  "synced_at": "2026-03-08T00:14:08.729025"
+}

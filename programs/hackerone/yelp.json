@@ -1,0 +1,13 @@
+{
+  "name": "Yelp",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.yelp-support.com",
+    "*.yelp.com",
+    "*.yelpwifi.com",
+    "yelptop100.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/yelp",
+  "synced_at": "2026-03-08T00:14:08.764792"
+}

@@ -1,0 +1,15 @@
+{
+  "name": "BILL VDP",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.2go.com",
+    "*.bill.com",
+    "*.divvy.co",
+    "*.finmark.com",
+    "app.bill.com",
+    "app.divvy.co"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/bill_vdp",
+  "synced_at": "2026-03-08T00:14:08.704825"
+}

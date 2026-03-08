@@ -1,0 +1,11 @@
+{
+  "name": "Rocket.Chat",
+  "platform": "hackerone",
+  "in_scope": [
+    "cloud.rocket.chat",
+    "rocket.chat"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/rocket_chat",
+  "synced_at": "2026-03-08T00:14:08.760462"
+}

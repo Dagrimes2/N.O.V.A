@@ -1,0 +1,13 @@
+{
+  "name": "British Airways VDP",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.ba.com",
+    "*.britishairways.com",
+    "www.britishairways.com/nx",
+    "www.britishairways.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/british_airways_vdp",
+  "synced_at": "2026-03-08T00:14:08.700379"
+}

@@ -1,0 +1,14 @@
+{
+  "name": "Redis VDP",
+  "platform": "hackerone",
+  "in_scope": [
+    "api.redislabs.com",
+    "app.redislabs.com",
+    "redis.io",
+    "www.redis.com",
+    "www.redislabs.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/redis-vdp",
+  "synced_at": "2026-03-08T00:14:08.729205"
+}

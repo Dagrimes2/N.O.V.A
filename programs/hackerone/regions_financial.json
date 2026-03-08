@@ -1,0 +1,20 @@
+{
+  "name": "Regions Financial",
+  "platform": "hackerone",
+  "in_scope": [
+    "clearsightadvisors.com",
+    "enerbank.com",
+    "firststerling.com",
+    "regions.com",
+    "regions.us",
+    "regionsapps.com",
+    "regionsdev.com",
+    "regionsqa.com",
+    "regionsretirement.com",
+    "regionssource.com",
+    "rgbk.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/regions_financial",
+  "synced_at": "2026-03-08T00:14:08.700536"
+}

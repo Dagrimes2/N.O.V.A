@@ -1,0 +1,14 @@
+{
+  "name": "Vodafone Oman",
+  "platform": "hackerone",
+  "in_scope": [
+    "apix.vodafone.om",
+    "vfo01.vodafone.om",
+    "vfo02.vodafone.om",
+    "vfo03.vodafone.om",
+    "www.vodafone.om"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/vodafone_oman",
+  "synced_at": "2026-03-08T00:14:08.720132"
+}

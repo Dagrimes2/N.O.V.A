@@ -1,0 +1,11 @@
+{
+  "name": "Magic Eden",
+  "platform": "hackerone",
+  "in_scope": [
+    "dicey.com",
+    "magiceden.io"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/magic-eden",
+  "synced_at": "2026-03-08T00:14:08.719647"
+}

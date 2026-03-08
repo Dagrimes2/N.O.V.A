@@ -1,0 +1,18 @@
+{
+  "name": "Hack The Box",
+  "platform": "hackerone",
+  "in_scope": [
+    "api.jobs.hackthebox.com",
+    "academy.hackthebox.com",
+    "account.hackthebox.com",
+    "app.hackthebox.com",
+    "ctf.hackthebox.com",
+    "enterprise.hackthebox.com",
+    "jobs.hackthebox.com",
+    "status.hackthebox.com",
+    "labs.hackthebox.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/hack_the_box",
+  "synced_at": "2026-03-08T00:14:08.701154"
+}

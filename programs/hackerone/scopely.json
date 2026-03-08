@@ -1,0 +1,12 @@
+{
+  "name": "Scopely",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.scopely.com",
+    "*.scopely.io",
+    "*.withbuddies.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/scopely",
+  "synced_at": "2026-03-08T00:14:08.761910"
+}

@@ -1,0 +1,24 @@
+{
+  "name": "Truist Financial",
+  "platform": "hackerone",
+  "in_scope": [
+    "businessdeposits.digitalcommerce.truist.com",
+    "creditcard.digitalcommerce.truist.com",
+    "deposits.digitalcommerce.truist.com",
+    "developer.truist.com",
+    "developer.truist.com",
+    "dias.bank.truist.com",
+    "dias.oneview.truist.com",
+    "dias.oneview.truist.com",
+    "lending.digitalcommerce.truist.com",
+    "new.digitalcommerce.truist.com",
+    "oneview.truist.com",
+    "teammate.digitalcommerce.truist.com",
+    "trade.digitalcommerce.truist.com",
+    "trade.digitalcommerce.truist.com",
+    "investments.truist.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/truist_financial",
+  "synced_at": "2026-03-08T00:14:08.718317"
+}

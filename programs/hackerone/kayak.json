@@ -1,0 +1,19 @@
+{
+  "name": "KAYAK",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.kayak.com",
+    "business.kayak.com",
+    "kayak.ai",
+    "www.cheapflights.com",
+    "www.checkfelix.com",
+    "www.hotelscombined.com",
+    "www.kayak.com",
+    "www.momondo.com",
+    "www.mundi.com.br",
+    "www.swoodoo.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/kayak",
+  "synced_at": "2026-03-08T00:14:08.763460"
+}

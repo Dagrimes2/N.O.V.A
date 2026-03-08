@@ -1,0 +1,13 @@
+{
+  "name": "Deribit",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.deribit.com",
+    "insights.deribit.com",
+    "pb.deribit.com",
+    "test.deribit.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/deribit",
+  "synced_at": "2026-03-08T00:14:08.726984"
+}

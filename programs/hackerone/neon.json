@@ -1,0 +1,12 @@
+{
+  "name": "Neon",
+  "platform": "hackerone",
+  "in_scope": [
+    "console-stage.neon.build",
+    "console.neon.tech",
+    "console.neon.tech/api/v2"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/neon_bbp",
+  "synced_at": "2026-03-08T00:14:08.705403"
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Canada Goose Inc.",
+  "platform": "hackerone",
+  "in_scope": [
+    "api.canadagoose.com",
+    "canadagoose.com",
+    "service.canadagoose.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/canada_goose_inc",
+  "synced_at": "2026-03-08T00:14:08.723369"
+}

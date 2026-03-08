@@ -1,0 +1,10 @@
+{
+  "name": "Staging.every.org",
+  "platform": "hackerone",
+  "in_scope": [
+    "staging.every.org"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/stagingdoteverydotorg",
+  "synced_at": "2026-03-08T00:14:08.750350"
+}

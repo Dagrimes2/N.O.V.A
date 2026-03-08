@@ -1,0 +1,15 @@
+{
+  "name": "Freshworks ",
+  "platform": "hackerone",
+  "in_scope": [
+    "yourdomain.freshcaller.com",
+    "yourdomain.freshchat.com",
+    "yourdomain.freshdesk.com",
+    "yourdomain.freshrelease.com",
+    "yourdomain.freshservice.com",
+    "yourdomain.myfreshworks.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/freshworks",
+  "synced_at": "2026-03-08T00:14:08.742107"
+}

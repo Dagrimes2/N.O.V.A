@@ -1,0 +1,17 @@
+{
+  "name": "Vectra AI, Inc. (Response)",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.vectra-svc.ai",
+    "*.vectra.ai",
+    "api.vectranetworks.com",
+    "metadata.vectranetworks.com",
+    "rp.vectranetworks.com",
+    "update2.vectranetworks.com",
+    "vectra.ai",
+    "vpn.vectranetworks.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/vectra_ai_vdp",
+  "synced_at": "2026-03-08T00:14:08.715553"
+}

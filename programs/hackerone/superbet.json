@@ -1,0 +1,30 @@
+{
+  "name": "Superbet",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.happening.dev",
+    "*.luckydays.ca",
+    "*.luckydays.com",
+    "*.napoleoncasino.be",
+    "*.napoleondice.be",
+    "*.napoleongames.be",
+    "*.napoleonsports.be",
+    "*.spinaway.com",
+    "*.superbet.com",
+    "*.superbet.pl",
+    "*.superbet.ro",
+    "*.superbet.rs",
+    "napoleoncasino.be",
+    "napoleoncasino.be/en-be/game/hogamba-crash?demo=false",
+    "napoleondice.be",
+    "napoleongames.be",
+    "napoleonsports.be",
+    "superbet.pl",
+    "superbet.ro",
+    "superbet.rs",
+    "superbet.bet.br"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/superbet",
+  "synced_at": "2026-03-08T00:14:08.719444"
+}

@@ -1,0 +1,13 @@
+{
+  "name": "FloQast",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.eu.floqast.app",
+    "*.floqast.app",
+    "api-eu.floqast.app",
+    "*.floqast.engineering"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/floqast",
+  "synced_at": "2026-03-08T00:14:08.726356"
+}

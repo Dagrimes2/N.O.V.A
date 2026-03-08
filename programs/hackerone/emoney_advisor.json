@@ -1,0 +1,12 @@
+{
+  "name": "eMoney Advisor",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.emaplan.com",
+    "*.emoneyadvisor.com",
+    "wealth.emaplan.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/emoney-advisor",
+  "synced_at": "2026-03-08T00:14:08.741911"
+}

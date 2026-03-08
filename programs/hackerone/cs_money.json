@@ -1,0 +1,14 @@
+{
+  "name": "CS Money",
+  "platform": "hackerone",
+  "in_scope": [
+    "3d.cs.money",
+    "blog.cs.money",
+    "cs.money",
+    "support.cs.money",
+    "wiki.cs.money"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/cs_money",
+  "synced_at": "2026-03-08T00:14:08.749541"
+}

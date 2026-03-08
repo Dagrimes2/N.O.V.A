@@ -1,0 +1,26 @@
+{
+  "name": "Netflix",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.nflxext.com",
+    "*.nflximg.net",
+    "*.nflxso.net",
+    "*.nflxvideo.net",
+    "*.prod.cloud.netflix.com",
+    "*.prod.dradis.netflix.com",
+    "*.prod.ftl.netflix.com",
+    "api*.netflix.com",
+    "beacon.netflix.com",
+    "customerevents.netflix.com",
+    "help.netflix.com",
+    "ichnaea.netflix.com",
+    "meechum.netflix.com",
+    "nmtracking.netflix.com",
+    "presentationtracking.netflix.com",
+    "secure.netflix.com",
+    "www.netflix.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/netflix",
+  "synced_at": "2026-03-08T00:14:08.714207"
+}

@@ -1,0 +1,19 @@
+{
+  "name": "GitLab",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.gitlab.net",
+    "*.gitlab.org",
+    "*.gitlap.com",
+    "about.gitlab.com",
+    "advisories.gitlab.com",
+    "customers.gitlab.com",
+    "design.gitlab.com",
+    "docs.gitlab.com",
+    "gitlab.com",
+    "registry.gitlab.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/gitlab",
+  "synced_at": "2026-03-08T00:14:08.765267"
+}

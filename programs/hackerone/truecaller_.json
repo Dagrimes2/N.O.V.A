@@ -1,0 +1,16 @@
+{
+  "name": "Truecaller ",
+  "platform": "hackerone",
+  "in_scope": [
+    "*-asia-south1.truecaller.com",
+    "*-eu.truecaller.com",
+    "*-noneu.truecaller.com",
+    "business-resources.truecaller.com",
+    "business.truecaller.com",
+    "web.truecaller.com",
+    "www.truecaller.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/truecaller",
+  "synced_at": "2026-03-08T00:14:08.751044"
+}

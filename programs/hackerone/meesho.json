@@ -1,0 +1,15 @@
+{
+  "name": "Meesho",
+  "platform": "hackerone",
+  "in_scope": [
+    "admin.meeshosupply.com",
+    "affiliate.meesho.com",
+    "superstoreapp.meesho.com",
+    "supplier.meesho.com",
+    "www.meesho.com",
+    "www.valmo.in"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/meesho_bbp",
+  "synced_at": "2026-03-08T00:14:08.701300"
+}

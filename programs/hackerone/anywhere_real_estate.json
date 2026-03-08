@@ -1,0 +1,25 @@
+{
+  "name": "Anywhere Real Estate",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.anywhere.re",
+    "*.bhgre.com",
+    "*.c21.com",
+    "*.cartus.com",
+    "*.cbcworldwide.com",
+    "*.century21.com",
+    "*.century21global.com",
+    "*.coldwellbanker.com",
+    "*.corcoran.com",
+    "*.era.com",
+    "*.leadrouter.com",
+    "*.mycbdesk.com",
+    "*.nrtllc.com",
+    "*.realogy.com",
+    "*.sothebysrealty.com",
+    "*.trgc.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/anywhererealestate",
+  "synced_at": "2026-03-08T00:14:08.747461"
+}

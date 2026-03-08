@@ -1,0 +1,10 @@
+{
+  "name": "FanDuel Response",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.fdbox.net"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/fanduel-vdp",
+  "synced_at": "2026-03-08T00:14:08.712673"
+}

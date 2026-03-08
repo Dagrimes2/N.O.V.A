@@ -1,0 +1,16 @@
+{
+  "name": "Brave Software",
+  "platform": "hackerone",
+  "in_scope": [
+    "account.brave.com",
+    "api-dashboard.search.brave.com",
+    "basicattentiontoken.org",
+    "brave.com",
+    "creators.basicattentiontoken.org",
+    "search.brave.com",
+    "talk.brave.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/brave",
+  "synced_at": "2026-03-08T00:14:08.761437"
+}

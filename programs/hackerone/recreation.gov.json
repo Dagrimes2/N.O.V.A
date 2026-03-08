@@ -1,0 +1,14 @@
+{
+  "name": "Recreation.gov",
+  "platform": "hackerone",
+  "in_scope": [
+    "cdn.recreation.gov",
+    "manage-cdn.recreation.gov",
+    "manage.recreation.gov",
+    "recreation.gov",
+    "www.recreation.gov"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/recreation_gov_vdp",
+  "synced_at": "2026-03-08T00:14:08.706274"
+}

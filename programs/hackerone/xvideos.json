@@ -1,0 +1,14 @@
+{
+  "name": "XVIDEOS",
+  "platform": "hackerone",
+  "in_scope": [
+    "www.xvideos.net/app",
+    "www.xnxx.com",
+    "www.xnxx.gold",
+    "www.xvideos.com",
+    "www.xvideos.red"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/xvideos",
+  "synced_at": "2026-03-08T00:14:08.747331"
+}

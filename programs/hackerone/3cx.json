@@ -1,0 +1,10 @@
+{
+  "name": "3CX",
+  "platform": "hackerone",
+  "in_scope": [
+    "portal.3cx.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/3cx",
+  "synced_at": "2026-03-08T00:14:08.713603"
+}

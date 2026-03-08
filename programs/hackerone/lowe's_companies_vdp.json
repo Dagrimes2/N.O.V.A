@@ -1,0 +1,14 @@
+{
+  "name": "Lowe's Companies VDP",
+  "platform": "hackerone",
+  "in_scope": [
+    "corporate.lowes.com",
+    "talent.lowes.com",
+    "uat.lpsdxp.com",
+    "www.lowes.co.in",
+    "lowes.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/lowes",
+  "synced_at": "2026-03-08T00:14:08.712978"
+}

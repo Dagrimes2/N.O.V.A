@@ -1,0 +1,19 @@
+{
+  "name": "Priceline",
+  "platform": "hackerone",
+  "in_scope": [
+    "bookingholdings-coe.com",
+    "cruises.priceline.com",
+    "flyiin.com",
+    "www.priceline.com/pwd/v0/pcln-graphql",
+    "ir.bookingholdings.com",
+    "press.priceline.com",
+    "priceline.com",
+    "www.bookingholdings.com",
+    "www.getaroom.com",
+    "www.priceline.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/priceline",
+  "synced_at": "2026-03-08T00:14:08.764697"
+}

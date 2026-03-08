@@ -1,0 +1,15 @@
+{
+  "name": "Kong",
+  "platform": "hackerone",
+  "in_scope": [
+    "developer.konghq.com",
+    "cloud.konghq.com",
+    "*.api.konghq.com",
+    "app.insomnia.rest",
+    "us.identity.konghq.com/*",
+    "konghq.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/kong",
+  "synced_at": "2026-03-08T00:14:08.701892"
+}

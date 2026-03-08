@@ -1,0 +1,10 @@
+{
+  "name": "Hotmart (VDP)",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.buildstaging.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/hotmartvdp",
+  "synced_at": "2026-03-08T00:14:08.703503"
+}

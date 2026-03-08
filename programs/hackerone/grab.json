@@ -1,0 +1,29 @@
+{
+  "name": "Grab",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.grab-sure.com",
+    "*.grab.co",
+    "*.grab.com",
+    "*.grabpay.com",
+    "*.grabtaxi.com",
+    "*.myteksi.com",
+    "*.myteksi.net",
+    "*.ovo.id",
+    "*.ovofinansial.com",
+    "api.grabpay.com",
+    "gamma.grab.co",
+    "gifts.grab.com",
+    "grab.careers",
+    "hungrygowhere.com",
+    "jira.grab.com",
+    "kartaview.org",
+    "manage.grab.co",
+    "p.grabtaxi.com",
+    "wiki.grab.com",
+    "xtramile.grabpay.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/grab",
+  "synced_at": "2026-03-08T00:14:08.762993"
+}

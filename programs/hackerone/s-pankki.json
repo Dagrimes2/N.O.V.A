@@ -1,0 +1,21 @@
+{
+  "name": "S-Pankki",
+  "platform": "hackerone",
+  "in_scope": [
+    "api.s-kaupat.fi",
+    "api.sokos.fi",
+    "digili.s-cloud.fi",
+    "extranet.s-pankki.fi",
+    "crosskey.io/stores/s-pankki/apis",
+    "mobile.s-pankki.fi",
+    "online.s-pankki.fi",
+    "tunnistus.s-ryhma.fi",
+    "www.prisma.fi",
+    "www.s-kaupat.fi",
+    "www.s-pankki.fi",
+    "www.sokos.fi"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/s-pankki",
+  "synced_at": "2026-03-08T00:14:08.756041"
+}

@@ -1,0 +1,14 @@
+{
+  "name": "Payoneer",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.payoneer.com",
+    "greenchannel.payoneer.com.cn/gcportal",
+    "myaccount-cn.payoneer.com",
+    "myaccount.payoneer.com",
+    "payoneer.com.cn"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/payoneer",
+  "synced_at": "2026-03-08T00:14:08.728648"
+}

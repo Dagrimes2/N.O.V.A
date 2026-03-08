@@ -1,0 +1,26 @@
+{
+  "name": "KHealth",
+  "platform": "hackerone",
+  "in_scope": [
+    "accounts.khealth.com",
+    "api.khealth.com",
+    "app.khealth.com",
+    "ask.khealth.com",
+    "auth.hhc247.org",
+    "eligibility.khealth.com",
+    "auth.khealth.com/cedars/sign-up",
+    "auth.khealth.com/khealth/sign-up",
+    "auth.khealth.com/mayo-la-crosse/sign-up",
+    "clinical-quality.khealth.com/api/v1",
+    "*.khealth.com",
+    "*.khealth.io",
+    "kaccount.khealth.com",
+    "salesforce.khealth.com",
+    "start.khealth.com",
+    "treatments.khealth.com",
+    "www.kpharmacyllc.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/khealth",
+  "synced_at": "2026-03-08T00:14:08.731155"
+}

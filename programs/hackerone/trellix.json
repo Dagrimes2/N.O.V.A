@@ -1,0 +1,11 @@
+{
+  "name": "Trellix",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.skyhighsecurity.com",
+    "*.trellix.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/trellix",
+  "synced_at": "2026-03-08T00:14:08.753784"
+}

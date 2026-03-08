@@ -1,0 +1,16 @@
+{
+  "name": "Bitwarden",
+  "platform": "hackerone",
+  "in_scope": [
+    "api.bitwarden.com",
+    "bitwarden.com",
+    "docs.passwordless.dev",
+    "help.bitwarden.com",
+    "identity.bitwarden.com",
+    "v4.passwordless.dev",
+    "vault.bitwarden.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/bitwarden",
+  "synced_at": "2026-03-08T00:14:08.759662"
+}

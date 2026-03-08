@@ -1,0 +1,13 @@
+{
+  "name": "Ring",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.blinkforhome.com/*",
+    "*.immedia-semi.com/*",
+    "prd-ring-web-us.prd.rings.solutions",
+    "publicsafety.ring.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/ring",
+  "synced_at": "2026-03-08T00:14:08.718207"
+}

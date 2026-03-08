@@ -1,0 +1,12 @@
+{
+  "name": "SMTP2GO BBP",
+  "platform": "hackerone",
+  "in_scope": [
+    "api.smtp2go.com",
+    "app.smtp2go.com",
+    "smtp2go.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/smtp2go",
+  "synced_at": "2026-03-08T00:14:08.731271"
+}

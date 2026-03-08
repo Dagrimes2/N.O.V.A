@@ -1,0 +1,11 @@
+{
+  "name": "Gymshark",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.gymshark.com",
+    "*.gymshark.io"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/gymshark",
+  "synced_at": "2026-03-08T00:14:08.727655"
+}

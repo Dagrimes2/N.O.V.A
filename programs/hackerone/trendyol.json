@@ -1,0 +1,14 @@
+{
+  "name": "Trendyol",
+  "platform": "hackerone",
+  "in_scope": [
+    "m.trendyol.com",
+    "www.dolap.com",
+    "www.tgoyemek.com",
+    "www.trendyol-milla.com",
+    "www.trendyol.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/trendyol",
+  "synced_at": "2026-03-08T00:14:08.740302"
+}

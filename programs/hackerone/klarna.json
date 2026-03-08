@@ -1,0 +1,17 @@
+{
+  "name": "Klarna",
+  "platform": "hackerone",
+  "in_scope": [
+    "api.klarna.com",
+    "js.klarna.com",
+    "klarna.com",
+    "klarna.net",
+    "klarnacdn.net",
+    "portal.openbanking.playground.klarna.com",
+    "pricerunner.com",
+    "xs2a.banking.playground.klarna.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/klarna",
+  "synced_at": "2026-03-08T00:14:08.711940"
+}

@@ -1,0 +1,11 @@
+{
+  "name": "WHO COVID-19 Mobile App",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.whocoronavirus.org",
+    "hack.whocoronavirus.org"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/who-covid-19-mobile-app",
+  "synced_at": "2026-03-08T00:14:08.741703"
+}
