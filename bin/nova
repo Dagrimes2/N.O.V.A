@@ -159,7 +159,7 @@ def safe_probe(target, mode="light"):
         "security_headers": [], "risk_score": 0
     }
     status = subprocess.run(
-        ["curl","-s","-o","/dev/null","-w","%{http_code}",f"http://{clean_target}"],
+        ["curl","-s","-L","-o","/dev/null","-w","%{http_code}",f"http://{clean_target}"],
         capture_output=True, text=True
     ).stdout.strip()
     report["status"] = status
@@ -321,11 +321,53 @@ def nova_sync():
     SOURCES = {
         "hackerone": "https://raw.githubusercontent.com/arkadiyt/bounty-targets-data/main/data/hackerone_data.json",
         "bugcrowd":  "https://raw.githubusercontent.com/arkadiyt/bounty-targets-data/main/data/bugcrowd_data.json",
+        "intigriti": "https://raw.githubusercontent.com/arkadiyt/bounty-targets-data/main/data/intigriti_data.json",
+        "yeswehack": "https://raw.githubusercontent.com/arkadiyt/bounty-targets-data/main/data/yeswehack_data.json",
     }
 
     print("[N.O.V.A] Syncing bug bounty programs...")
     total = 0
-
+# HackenProof — direct API
+    try:
+        print("  Fetching hackenproof...")
+        platform_dir = PROGRAMS / "hackenproof"
+        platform_dir.mkdir(parents=True, exist_ok=True)
+        with urllib.request.urlopen(
+            "https://hackenproof.com/programs.json", timeout=30
+        ) as r:
+            data = json.loads(r.read())
+        count = 0
+        for program in data:
+            name = program.get("name", "unknown")
+            safe_name = name.lower().replace(" ","_").replace("/","_")[:50]
+            in_scope = []
+            for t in program.get("scope", []):
+                if isinstance(t, dict):
+                    asset = t.get("target", t.get("url", ""))
+                    if asset:
+                        in_scope.append(
+                            asset.replace("https://","")
+                                 .replace("http://","")
+                                 .strip("/")
+                        )
+            if not in_scope:
+                continue
+            prog_data = {
+                "name": name,
+                "platform": "hackenproof",
+                "in_scope": in_scope,
+                "out_of_scope": [],
+                "url": program.get("url",""),
+                "synced_at": datetime.now().isoformat()
+            }
+            (platform_dir / f"{safe_name}.json").write_text(
+                json.dumps(prog_data, indent=2)
+            )
+            count += 1
+        print(f"  ✓ hackenproof: {count} programs saved")
+    except Exception as e:
+        print(f"  ✗ hackenproof failed: {e}")
+        print(f"    (Their API endpoint may differ — check hackenproof.com/api)")
     for platform, url in SOURCES.items():
         platform_dir = PROGRAMS / platform
         platform_dir.mkdir(parents=True, exist_ok=True)

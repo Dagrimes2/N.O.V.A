@@ -28,11 +28,11 @@
     "self-improvement"
   ],
   "stats": {
-    "total_scans": 22,
-    "findings_stored": 28,
+    "total_scans": 25,
+    "findings_stored": 32,
     "dreams_completed": 2,
     "chats_with_travis": 1,
-    "life_entries": 1,
+    "life_entries": 2,
     "programs_available": 393,
     "first_decision": "act",
     "first_target": "example.com/admin"
