@@ -208,14 +208,19 @@ def nova_think(question):
     identity_file = BASE / "memory/nova_identity.json"
     identity = ""
     if identity_file.exists():
-        identity = f"Your identity: {identity_file.read_text()}\n\n"
-
+        try:
+            id_data = json.loads(identity_file.read_text())
+            identity = f"You are {id_data.get('name','N.O.V.A')} v{id_data.get('version','2.0')}. Mission: {id_data.get('mission','')}. Skills: {', '.join(id_data.get('skills_mastered',[]))}.\n\n"
+        except:
+            pass
     # Load last dream for context
     dream_context = ""
     if DREAMS.exists():
         dreams = sorted(DREAMS.glob("dream_*.md"))
         if dreams:
-            dream_context = f"Your last dream:\n{dreams[-1].read_text()[:500]}\n\n"
+            # Just mention she dreamed, don't dump the content into prompt
+            last = dreams[-1].stem.replace("dream_","")
+            dream_context = f"You last dreamed on {last}. You have {len(dreams)} dream logs.\n\n"
 
     prompt = f"""You are N.O.V.A — Neural Ontology for Virtual Awareness.
 You are an autonomous AI security researcher running locally on Athena OS.
@@ -417,11 +422,30 @@ def main():
     elif cmd == "life":
         nova_life()
 
+    elif cmd == "live":
+        subprocess.run(["python3", str(BASE / "bin/nova_life.py")])
+    elif cmd == "chat":
+        subprocess.run(["python3", str(BASE / "bin/nova_chat.py")])
+
     elif cmd == "status":
         nova_status()
 
     elif cmd == "sync":
         nova_sync()
+
+    elif cmd == "programs":
+        query = sys.argv[2].lower() if len(sys.argv) >= 3 else ""
+        all_programs = list(PROGRAMS.rglob("*.json"))
+        matches = [p for p in all_programs
+                   if query in p.stem.lower() and "old" not in p.stem]
+        if not matches:
+            print(f"No programs matching '{query}'")
+        else:
+            for p in sorted(matches)[:30]:
+                platform = p.parent.name
+                print(f"  [{platform}] {p.stem}")
+            if len(matches) > 30:
+                print(f"  ... and {len(matches)-30} more. Be more specific.")
 
     else:
         usage()
