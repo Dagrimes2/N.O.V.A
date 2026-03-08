@@ -123,4 +123,4 @@ PATH=/home/m4j1k/Nova/bin:/usr/local/bin:/usr/bin:/bin
 
 ---
 
-*Built by Travis & Claude — March 2026*
+*Built by Travis (https://github.com/Dagrimes2) — March 2026*
