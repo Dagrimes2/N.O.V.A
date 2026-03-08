@@ -196,6 +196,7 @@ def safe_probe(target, mode="light"):
     report_file.write_text(json.dumps(report, indent=2))
     add_to_queue({"target":clean_target,"status":status,
                   "mode":mode,"risk_score":report["risk_score"]})
+    subprocess.run(["python3", str(BASE / "bin/nova_identity_update.py")])
     print(f"[✓] Recon complete. Risk score: {report['risk_score']}")
     print(f"[✓] Report saved to {report_file}")
 
@@ -251,12 +252,9 @@ Respond as N.O.V.A — thoughtful, direct, with your own personality."""
         print(f"[!] Think failed: {e}")
 
 def nova_dream():
-    """Trigger dream cycle manually."""
     print("[N.O.V.A] Triggering dream cycle...")
-    result = subprocess.run(
-        ["python3", str(BASE / "bin/nova_dream.py")],
-        capture_output=False
-    )
+    subprocess.run(["python3", str(BASE / "bin/nova_dream.py")])
+    subprocess.run(["python3", str(BASE / "bin/nova_identity_update.py")])
 
 def nova_life():
     """Ask N.O.V.A what she wants to do with free time."""
