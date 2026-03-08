@@ -111,6 +111,10 @@
     "example.com/login/status": {
       "seen": 18,
       "confirmed": 0
+    },
+    "None/": {
+      "seen": 8,
+      "confirmed": 0
     }
   },
   "signals": {

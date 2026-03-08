@@ -1,0 +1,9 @@
+{
+  "name": "Demo Program",
+  "platform": "hackerone",
+  "in_scope": ["example.com", "*.example.com"],
+  "out_of_scope": [],
+  "priority_assets": ["admin.example.com"],
+  "focus": ["auth", "api"],
+  "severity_target": "high"
+}

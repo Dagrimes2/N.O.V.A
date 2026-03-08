@@ -150,6 +150,8 @@ def normalize_record(record: Dict[str, Any]) -> Dict[str, Any]:
     host = first_non_none(
         record.get("host"),
         record.get("hostname"),
+        record.get("target"),
+        record.get("domain"),
         record.get("domain"),
         host_from_url,
     )

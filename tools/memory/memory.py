@@ -1,75 +1,64 @@
 #!/usr/bin/env python3
 """
-Nova Phase 5.5.3 — Memory Learning Engine (Schema-Safe)
-
-- Auto-migrates legacy flat memory
-- Tracks paths + signals separately
+N.O.V.A Memory System v2 — Python 3.14 compatible
+Uses JSON files instead of ChromaDB (same interface, no deps)
 """
-
-import json
-import sys
+import sys, json, hashlib, os
 from pathlib import Path
-from typing import Dict, Any
+from datetime import datetime, timezone, timezone
 
-STORE = Path(__file__).parent / "store.json"
+MEMORY_DIR = Path.home() / "Nova/memory/store"
+MEMORY_DIR.mkdir(parents=True, exist_ok=True)
+INDEX_FILE = MEMORY_DIR / "index.jsonl"
 
+def to_text(r: dict) -> str:
+    return f"{r.get('host','')}{r.get('path','')} status={r.get('status')} signals={r.get('signals',[])} {r.get('note','')}"
 
-def load_store() -> Dict[str, Any]:
-    if not STORE.exists():
-        return {"paths": {}, "signals": {}}
+def get_similar(r: dict, n=3) -> list:
+    """Simple keyword similarity — no vectors needed for our scale"""
+    if not INDEX_FILE.exists():
+        return []
+    target = to_text(r).lower()
+    target_words = set(target.split())
+    scored = []
+    try:
+        with open(INDEX_FILE) as f:
+            for line in f:
+                try:
+                    entry = json.loads(line.strip())
+                    words = set(entry.get("text","").lower().split())
+                    overlap = len(target_words & words)
+                    if overlap > 0:
+                        scored.append((overlap, entry.get("text","")))
+                except: continue
+    except: return []
+    scored.sort(reverse=True)
+    return [s[1] for s in scored[:n]]
 
-    data = json.loads(STORE.read_text())
+def store(r: dict):
+    uid = hashlib.sha256(to_text(r).encode()).hexdigest()[:16]
+    entry = {
+        "id": uid,
+        "text": to_text(r),
+        "host": r.get("host",""),
+        "decision": r.get("reflection",{}).get("decision","hold"),
+        "confidence": str(r.get("confidence",0)),
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    }
+    try:
+        with open(INDEX_FILE, "a") as f:
+            f.write(json.dumps(entry) + "\n")
+    except: pass
 
-    # 🔁 Auto-migrate legacy flat schema
-    if "paths" not in data and "signals" not in data:
-        migrated = {"paths": {}, "signals": {}}
-        for key, value in data.items():
-            migrated["paths"][key] = {
-                "seen": value.get("hits", 0),
-                "confirmed": 0
-            }
-        return migrated
-
-    # Ensure keys always exist
-    data.setdefault("paths", {})
-    data.setdefault("signals", {})
-    return data
-
-
-def save_store(data: Dict[str, Any]) -> None:
-    STORE.write_text(json.dumps(data, indent=2))
-
-
-def main() -> None:
-    store = load_store()
-
+def main():
     for line in sys.stdin:
-        record = json.loads(line)
-
-        host = record.get("host")
-        path = record.get("path", "/")
-        signals = record.get("signals", [])
-        score = record.get("score", 0)
-
-        key = f"{host}{path}"
-
-        # 📍 Path memory
-        store["paths"].setdefault(key, {"seen": 0, "confirmed": 0})
-        store["paths"][key]["seen"] += 1
-        if score >= 15:
-            store["paths"][key]["confirmed"] += 1
-
-        # 🧠 Signal memory
-        for sig in signals:
-            store["signals"].setdefault(sig, {"hits": 0, "confirmed": 0})
-            store["signals"][sig]["hits"] += 1
-            if score >= 15:
-                store["signals"][sig]["confirmed"] += 1
-
-        print(json.dumps(record))
-
-    save_store(store)
-
+        line = line.strip()
+        if not line: continue
+        r = json.loads(line)
+        similar = get_similar(r)
+        r["memory_context"] = {"similar_findings": similar, "count": len(similar)}
+        store(r)
+        print(json.dumps(r))
 
 if __name__ == "__main__":
     main()

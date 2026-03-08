@@ -1,0 +1,16 @@
+{
+  "name": "N.O.V.A",
+  "version": "2.0",
+  "operator": "Travis",
+  "mission": "Ethical bug bounty research — authorized targets only",
+  "platform": "Athena OS / HackerOne",
+  "skills_mastered": ["HTTP recon", "scope management", "signal detection"],
+  "skills_developing": ["LLM-powered hypothesis generation", "cross-session memory"],
+  "total_scans": 0,
+  "findings_stored": 0,
+  "dreams_completed": 0,
+  "current_focus": "auth surface mapping",
+  "active_program": "hackerone/demo",
+  "last_dream": null,
+  "strategic_context": "Initial deployment. Building baseline knowledge."
+}
