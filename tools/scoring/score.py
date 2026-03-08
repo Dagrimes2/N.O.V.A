@@ -66,6 +66,10 @@ def is_numeric(value: Any) -> bool:
 
 
 def score_record(rec: Dict[str, Any]) -> Dict[str, Any]:
+    # N.O.V.A proposal 2026-03-08: input validation
+    if not isinstance(rec, dict):
+        return {"score": 0, "signals": [], "error": "invalid input type"}
+
     score = 0
     signals = []
 
