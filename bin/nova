@@ -65,6 +65,8 @@ MIND
   nova evolve                      generate self-improvement proposal
   nova evolve list                 show pending proposals
   nova evolve approve <name>       approve a proposal
+  nova research "<query>"          search and synthesize on any topic
+  nova research "<cve>" --cve      search CVE database specifically
 """)
     sys.exit(1)
 
@@ -478,6 +480,10 @@ def main():
 
     elif cmd == "chat":
         subprocess.run(["python3", str(BASE / "bin/nova_chat.py")])
+
+    elif cmd == "research" and len(sys.argv) >= 3:
+        args = sys.argv[2:]
+        subprocess.run(["python3", str(BASE / "bin/nova_research.py")] + args)
 
     elif cmd == "status":
         nova_status()
