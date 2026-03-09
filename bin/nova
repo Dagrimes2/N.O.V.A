@@ -150,7 +150,7 @@ def safe_probe(target, mode="light"):
         print(f"[!] Target {target} is OUT OF SCOPE.")
         sys.exit(1)
     print(f"[+] Safe probe ({mode}): {target}")
-    clean_target = target.replace("https://","").replace("http://","").strip("/")
+    clean_target = target.replace("https://","").replace("https://","").strip("/")
     report = {
         "target": clean_target,
         "status": None, "server": None,
@@ -159,12 +159,12 @@ def safe_probe(target, mode="light"):
         "security_headers": [], "risk_score": 0
     }
     status = subprocess.run(
-        ["curl","-s","-L","-o","/dev/null","-w","%{http_code}",f"http://{clean_target}"],
+        ["curl","-s","-L","-o","/dev/null","-w","%{https_code}",f"https://{clean_target}"],
         capture_output=True, text=True
     ).stdout.strip()
     report["status"] = status
     headers = subprocess.run(
-        ["curl","-s","-I",f"http://{clean_target}"],
+        ["curl","-s","-I",f"https://{clean_target}"],
         capture_output=True, text=True
     ).stdout
     for line in headers.splitlines():
@@ -183,8 +183,8 @@ def safe_probe(target, mode="light"):
     if mode == "deep":
         for path in ["admin","login","api","dashboard"]:
             resp = subprocess.run(
-                ["curl","-s","-o","/dev/null","-w","%{http_code}",
-                 f"http://{clean_target}/{path}"],
+                ["curl","-s","-o","/dev/null","-w","%{https_code}",
+                 f"https://{clean_target}/{path}"],
                 capture_output=True, text=True
             ).stdout.strip()
             if resp not in ["404","000"]:
