@@ -1,39 +1,33 @@
 #!/usr/bin/env python3
 """
-N.O.V.A Self-Healing Engine
-Detects broken components and fixes what it safely can.
-Reports what needs human intervention.
+N.O.V.A Self-Healing Engine v3
+Scans ALL Python scripts, repairs broken ones autonomously.
+Backs up before every repair. Restores if fix fails.
+Never touches governance or the main nova CLI.
 """
-import json, subprocess, requests, sys, os
+import json, subprocess, requests, sys, os, shutil
 from pathlib import Path
 from datetime import datetime
 
 BASE       = Path.home() / "Nova"
 HEAL_LOG   = BASE / "logs/heal.log"
+BACKUP_DIR = BASE / "memory/backups"
 OLLAMA_URL = "http://localhost:11434/api/generate"
 MODEL      = os.getenv("NOVA_MODEL", "gemma2:2b")
 
 HEAL_LOG.parent.mkdir(parents=True, exist_ok=True)
+BACKUP_DIR.mkdir(parents=True, exist_ok=True)
 
-PIPELINE_SCRIPTS = [
-    "normalize.py",
-    "tools/scoring/score.py",
-    "tools/reasoning/hypothesize.py",
-    "tools/reasoning/reflect.py",
-    "tools/reasoning/meta_reason.py",
-    "tools/memory/memory.py",
-    "tools/operator/queue.py",
+PROTECTED = [
+    str(BASE / "tools/governance/autonomy_guard.py"),
+    str(BASE / "tools/governance/audit.py"),
+    str(BASE / "bin/nova"),
 ]
 
 REQUIRED_DIRS = [
-    "memory/store",
-    "memory/dreams",
-    "memory/life",
-    "memory/chats",
-    "logs",
-    "reports",
-    "state",
-    "core",
+    "memory/store", "memory/dreams", "memory/life",
+    "memory/chats", "memory/research", "memory/proposals",
+    "memory/backups", "logs", "reports", "state", "core", "tests",
 ]
 
 def log(msg):
@@ -43,148 +37,203 @@ def log(msg):
     with open(HEAL_LOG, "a") as f:
         f.write(line + "\n")
 
-def check_ollama() -> bool:
-    try:
-        resp = requests.get("http://localhost:11434/api/tags", timeout=3)
-        return resp.status_code == 200
-    except:
-        return False
+def backup_file(path: Path) -> Path:
+    ts = datetime.now().strftime("%Y%m%d-%H%M%S")
+    backup = BACKUP_DIR / f"{path.name}.{ts}.bak"
+    shutil.copy2(path, backup)
+    return backup
 
-def heal_ollama():
-    log("[HEAL] Ollama down — attempting restart...")
+def check_syntax(path: Path) -> tuple:
     result = subprocess.run(
-        ["sudo", "systemctl", "restart", "ollama"],
+        ["python3", "-m", "py_compile", str(path)],
         capture_output=True, text=True
     )
-    import time; time.sleep(3)
-    if check_ollama():
-        log("[HEAL] ✓ Ollama restarted successfully")
-        return True
-    else:
-        log("[HEAL] ✗ Ollama restart failed — manual intervention needed")
+    return result.returncode == 0, result.stderr.strip()
+
+def discover_scripts() -> list:
+    scripts = []
+    for path in BASE.rglob("*.py"):
+        if "__pycache__" in str(path): continue
+        if str(path) in PROTECTED: continue
+        scripts.append(path)
+    return sorted(scripts)
+
+def llm_repair(path: Path, error: str) -> str:
+    code = path.read_text()
+    prompt = f"""You are N.O.V.A repairing your own code.
+
+File: {path.name}
+Syntax error: {error}
+
+Code:
+{code[:2000]}
+
+Fix the syntax error. Return the complete corrected Python file.
+Return ONLY the fixed code, no explanation, no markdown."""
+
+    try:
+        resp = requests.post(OLLAMA_URL, json={
+            "model": MODEL,
+            "prompt": prompt,
+            "stream": False,
+            "options": {"temperature": 0.1, "num_predict": 800}
+        }, timeout=300)
+        fixed = resp.json()["response"].strip()
+        if "```" in fixed:
+            fixed = fixed.split("```")[1]
+            if fixed.startswith("python"): fixed = fixed[6:]
+        return fixed.strip()
+    except Exception as e:
+        return ""
+
+def heal_script(path: Path) -> bool:
+    ok, error = check_syntax(path)
+    if ok: return True
+
+    log(f"[BROKEN] {path.relative_to(BASE)}")
+    log(f"  Error: {error}")
+
+    backup = backup_file(path)
+    log(f"  Backup: {backup.name}")
+    log(f"  Attempting autonomous repair...")
+
+    fixed_code = llm_repair(path, error)
+    if not fixed_code:
+        log(f"  [FAIL] LLM returned empty")
         return False
 
-def check_pipeline_scripts() -> list:
-    broken = []
-    for script in PIPELINE_SCRIPTS:
-        path = BASE / script
-        if not path.exists():
-            broken.append((script, "missing"))
-            continue
-        result = subprocess.run(
-            ["python3", "-m", "py_compile", str(path)],
-            capture_output=True, text=True
-        )
-        if result.returncode != 0:
-            broken.append((script, result.stderr.strip()))
-    return broken
+    path.write_text(fixed_code)
+    ok2, error2 = check_syntax(path)
+    if ok2:
+        log(f"  [FIXED] ✓ Repaired autonomously")
+        return True
+    else:
+        shutil.copy2(backup, path)
+        log(f"  [FAIL] Fix failed, restored backup. Error: {error2}")
+        return False
 
-def heal_directories():
-    fixed = []
-    for d in REQUIRED_DIRS:
-        path = BASE / d
-        if not path.exists():
-            path.mkdir(parents=True, exist_ok=True)
-            fixed.append(d)
-            log(f"[HEAL] ✓ Created missing directory: {d}")
-    return fixed
-
-def check_memory_index() -> bool:
+def check_memory_index():
     index = BASE / "memory/store/index.jsonl"
     if not index.exists():
         index.touch()
-        log("[HEAL] ✓ Created missing memory index")
-        return False
-    # Check for corrupted lines
-    good, bad = 0, 0
-    clean_lines = []
+        log("[HEAL] Created missing memory index")
+        return
+    good, bad, clean = 0, 0, []
     with open(index) as f:
         for line in f:
             line = line.strip()
-            if not line:
-                continue
+            if not line: continue
             try:
                 json.loads(line)
-                clean_lines.append(line)
+                clean.append(line)
                 good += 1
             except:
                 bad += 1
     if bad > 0:
-        log(f"[HEAL] ✓ Removed {bad} corrupted memory entries, kept {good}")
         with open(index, "w") as f:
-            for line in clean_lines:
-                f.write(line + "\n")
-    return True
+            f.write("\n".join(clean) + "\n")
+        log(f"[HEAL] Cleaned {bad} corrupted memory entries, kept {good}")
 
 def check_core_files():
-    defaults = {
-        "core/queue.json": "[]",
-        "core/whitelist.json": "[]",
-    }
-    for path_str, default in defaults.items():
-        path = BASE / path_str
+    defaults = {"core/queue.json": "[]", "core/whitelist.json": "[]"}
+    for p, default in defaults.items():
+        path = BASE / p
         if not path.exists():
             path.write_text(default)
-            log(f"[HEAL] ✓ Restored missing: {path_str}")
+            log(f"[HEAL] Restored: {p}")
         else:
             try:
                 json.loads(path.read_text())
             except:
-                log(f"[HEAL] ✓ Repaired corrupted: {path_str}")
                 path.write_text(default)
+                log(f"[HEAL] Repaired corrupted: {p}")
+
+def check_ollama() -> bool:
+    try:
+        return requests.get(
+            "http://localhost:11434/api/tags", timeout=3
+        ).status_code == 200
+    except:
+        return False
+
+def heal_ollama():
+    log("[HEAL] Ollama down — restarting...")
+    subprocess.run(["sudo", "systemctl", "restart", "ollama"],
+                   capture_output=True)
+    import time; time.sleep(4)
+    if check_ollama():
+        log("[HEAL] ✓ Ollama restarted")
+        return True
+    log("[HEAL] ✗ Ollama restart failed")
+    return False
 
 def run_health_check():
-    log("=" * 50)
-    log("[N.O.V.A] Health check starting...")
-    issues = []
-    fixed  = []
+    log("=" * 55)
+    log("[N.O.V.A] Health check + autonomous repair starting...")
+    issues, fixed, repaired = [], [], []
 
-    # 1. Directories
-    fixed_dirs = heal_directories()
-    if fixed_dirs:
-        fixed.extend(fixed_dirs)
+    # Directories
+    for d in REQUIRED_DIRS:
+        p = BASE / d
+        if not p.exists():
+            p.mkdir(parents=True, exist_ok=True)
+            fixed.append(d)
+            log(f"[HEAL] ✓ Created: {d}")
 
-    # 2. Core files
+    # Core files
     check_core_files()
 
-    # 3. Memory
+    # Memory
     check_memory_index()
 
-    # 4. Ollama
+    # Ollama
     if check_ollama():
         log("[OK] Ollama: running")
     else:
-        if heal_ollama():
-            fixed.append("ollama")
-        else:
-            issues.append("ollama: offline, restart failed")
+        if heal_ollama(): fixed.append("ollama")
+        else: issues.append("ollama: offline")
 
-    # 5. Pipeline scripts
-    broken_scripts = check_pipeline_scripts()
-    if broken_scripts:
-        for script, error in broken_scripts:
-            log(f"[!!] Broken script: {script}")
-            log(f"     Error: {error}")
-            issues.append(f"{script}: syntax error")
-    else:
-        log("[OK] Pipeline scripts: all valid")
+    # ALL Python scripts
+    scripts = discover_scripts()
+    log(f"[N.O.V.A] Checking {len(scripts)} Python scripts...")
+    broken_count = 0
+    for path in scripts:
+        ok, error = check_syntax(path)
+        if not ok:
+            broken_count += 1
+            success = heal_script(path)
+            if success:
+                repaired.append(str(path.relative_to(BASE)))
+            else:
+                issues.append(f"{path.relative_to(BASE)}: repair failed")
 
-    # 6. Identity file
+    if broken_count == 0:
+        log(f"[OK] All {len(scripts)} scripts healthy")
+
+    # Identity
     identity = BASE / "memory/nova_identity.json"
     if identity.exists():
-        log("[OK] Identity file: present")
+        log("[OK] Identity: present")
     else:
-        log("[!!] Identity file missing — run nova_identity_update.py")
         issues.append("nova_identity.json: missing")
 
+    # Update stats
+    subprocess.run(
+        ["python3", str(BASE / "bin/nova_identity_update.py")],
+        capture_output=True
+    )
+
     # Summary
-    log("-" * 50)
+    log("-" * 55)
+    log(f"[N.O.V.A] Scanned: {len(scripts)} scripts")
+    log(f"[N.O.V.A] Fixed: {len(fixed)} structural issues")
+    if repaired:
+        log(f"[N.O.V.A] Auto-repaired: {', '.join(repaired)}")
     if not issues:
-        log(f"[N.O.V.A] ✓ All systems healthy. Fixed {len(fixed)} minor issues.")
+        log("[N.O.V.A] ✓ All systems healthy.")
     else:
-        log(f"[N.O.V.A] ✗ {len(issues)} issues need attention:")
-        for issue in issues:
-            log(f"  → {issue}")
+        log(f"[N.O.V.A] ✗ {len(issues)} unresolved:")
+        for i in issues: log(f"  → {i}")
 
     return issues
 
