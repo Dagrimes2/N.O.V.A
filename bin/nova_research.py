@@ -35,45 +35,64 @@ def web_fetch(url: str, timeout=15) -> str:
         return f"fetch_failed: {e}"
 
 def search_ddg(query: str) -> list:
-    """Search DuckDuckGo instant answers API."""
+    results = []
+
+    # Wikipedia — always works, no rate limits
     try:
-        url = f"https://api.duckduckgo.com/?q={quote(query)}&format=json&no_html=1"
-        resp = requests.get(url, timeout=10,
+        url = f"https://en.wikipedia.org/api/rest_v1/page/summary/{quote(query.replace(' ','_'))}"
+        resp = requests.get(url, timeout=10, headers={"User-Agent": "NOVA-research/2.0"})
+        if resp.ok and resp.json().get("extract"):
+            data = resp.json()
+            results.append({
+                "title": data.get("title", query),
+                "snippet": data["extract"][:400],
+                "url": data.get("content_urls",{}).get("desktop",{}).get("page","")
+            })
+    except: pass
+
+    # HackerOne disclosed reports feed
+    try:
+        url = f"https://hackerone.com/hacktivity.json?querystring={quote(query)}&limit=3"
+        resp = requests.get(url, timeout=10, headers={"User-Agent": "NOVA-research/2.0"})
+        if resp.ok:
+            for item in resp.json().get("reports", [])[:3]:
+                results.append({
+                    "title": item.get("title",""),
+                    "snippet": item.get("vulnerability_information","")[:200],
+                    "url": f"https://hackerone.com/reports/{item.get('id','')}"
+                })
+    except: pass
+
+    # CVE search as fallback for security queries
+    if not results and any(w in query.lower() for w in
+                           ["cve","vulnerability","exploit","bypass","injection","xss"]):
+        return search_cve(query)
+
+    return results
+
+def search_cve(keyword: str) -> list:
+    """Search NVD (NIST) CVE database — the real one."""
+    try:
+        url = f"https://services.nvd.nist.gov/rest/json/cves/2.0?keywordSearch={quote(keyword)}&resultsPerPage=5"
+        resp = requests.get(url, timeout=15,
                            headers={"User-Agent": "NOVA-research/2.0"})
         data = resp.json()
         results = []
-        # Abstract
-        if data.get("Abstract"):
+        for item in data.get("vulnerabilities", []):
+            cve = item.get("cve", {})
+            cve_id = cve.get("id", "")
+            desc = cve.get("descriptions", [{}])[0].get("value", "")[:200]
+            metrics = cve.get("metrics", {})
+            cvss = "N/A"
+            for key in ["cvssMetricV31", "cvssMetricV30", "cvssMetricV2"]:
+                if key in metrics:
+                    cvss = metrics[key][0].get("cvssData",{}).get("baseScore","N/A")
+                    break
             results.append({
-                "title": data.get("Heading", query),
-                "snippet": data["Abstract"],
-                "url": data.get("AbstractURL", "")
-            })
-        # Related topics
-        for t in data.get("RelatedTopics", [])[:4]:
-            if isinstance(t, dict) and t.get("Text"):
-                results.append({
-                    "title": t.get("Text","")[:60],
-                    "snippet": t.get("Text",""),
-                    "url": t.get("FirstURL","")
-                })
-        return results
-    except Exception as e:
-        return [{"error": str(e)}]
-
-def search_cve(keyword: str) -> list:
-    """Search CVE database for a keyword."""
-    try:
-        url = f"https://cve.circl.lu/api/search/{quote(keyword)}"
-        resp = requests.get(url, timeout=10)
-        data = resp.json()
-        results = []
-        for cve in data.get("results", [])[:5]:
-            results.append({
-                "id": cve.get("id",""),
-                "summary": cve.get("summary","")[:200],
-                "cvss": cve.get("cvss","N/A"),
-                "published": cve.get("Published","")[:10]
+                "id": cve_id,
+                "summary": desc,
+                "cvss": cvss,
+                "published": cve.get("published","")[:10]
             })
         return results
     except Exception as e:
