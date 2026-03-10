@@ -25,3 +25,8 @@ reports/
 core/queue.json
 core/whitelist.json
 state/active_program.json
+voice/*.onnx
+voice/*.json
+voice/voice/
+whisper.cpp/
+*.wav
