@@ -30,3 +30,6 @@ voice/*.json
 voice/voice/
 whisper.cpp/
 *.wav
+__pycache__/
+*.pyc
+*.pyo
