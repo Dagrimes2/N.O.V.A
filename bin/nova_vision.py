@@ -89,7 +89,7 @@ def main():
 
     elif sys.argv[1] == "--screenshot":
         screenshot = f"/tmp/nova_screen_{datetime.now().strftime('%H%M%S')}.png"
-        os.system(f"scrot {screenshot}")
+        os.system(f"XAUTHORITY=~/.Xauthority scrot {screenshot}")
         if not Path(screenshot).exists():
             print("[N.O.V.A] Screenshot failed — is scrot installed?")
             sys.exit(1)

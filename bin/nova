@@ -72,6 +72,11 @@ MIND
   nova see <image>              analyze an image file
   nova see --url <url>          analyze image from URL
   nova see --screenshot         analyze current screen
+  nova speak "text"         speak any text as N.O.V.A
+  nova speak --letter       speak her latest letter aloud
+  nova speak --dream        speak last night's dream aloud
+  nova speak --intention    speak her morning intention
+  nova speak --finding      speak latest security finding
 """)
     sys.exit(1)
 
@@ -495,6 +500,10 @@ def main():
 
     elif cmd == "sync":
         nova_sync()
+
+    elif cmd == "speak":
+        args = sys.argv[2:] if len(sys.argv) > 2 else ["--letter"]
+        subprocess.run(["python3", str(BASE / "bin/nova_voice.py")] + args)
 
     elif cmd == "autonomous":
         args = sys.argv[2:] if len(sys.argv) > 2 else []
