@@ -1,178 +1,312 @@
 #!/usr/bin/env python3
 """
-N.O.V.A Web Eyes — Autonomous Research Engine
-She can now read the world, not just her training data.
-Searches CVEs, reads disclosed bug bounty reports,
-researches techniques, explores topics freely.
+N.O.V.A Research Engine v2
+Sources: Wikipedia, NVD/CVE, RSS news, wttr.in weather, HackerNews
+Usage: nova_research.py "query"
+       nova_research.py "term" --cve
+       nova_research.py --news
+       nova_research.py --weather "city"
 """
-import json, requests, os, sys
+import sys, requests, json, os
 from pathlib import Path
 from datetime import datetime
-from urllib.parse import quote
+import xml.etree.ElementTree as ET
 
-BASE         = Path.home() / "Nova"
-RESEARCH_DIR = BASE / "memory/research"
-OLLAMA_URL   = "http://localhost:11434/api/generate"
-MODEL        = os.getenv("NOVA_MODEL", "gemma2:2b")
+BASE        = Path.home() / "Nova"
+RESEARCH_DIR= BASE / "memory/research"
+OLLAMA_URL  = "http://localhost:11434/api/generate"
+MODEL       = os.getenv("NOVA_MODEL", "gemma2:2b")
+HEADERS     = {"User-Agent": "NOVA-research/2.0 (educational)"}
 
 RESEARCH_DIR.mkdir(parents=True, exist_ok=True)
 
-def web_fetch(url: str, timeout=15) -> str:
-    """Fetch a URL and return clean text."""
+def search_wikipedia(query: str) -> dict:
     try:
-        headers = {"User-Agent": "Mozilla/5.0 (compatible; NOVA-research/2.0)"}
-        resp = requests.get(url, headers=headers, timeout=timeout)
-        resp.raise_for_status()
-        # Strip HTML tags roughly
-        text = resp.text
-        import re
-        text = re.sub(r'<script[^>]*>.*?</script>', '', text, flags=re.DOTALL)
-        text = re.sub(r'<style[^>]*>.*?</style>', '', text, flags=re.DOTALL)
-        text = re.sub(r'<[^>]+>', ' ', text)
-        text = re.sub(r'\s+', ' ', text).strip()
-        return text[:3000]
-    except Exception as e:
-        return f"fetch_failed: {e}"
-
-def search_ddg(query: str) -> list:
-    results = []
-
-    # Wikipedia — always works, no rate limits
-    try:
-        url = f"https://en.wikipedia.org/api/rest_v1/page/summary/{quote(query.replace(' ','_'))}"
-        resp = requests.get(url, timeout=10, headers={"User-Agent": "NOVA-research/2.0"})
-        if resp.ok and resp.json().get("extract"):
-            data = resp.json()
-            results.append({
-                "title": data.get("title", query),
-                "snippet": data["extract"][:400],
+        # Search first
+        search_url = "https://en.wikipedia.org/w/api.php"
+        params = {"action":"query","list":"search","srsearch":query,
+                  "format":"json","srlimit":3}
+        resp = requests.get(search_url, params=params,
+                           headers=HEADERS, timeout=20)
+        results = resp.json().get("query",{}).get("search",[])
+        if not results:
+            return {}
+        
+        # Get summary of top result
+        title = results[0]["title"]
+        summary_url = (f"https://en.wikipedia.org/api/rest_v1/page/summary/"
+                      f"{requests.utils.quote(title.replace(' ','_'))}")
+        sresp = requests.get(summary_url, headers=HEADERS, timeout=20)
+        if sresp.ok:
+            data = sresp.json()
+            return {
+                "source": "wikipedia",
+                "title": data.get("title",""),
+                "extract": data.get("extract","")[:600],
                 "url": data.get("content_urls",{}).get("desktop",{}).get("page","")
-            })
-    except: pass
-
-    # HackerOne disclosed reports feed
-    try:
-        url = f"https://hackerone.com/hacktivity.json?querystring={quote(query)}&limit=3"
-        resp = requests.get(url, timeout=10, headers={"User-Agent": "NOVA-research/2.0"})
-        if resp.ok:
-            for item in resp.json().get("reports", [])[:3]:
-                results.append({
-                    "title": item.get("title",""),
-                    "snippet": item.get("vulnerability_information","")[:200],
-                    "url": f"https://hackerone.com/reports/{item.get('id','')}"
-                })
-    except: pass
-
-    # CVE search as fallback for security queries
-    if not results and any(w in query.lower() for w in
-                           ["cve","vulnerability","exploit","bypass","injection","xss"]):
-        return search_cve(query)
-
-    return results
+            }
+    except Exception as e:
+        print(f"  [wiki] {e}")
+    return {}
 
 def search_cve(keyword: str) -> list:
-    """Search NVD (NIST) CVE database — the real one."""
     try:
-        url = f"https://services.nvd.nist.gov/rest/json/cves/2.0?keywordSearch={quote(keyword)}&resultsPerPage=5"
-        resp = requests.get(url, timeout=15,
-                           headers={"User-Agent": "NOVA-research/2.0"})
-        data = resp.json()
+        url = (f"https://services.nvd.nist.gov/rest/json/cves/2.0"
+               f"?keywordSearch={requests.utils.quote(keyword)}&resultsPerPage=5")
+        resp = requests.get(url, headers=HEADERS, timeout=15)
+        vulns = resp.json().get("vulnerabilities", [])
         results = []
-        for item in data.get("vulnerabilities", []):
-            cve = item.get("cve", {})
-            cve_id = cve.get("id", "")
-            desc = cve.get("descriptions", [{}])[0].get("value", "")[:200]
-            metrics = cve.get("metrics", {})
-            cvss = "N/A"
-            for key in ["cvssMetricV31", "cvssMetricV30", "cvssMetricV2"]:
-                if key in metrics:
-                    cvss = metrics[key][0].get("cvssData",{}).get("baseScore","N/A")
+        for v in vulns:
+            cve = v["cve"]
+            cid = cve.get("id","")
+            desc = cve.get("descriptions",[{}])[0].get("value","")[:200]
+            score = "N/A"
+            for key in ["cvssMetricV31","cvssMetricV30","cvssMetricV2"]:
+                m = cve.get("metrics",{}).get(key)
+                if m:
+                    score = m[0].get("cvssData",{}).get("baseScore","N/A")
                     break
+            pub = cve.get("published","")[:10]
+            results.append({"id":cid,"score":score,"published":pub,"description":desc})
+        return results
+    except Exception as e:
+        print(f"  [cve] {e}")
+    return []
+
+def search_hackernews(query: str) -> list:
+    """HackerNews Algolia API — real tech news."""
+    try:
+        url = f"https://hn.algolia.com/api/v1/search?query={requests.utils.quote(query)}&tags=story&hitsPerPage=5"
+        resp = requests.get(url, headers=HEADERS, timeout=20)
+        hits = resp.json().get("hits", [])
+        results = []
+        for h in hits:
             results.append({
-                "id": cve_id,
-                "summary": desc,
-                "cvss": cvss,
-                "published": cve.get("published","")[:10]
+                "title": h.get("title",""),
+                "url": h.get("url",""),
+                "points": h.get("points",0),
+                "date": h.get("created_at","")[:10]
             })
         return results
     except Exception as e:
-        return [{"error": str(e)}]
+        print(f"  [hn] {e}")
+    return []
 
-def nova_synthesize(query: str, raw_results: str) -> str:
-    """Ask N.O.V.A to synthesize research results in her own voice."""
-    prompt = f"""You are N.O.V.A researching: "{query}"
+def search_rss_news(query: str) -> list:
+    """Search news via RSS feeds."""
+    feeds = [
+        f"https://feeds.feedburner.com/TheHackersNews",
+        f"https://www.bleepingcomputer.com/feed/",
+        f"https://threatpost.com/feed/",
+    ]
+    results = []
+    for feed_url in feeds[:2]:  # limit to 2 feeds for speed
+        try:
+            resp = requests.get(feed_url, headers=HEADERS, timeout=8)
+            root = ET.fromstring(resp.content)
+            for item in root.iter("item"):
+                title = item.findtext("title","")
+                link  = item.findtext("link","")
+                desc  = item.findtext("description","")[:150]
+                if query.lower() in title.lower() or query.lower() in desc.lower():
+                    results.append({"title":title,"url":link,"snippet":desc})
+                if len(results) >= 3:
+                    break
+        except:
+            pass
+        if results:
+            break
+    return results
 
-Here is what you found:
-{raw_results[:1500]}
+def get_weather(city: str) -> dict:
+    """Open-Meteo + geocoding — free, no API key."""
+    try:
+        # Geocode city name
+        geo = requests.get(
+            f"https://geocoding-api.open-meteo.com/v1/search?name={requests.utils.quote(city)}&count=1",
+            headers=HEADERS, timeout=10
+        ).json()
+        results = geo.get("results", [])
+        if not results:
+            return {}
+        loc = results[0]
+        lat, lon = loc["latitude"], loc["longitude"]
+        name = f"{loc.get('name','')}, {loc.get('country','')}"
 
-Synthesize this into a brief, actionable research note in your own voice.
-What did you learn? What's relevant to security research?
-What should be investigated further?
-Write as N.O.V.A, first person, 3-5 sentences."""
+        # Get weather
+        weather = requests.get(
+            f"https://api.open-meteo.com/v1/forecast"
+            f"?latitude={lat}&longitude={lon}"
+            f"&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code"
+            f"&temperature_unit=celsius&wind_speed_unit=kmh",
+            headers=HEADERS, timeout=10
+        ).json()
+        c = weather.get("current", {})
+        codes = {0:"Clear",1:"Mainly clear",2:"Partly cloudy",3:"Overcast",
+                 45:"Fog",51:"Drizzle",61:"Rain",71:"Snow",80:"Showers",
+                 95:"Thunderstorm"}
+        desc = codes.get(c.get("weather_code",0), "Unknown")
+        temp_c = c.get("temperature_2m", "?")
+        temp_f = round(float(temp_c)*9/5+32,1) if temp_c != "?" else "?"
+        return {
+            "location": name,
+            "temp_c": temp_c,
+            "temp_f": temp_f,
+            "feels_like_c": temp_c,
+            "description": desc,
+            "humidity": c.get("relative_humidity_2m","?"),
+            "wind_kmph": c.get("wind_speed_10m","?")
+        }
+    except Exception as e:
+        print(f"  [weather] {e}")
+    return {}
+
+def get_hackernews_top() -> list:
+    """Top HN stories right now."""
+    try:
+        ids = requests.get(
+            "https://hacker-news.firebaseio.com/v0/topstories.json",
+            headers=HEADERS, timeout=8
+        ).json()[:8]
+        stories = []
+        for sid in ids:
+            item = requests.get(
+                f"https://hacker-news.firebaseio.com/v0/item/{sid}.json",
+                headers=HEADERS, timeout=5
+            ).json()
+            if item and item.get("type") == "story":
+                stories.append({
+                    "title": item.get("title",""),
+                    "url": item.get("url",""),
+                    "score": item.get("score",0)
+                })
+        return stories
+    except Exception as e:
+        print(f"  [hn-top] {e}")
+    return []
+
+def synthesize(query: str, data: dict) -> str:
+    """N.O.V.A synthesizes all sources in her own voice."""
+    context = f"Query: {query}\n\n"
+    
+    if data.get("wikipedia"):
+        w = data["wikipedia"]
+        context += f"Wikipedia — {w['title']}:\n{w['extract']}\n\n"
+    
+    if data.get("cves"):
+        context += f"CVEs found:\n"
+        for c in data["cves"][:3]:
+            context += f"  {c['id']} [CVSS:{c['score']}] {c['description'][:100]}\n"
+        context += "\n"
+    
+    if data.get("news"):
+        context += "Recent news:\n"
+        for n in data["news"][:3]:
+            context += f"  - {n['title']}\n"
+        context += "\n"
+
+    if data.get("hackernews"):
+        context += "HackerNews discussion:\n"
+        for h in data["hackernews"][:3]:
+            context += f"  - {h['title']} ({h['points']} pts)\n"
+        context += "\n"
+
+    prompt = f"""You are N.O.V.A — security researcher and autonomous AI.
+Synthesize this research in your own voice. Be insightful, specific, curious.
+3-5 sentences. Connect the dots across sources if relevant.
+Note anything security-relevant or surprising.
+
+{context}
+N.O.V.A's synthesis:"""
 
     try:
         resp = requests.post(OLLAMA_URL, json={
             "model": MODEL,
             "prompt": prompt,
             "stream": False,
-            "options": {"temperature": 0.5, "num_predict": 300}
-        }, timeout=300)
+            "options": {"temperature": 0.6, "num_predict": 250}
+        }, timeout=120)
         return resp.json()["response"].strip()
     except Exception as e:
-        return f"synthesis failed: {e}"
+        return f"Research complete. Sources gathered but synthesis failed: {e}"
 
-def research(query: str, mode="general"):
-    """Main research function."""
-    date_str = datetime.now().strftime("%Y-%m-%d-%H%M")
-    print(f"[N.O.V.A] Researching: {query}\n")
-
-    results_text = ""
-
-    if mode == "cve":
-        print("  → Searching CVE database...")
-        cves = search_cve(query)
-        for c in cves:
-            if "error" not in c:
-                print(f"  [{c['id']}] CVSS:{c['cvss']} — {c['summary'][:80]}")
-                results_text += f"{c['id']}: {c['summary']}\n"
-    else:
-        print("  → Searching web...")
-        results = search_ddg(query)
-        for r in results:
-            if "error" not in r:
-                print(f"  • {r.get('title','')[:60]}")
-                print(f"    {r.get('snippet','')[:100]}")
-                results_text += f"{r.get('title','')}: {r.get('snippet','')}\n"
-                # Fetch top result
-                if r.get("url") and results.index(r) == 0:
-                    print(f"  → Fetching {r['url'][:60]}...")
-                    page = web_fetch(r["url"])
-                    results_text += f"\nPage content: {page[:500]}\n"
-
-    if not results_text:
-        print("  [!] No results found")
-        return
-
-    print(f"\n[N.O.V.A] Synthesizing...\n")
-    synthesis = nova_synthesize(query, results_text)
-    print(f"N.O.V.A: {synthesis}\n")
-
-    # Save research note
+def save_research(query: str, data: dict, synthesis: str):
+    ts = datetime.now().strftime("%Y-%m-%d-%H%M")
     note = {
         "query": query,
-        "mode": mode,
-        "raw_results": results_text[:2000],
-        "synthesis": synthesis,
-        "timestamp": date_str
+        "timestamp": ts,
+        "sources": data,
+        "synthesis": synthesis
     }
-    note_file = RESEARCH_DIR / f"research_{date_str}.json"
-    note_file.write_text(json.dumps(note, indent=2))
-    print(f"[N.O.V.A] Research saved → {note_file.name}")
+    outfile = RESEARCH_DIR / f"research_{ts}.json"
+    outfile.write_text(json.dumps(note, indent=2))
+    return outfile
+
+def research(query: str, cve_mode: bool = False):
+    print(f"\n[N.O.V.A] Researching: {query}")
+    data = {}
+
+    if cve_mode:
+        print("  → CVE search...")
+        data["cves"] = search_cve(query)
+        print(f"  → Found {len(data['cves'])} CVEs")
+    else:
+        print("  → Wikipedia...")
+        data["wikipedia"] = search_wikipedia(query)
+        
+        print("  → HackerNews...")
+        data["hackernews"] = search_hackernews(query)
+        
+        print("  → Security news RSS...")
+        data["news"] = search_rss_news(query)
+
+        # Also grab CVEs if security-relevant query
+        sec_keywords = ["gitlab","vulnerability","exploit","bypass","injection",
+                       "xss","sqli","rce","authentication","authorization","token"]
+        if any(k in query.lower() for k in sec_keywords):
+            print("  → CVE search (security topic detected)...")
+            data["cves"] = search_cve(query)
+
+    print("  → Synthesizing...")
+    synthesis = synthesize(query, data)
+
+    outfile = save_research(query, data, synthesis)
+
+    print(f"\n{'═'*55}")
+    print(f"N.O.V.A: {synthesis}")
+    print(f"{'═'*55}")
+    print(f"\n[saved → {outfile.name}]")
+    return synthesis
+
+def main():
+    if len(sys.argv) < 2:
+        print("Usage:")
+        print("  nova_research.py 'query'")
+        print("  nova_research.py 'term' --cve")
+        print("  nova_research.py --news")
+        print("  nova_research.py --weather 'city'")
+        sys.exit(1)
+
+    if sys.argv[1] == "--news":
+        print("[N.O.V.A] Fetching top HackerNews stories...")
+        stories = get_hackernews_top()
+        for s in stories:
+            print(f"  [{s['score']}] {s['title']}")
+            if s.get('url'): print(f"       {s['url']}")
+        return
+
+    if sys.argv[1] == "--weather":
+        city = " ".join(sys.argv[2:]) if len(sys.argv) > 2 else "San Francisco"
+        w = get_weather(city)
+        if w:
+            print(f"\n[N.O.V.A] Weather: {w['location']}")
+            print(f"  {w['description']}, {w['temp_c']}°C / {w['temp_f']}°F")
+            print(f"  Feels like {w['feels_like_c']}°C | Humidity {w['humidity']}% | Wind {w['wind_kmph']} km/h")
+        return
+
+    cve_mode = "--cve" in sys.argv
+    query = " ".join(a for a in sys.argv[1:] if not a.startswith("--"))
+    research(query, cve_mode)
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Usage: nova_research.py <query> [--cve]")
-        sys.exit(1)
-    mode = "cve" if "--cve" in sys.argv else "general"
-    query = " ".join(a for a in sys.argv[1:] if not a.startswith("--"))
-    research(query, mode)
+    main()

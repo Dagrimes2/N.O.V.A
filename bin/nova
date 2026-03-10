@@ -79,6 +79,9 @@ MIND
   nova speak --finding      speak latest security finding
   nova listen              listen once, print transcript
   nova listen --chat       full voice conversation
+  nova report              draft report from top finding
+  nova report --list       show reportable findings
+  nova report --id <n>     draft specific finding
 """)
     sys.exit(1)
 
@@ -499,6 +502,10 @@ def main():
 
     elif cmd == "status":
         nova_status()
+
+    elif cmd == "report":
+        args = sys.argv[2:] if len(sys.argv) > 2 else []
+        subprocess.run(["python3", str(BASE / "bin/nova_report.py")] + args)
 
     elif cmd == "sync":
         nova_sync()

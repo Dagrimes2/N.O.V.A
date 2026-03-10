@@ -13,6 +13,7 @@
     "dev-training.ui.com",
     "fw-update.ubnt.com",
     "help.ui.com",
+    "help.uisp.com",
     "*.ui.com/distributors",
     "*.ui.com/training/partners",
     "ui.com/distributors",
@@ -28,5 +29,5 @@
   ],
   "out_of_scope": [],
   "url": "https://hackerone.com/ui",
-  "synced_at": "2026-03-08T14:55:56.772016"
+  "synced_at": "2026-03-10T04:02:02.553887"
 }
