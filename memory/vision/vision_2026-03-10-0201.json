@@ -1,0 +1,6 @@
+{
+  "source": "screenshot",
+  "question": "what do you see in this terminal?",
+  "analysis": "Vision failed: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)",
+  "timestamp": "2026-03-10-0201"
+}

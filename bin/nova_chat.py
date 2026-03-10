@@ -161,6 +161,8 @@ def chat():
             print("  [PING:host]       — host alive check")
             print("  [DNS:domain]      — DNS lookup")
             print("  [RESEARCH:topic]  — research any topic\n")
+            # In the 'tools' command output add:
+            print("  [SEE:path/url]    — analyze an image")
             continue
 
         history_text = ""

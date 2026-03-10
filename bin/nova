@@ -67,6 +67,11 @@ MIND
   nova evolve approve <name>       approve a proposal
   nova research "<query>"          search and synthesize on any topic
   nova research "<cve>" --cve      search CVE database specifically
+  nova autonomous          run one autonomous cycle now
+  nova autonomous status   check notifications + recent activity
+  nova see <image>              analyze an image file
+  nova see --url <url>          analyze image from URL
+  nova see --screenshot         analyze current screen
 """)
     sys.exit(1)
 
@@ -490,6 +495,14 @@ def main():
 
     elif cmd == "sync":
         nova_sync()
+
+    elif cmd == "autonomous":
+        args = sys.argv[2:] if len(sys.argv) > 2 else []
+        subprocess.run(["python3", str(BASE / "bin/nova_autonomous.py")] + args)
+
+    elif cmd == "see":
+        args = sys.argv[2:] if len(sys.argv) > 2 else []
+        subprocess.run(["python3", str(BASE / "bin/nova_vision.py")] + args)
 
     elif cmd == "programs":
         query = sys.argv[2].lower() if len(sys.argv) >= 3 else ""

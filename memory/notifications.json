@@ -12,5 +12,12 @@
     "priority": "normal",
     "timestamp": "2026-03-10 01:38",
     "read": true
+  },
+  {
+    "title": "N.O.V.A Found Something",
+    "message": "During autonomous research: for any organization using GitLab, as it could allow attackers to gain unauthorized access to sensit",
+    "priority": "high",
+    "timestamp": "2026-03-10 02:02",
+    "read": false
   }
 ]

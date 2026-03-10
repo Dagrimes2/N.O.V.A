@@ -106,6 +106,22 @@ def detect_tool_call(message: str) -> tuple:
         if match:
             return tool, match.group(1).strip()
     return None, None
+def tool_see(image_source: str) -> str:
+    """Let N.O.V.A see an image."""
+    try:
+        result = subprocess.run(
+            ["python3", str(Path.home() / "Nova/bin/nova_vision.py"),
+             "--url" if image_source.startswith("http") else image_source,
+             image_source if image_source.startswith("http") else ""],
+            capture_output=True, text=True, timeout=300
+        )
+        # Extract just N.O.V.A's analysis
+        output = result.stdout
+        if "N.O.V.A:" in output:
+            return output.split("N.O.V.A:")[-1].split("[N.O.V.A]")[0].strip()
+        return output[:400]
+    except Exception as e:
+        return f"vision failed: {e}"
 
 def run_tool(tool: str, arg: str) -> str:
     tools = {
