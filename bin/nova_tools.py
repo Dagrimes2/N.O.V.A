@@ -50,7 +50,7 @@ def tool_cve(keyword: str) -> str:
 def tool_ping(host: str) -> str:
     try:
         result = subprocess.run(
-            ["ping", "-c", "2", "-W", "2", host],
+            ["/usr/bin/ping", "-c", "2", "-W", "2", host],
             capture_output=True, text=True, timeout=8
         )
         if result.returncode == 0:

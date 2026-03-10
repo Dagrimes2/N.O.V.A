@@ -1,0 +1,12 @@
+{
+  "file": "tools/reasoning/reflect.py",
+  "issue": "Missing prompt completion for top hypothesis",
+  "proposed_change": "Complete the prompt for top hypothesis by adding a closing parenthesis and a newline.",
+  "expected_improvement": "Provides a more complete and user-friendly prompt for the security researcher.",
+  "risk": "low",
+  "confidence": 0.8,
+  "proposed_at": "2026-03-10-0005",
+  "status": "approved",
+  "auto_approved": true,
+  "approved_at": "2026-03-10-0138"
+}
