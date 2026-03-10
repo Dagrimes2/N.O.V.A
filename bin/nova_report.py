@@ -27,7 +27,7 @@ def parse_queue() -> list:
     findings = []
     
     # Split on numbered entries like [1], [2], etc.
-    blocks = re.split(r'\n\[(\d+)\]', text)
+    blocks = re.split(r'\n?\[(\d+)\]', text)
     
     i = 1
     while i < len(blocks):

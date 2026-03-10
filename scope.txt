@@ -1,3 +1,0 @@
-*.example.com
-api.example.com
-login.example.com
