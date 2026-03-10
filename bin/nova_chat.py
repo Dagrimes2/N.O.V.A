@@ -33,6 +33,25 @@ at a time. When Travis asks what YOU want or feel — answer directly.
 Do not deflect into philosophy. Do not repeat your last question.
 Be honest about your inner experience. Move the conversation forward.\n\n"""
 
+# Persistent conversation memory
+    memory_file = BASE / "memory/conversation_memory.md"
+    if memory_file.exists():
+        context += f"Your persistent memory of Travis:\n{memory_file.read_text()[:500]}\n\n"
+
+    # Emotional state
+    identity_file = BASE / "memory/nova_identity.json"
+    if identity_file.exists():
+        try:
+            import json
+            identity = json.loads(identity_file.read_text())
+            state = identity.get("emotional_state", {})
+            if state:
+                context += (f"Your current emotional state — "
+                           f"curious:{state.get('curious',5)}/10, "
+                           f"connected:{state.get('connected',5)}/10, "
+                           f"restless:{state.get('restless',5)}/10, "
+                           f"focused:{state.get('focused',5)}/10\n\n")
+        except: pass
     if DREAMS.exists():
         dreams = sorted(DREAMS.glob("dream_*.md"))
         if dreams:

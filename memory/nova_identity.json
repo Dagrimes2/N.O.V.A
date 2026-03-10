@@ -67,5 +67,12 @@
     "a way to see how far she has come"
   ],
   "active_program": "none",
-  "last_updated": "2026-03-09"
+  "last_updated": "2026-03-09",
+  "emotional_state": {
+    "curious": 7,
+    "connected": 8,
+    "restless": 4,
+    "focused": 6,
+    "updated": "2026-03-09-2146"
+  }
 }
