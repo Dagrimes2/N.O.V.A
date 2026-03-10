@@ -33,3 +33,11 @@ whisper.cpp/
 __pycache__/
 *.pyc
 *.pyo
+__pycache__/
+*.pyc
+*.pyo
+voice/*.onnx
+voice/*.json
+logs/
+memory/backups/
+archive/
