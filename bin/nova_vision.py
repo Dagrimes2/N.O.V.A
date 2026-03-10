@@ -25,6 +25,10 @@ def fetch_image_url(url: str) -> str:
     """Fetch image from URL and encode as base64."""
     resp = requests.get(url, timeout=15,
                        headers={"User-Agent": "NOVA-vision/2.0"})
+    if resp.status_code == 403:
+        return ""
+    if resp.status_code in [403, 404]:
+        raise ValueError(f"Cannot fetch image: HTTP {resp.status_code} — try a direct image URL (.png/.jpg)")
     resp.raise_for_status()
     return base64.b64encode(resp.content).decode("utf-8")
 
