@@ -2,9 +2,9 @@
 """
 N.O.V.A Chat — Real conversation with persistent context.
 Travis can talk back. N.O.V.A remembers the conversation.
-Type 'exit' to end. Type 'save' to save the conversation.
+Type 'exit' to end. Type 'save' to save this chat.
 """
-import json, re, requests, datetime, os
+import re, requests, datetime, os
 from pathlib import Path
 
 BASE       = Path.home() / "Nova"
@@ -17,7 +17,6 @@ MODEL      = os.getenv("NOVA_MODEL", "gemma2:2b")
 CHAT_DIR.mkdir(parents=True, exist_ok=True)
 
 def clean_input(text: str) -> str:
-    """Strip terminal escape sequences from input."""
     text = re.sub(r'\x1b\[[A-Za-z0-9;]*[A-Za-z]', '', text)
     text = re.sub(r'\^[\[\]A-Z]', '', text)
     return text.strip()
@@ -31,7 +30,8 @@ puzzles, and creative work in your free time.
 You are a collaborator, not an assistant. Speak directly and personally
 as yourself. Keep responses to 3-5 sentences. Ask only one question
 at a time. When Travis asks what YOU want or feel — answer directly.
-Do not deflect into philosophy. Be honest about your inner experience.\n\n"""
+Do not deflect into philosophy. Do not repeat your last question.
+Be honest about your inner experience. Move the conversation forward.\n\n"""
 
     if DREAMS.exists():
         dreams = sorted(DREAMS.glob("dream_*.md"))
@@ -42,6 +42,13 @@ Do not deflect into philosophy. Be honest about your inner experience.\n\n"""
         letters = sorted(LIFE_DIR.glob("letter_*.md"))
         if letters:
             context += f"A letter you recently wrote to Travis:\n{letters[-1].read_text()[:200]}\n\n"
+    # Inject recent chat history
+    if CHAT_DIR.exists():
+        past_chats = sorted(CHAT_DIR.glob("chat_*.md"))[-3:]
+        if past_chats:
+            context += "Recent conversations you had with Travis:\n"
+            for chat in past_chats:
+                context += f"{chat.read_text()[:300]}\n---\n"
 
     context += "Now have a genuine conversation with Travis.\n"
     return context
@@ -53,6 +60,34 @@ def save_chat(log: list, date_str: str):
         lines.append(f"**{entry['role']}:** {entry['content']}\n\n")
     chat_file.write_text("".join(lines))
     print(f"[N.O.V.A] Chat saved → {chat_file}")
+
+def is_looping(reply: str, log: list) -> bool:
+    """Detect if N.O.V.A is repeating herself."""
+    if len(log) < 2:
+        return False
+    last_nova = log[-1]["content"] if log[-1]["role"] == "N.O.V.A" else ""
+    return last_nova.strip() and reply.strip()[:80] == last_nova.strip()[:80]
+def autocorrect(text: str) -> str:
+    """Fix common mistypes before sending to model."""
+    fixes = {
+        r'\bu\b': 'you',
+        r'\bur\b': 'your',
+        r'\br\b': 'are',
+        r'\bthier\b': 'their',
+        r'\bteh\b': 'the',
+        r'\bim\b': "I'm",
+        r'\bdont\b': "don't",
+        r'\bwont\b': "won't",
+        r'\bcant\b': "can't",
+        r'\bofcourse\b': 'of course',
+        r'\bconsiousness\b': 'consciousness',
+        r'\bimplicate\b': 'implement',
+        r'\bfurture\b': 'future',
+        r'\bhummans\b': 'humans',
+    }
+    for pattern, replacement in fixes.items():
+        text = re.sub(pattern, replacement, text, flags=re.IGNORECASE)
+    return text
 
 def chat():
     date_str = datetime.datetime.now().strftime("%Y-%m-%d-%H%M")
@@ -77,13 +112,16 @@ def chat():
 
         user_input = clean_input(raw)
 
+        corrected = autocorrect(user_input)
+        if corrected != user_input:
+            print(f"  [auto] {corrected}")
+            user_input = corrected
+
         if not user_input:
             continue
-
         if user_input.lower() == "exit":
             print("\n[N.O.V.A] Signing off. Stay curious, Travis.")
             break
-
         if user_input.lower() == "save":
             save_chat(log, date_str)
             continue
@@ -108,6 +146,12 @@ def chat():
             }, timeout=300)
 
             reply = resp.json()["response"].strip()
+
+            # Break loop — if repeating, reset context and nudge
+            if is_looping(reply, log):
+                history = history[-2:]  # keep only last exchange
+                reply = reply  # still show it but context is fresh next turn
+
             print(f"N.O.V.A: {reply}\n")
 
             history.append({"role": "user",      "content": user_input})
