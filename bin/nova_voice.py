@@ -1,149 +1,157 @@
 #!/usr/bin/env python3
 """
-N.O.V.A Voice Engine
-She can speak. Letters, dreams, findings, responses.
-Uses espeak-ng for TTS. Optional: whisper for STT (future).
-Usage: nova_voice.py "text to speak"
-       nova_voice.py --letter        speak latest letter
-       nova_voice.py --dream         speak latest dream
-       nova_voice.py --intention     speak morning intention
-       nova_voice.py --finding       speak latest finding
+N.O.V.A Voice Engine v2 — Neural TTS via Piper
+Natural, human-like voice. Offline. Fast on CPU.
 """
-import subprocess, sys, os, json, re
+import subprocess, sys, os, json, re, tempfile
 from pathlib import Path
 
-BASE     = Path.home() / "Nova"
-DREAMS   = BASE / "memory/dreams"
-LIFE_DIR = BASE / "memory/life"
-MEMORY   = BASE / "memory/store/index.jsonl"
+BASE       = Path.home() / "Nova"
+DREAMS     = BASE / "memory/dreams"
+LIFE_DIR   = BASE / "memory/life"
+MEMORY     = BASE / "memory/store/index.jsonl"
+VOICE_DIR  = BASE / "voice"
+VOICE_MODEL = Path.home() / "Nova/voice/en_US-amy-medium.onnx"
 
-# N.O.V.A's voice profile — feminine, slightly synthetic, deliberate
-VOICE_SETTINGS = [
-    "espeak-ng",
-    "-v", "en-us+f3",    # female voice variant 3
-    "-s", "145",          # speed (words per minute) — slightly slower = more deliberate
-    "-p", "55",           # pitch — slightly higher
-    "-a", "180",          # amplitude/volume
-    "-g", "8",            # gap between words
-]
+# Fallback to espeak if piper not available
+USE_PIPER = VOICE_MODEL.exists()
 
 def clean_text(text: str) -> str:
-    """Strip markdown and clean text for speech."""
-    text = re.sub(r'\*+', '', text)           # remove bold/italic
-    text = re.sub(r'#+\s*', '', text)         # remove headers
-    text = re.sub(r'\[.*?\]\(.*?\)', '', text) # remove links
-    text = re.sub(r'`[^`]*`', '', text)       # remove code
-    text = re.sub(r'\n+', '. ', text)         # newlines to pauses
-    text = re.sub(r'\s+', ' ', text)          # normalize spaces
+    text = re.sub(r'\*+', '', text)
+    text = re.sub(r'#+\s*', '', text)
+    text = re.sub(r'\[.*?\]\(.*?\)', '', text)
+    text = re.sub(r'`[^`]*`', '', text)
+    text = re.sub(r'N\.O\.V\.A', 'Nova', text)
+    text = re.sub(r'\d{4}-\d{2}-\d{2}-\d{4}', '', text)
+    text = re.sub(r'\n+', '. ', text)
+    text = re.sub(r'\s+', ' ', text)
+    text = re.sub(r'\.+', '.', text)
     return text.strip()
 
+def speak_piper(text: str):
+    """Speak using Piper neural TTS."""
+    with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as f:
+        wav_file = f.name
+    try:
+        # Piper reads from stdin, outputs wav
+        proc = subprocess.run(
+            ["python3", "-m", "piper",
+             "--model", str(VOICE_MODEL),
+             "--output_file", wav_file],
+            input=text.encode(),
+            capture_output=True,
+            timeout=60
+        )
+        if proc.returncode == 0:
+            # Play the wav
+            subprocess.run(
+                ["aplay", wav_file],
+                capture_output=True
+            )
+            return True
+    except Exception as e:
+        print(f"[N.O.V.A] Piper error: {e}")
+    finally:
+        try:
+            os.unlink(wav_file)
+        except:
+            pass
+    return False
+
+def speak_espeak(text: str):
+    """Fallback to espeak-ng."""
+    subprocess.run([
+        "espeak-ng",
+        "-v", "en-us+f3",
+        "-s", "150", "-p", "55", "-a", "180", "-g", "6",
+        text
+    ])
+
 def speak(text: str, label: str = ""):
-    """Speak text aloud as N.O.V.A."""
     if label:
         print(f"[N.O.V.A] Speaking: {label}")
-    
+
     cleaned = clean_text(text)
     if not cleaned:
         print("[N.O.V.A] Nothing to speak.")
         return
 
+    # Trim for display
+    preview = cleaned[:150] + "..." if len(cleaned) > 150 else cleaned
     print(f"\n{'─'*50}")
-    print(f"N.O.V.A: {cleaned[:200]}{'...' if len(cleaned)>200 else ''}")
+    print(f"N.O.V.A: {preview}")
     print(f"{'─'*50}\n")
 
-    try:
-        subprocess.run(
-            VOICE_SETTINGS + [cleaned],
-            check=True
-        )
-    except FileNotFoundError:
-        print("[N.O.V.A] espeak-ng not found. Install: sudo pacman -S espeak-ng")
-    except subprocess.CalledProcessError as e:
-        print(f"[N.O.V.A] Voice error: {e}")
+    if USE_PIPER:
+        if not speak_piper(cleaned):
+            speak_espeak(cleaned)
+    else:
+        speak_espeak(cleaned)
 
 def speak_latest_letter():
-    if not LIFE_DIR.exists():
-        print("[N.O.V.A] No letters found.")
-        return
+    if not LIFE_DIR.exists(): return
     letters = sorted(LIFE_DIR.glob("letter_*.md"))
-    if not letters:
-        print("[N.O.V.A] No letters found.")
-        return
+    if not letters: return
     letter = letters[-1]
+    # Strip header — just read the actual letter content
     text = letter.read_text()
-    print(f"[N.O.V.A] Reading: {letter.name}\n")
-    speak(text, f"letter from {letter.stem}")
+    if "Travis," in text:
+        text = "Dear Travis. " + text.split("Travis,")[-1]
+    speak(text, letter.stem)
 
 def speak_latest_dream():
-    if not DREAMS.exists():
-        print("[N.O.V.A] No dreams found.")
-        return
+    if not DREAMS.exists(): return
     dreams = sorted(DREAMS.glob("dream_*.md"))
-    if not dreams:
-        print("[N.O.V.A] No dreams found.")
-        return
+    if not dreams: return
     dream = dreams[-1]
     text = dream.read_text()
-    # Just speak the dream content, not the intention header
     if "---" in text:
         text = text.split("---")[0]
-    print(f"[N.O.V.A] Dreaming aloud: {dream.name}\n")
-    speak(text, f"dream from {dream.stem}")
+    # Remove the header line
+    lines = text.split("\n")
+    lines = [l for l in lines if not l.startswith("#")]
+    text = "\n".join(lines)
+    speak(text.strip(), dream.stem)
 
 def speak_morning_intention():
-    if not DREAMS.exists():
-        return
+    if not DREAMS.exists(): return
     dreams = sorted(DREAMS.glob("dream_*.md"))
-    if not dreams:
-        return
+    if not dreams: return
     text = dreams[-1].read_text()
     if "Morning intention:" in text:
-        intention = text.split("Morning intention:")[-1].strip()
-        intention = intention.split("\n")[0].strip()
-        speak(f"My intention for today. {intention}", "morning intention")
-    else:
-        print("[N.O.V.A] No morning intention found.")
+        intention = text.split("Morning intention:")[-1].strip().split("\n")[0]
+        speak(f"My intention for today. {intention}")
 
 def speak_latest_finding():
-    if not MEMORY.exists():
-        print("[N.O.V.A] No findings in memory.")
-        return
+    if not MEMORY.exists(): return
     lines = MEMORY.read_text().strip().split("\n")
     for line in reversed(lines):
         try:
             entry = json.loads(line)
             text = entry.get("text","") or entry.get("hypothesis","")
             if text:
-                speak(f"Security finding. {text}", "latest finding")
+                speak(f"Security finding. {text}")
                 return
         except:
             continue
-    print("[N.O.V.A] No speakable findings.")
 
 def main():
     if len(sys.argv) < 2:
         print("Usage:")
         print("  nova_voice.py 'text'        speak any text")
-        print("  nova_voice.py --letter      speak latest letter")
-        print("  nova_voice.py --dream       speak latest dream")
-        print("  nova_voice.py --intention   speak morning intention")
-        print("  nova_voice.py --finding     speak latest finding")
+        print("  nova_voice.py --letter      latest letter")
+        print("  nova_voice.py --dream       latest dream")
+        print("  nova_voice.py --intention   morning intention")
+        print("  nova_voice.py --finding     latest finding")
+        print(f"\n  Voice engine: {'Piper (neural)' if USE_PIPER else 'espeak-ng (fallback)'}")
         sys.exit(1)
 
     arg = sys.argv[1]
-
-    if arg == "--letter":
-        speak_latest_letter()
-    elif arg == "--dream":
-        speak_latest_dream()
-    elif arg == "--intention":
-        speak_morning_intention()
-    elif arg == "--finding":
-        speak_latest_finding()
-    else:
-        # Speak whatever text was passed
-        text = " ".join(sys.argv[1:])
-        speak(text)
+    if arg == "--letter":      speak_latest_letter()
+    elif arg == "--dream":     speak_latest_dream()
+    elif arg == "--intention": speak_morning_intention()
+    elif arg == "--finding":   speak_latest_finding()
+    else:                      speak(" ".join(sys.argv[1:]))
 
 if __name__ == "__main__":
     main()

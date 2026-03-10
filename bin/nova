@@ -77,6 +77,8 @@ MIND
   nova speak --dream        speak last night's dream aloud
   nova speak --intention    speak her morning intention
   nova speak --finding      speak latest security finding
+  nova listen              listen once, print transcript
+  nova listen --chat       full voice conversation
 """)
     sys.exit(1)
 
@@ -512,6 +514,10 @@ def main():
     elif cmd == "see":
         args = sys.argv[2:] if len(sys.argv) > 2 else []
         subprocess.run(["python3", str(BASE / "bin/nova_vision.py")] + args)
+
+    elif cmd == "listen":
+        args = sys.argv[2:] if len(sys.argv) > 2 else []
+        subprocess.run(["python3", str(BASE / "bin/nova_listen.py")] + args)
 
     elif cmd == "programs":
         query = sys.argv[2].lower() if len(sys.argv) >= 3 else ""
