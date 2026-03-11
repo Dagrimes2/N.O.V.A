@@ -1,0 +1,19 @@
+{
+  "mode": "attack_sim",
+  "program": "GitLab",
+  "iteration": 3,
+  "attack": "TITLE: File Download Abuse via GraphQL Introspection\nTARGET: GET /api/v4/projects/1234567890/repository/files/example.txt\nTECHNIQUE: GraphQL introspection or batching abuse\nSTEPS:\n1. Utilize the GraphQL introspection endpoint: `GET /api/v4/graphql` \n    - Include a query like:  `query { projects(first: 10) { name, files { name, path } } }`\n    - This will retrieve the list of projects and their files.\n2. Analyze the retrieved information and look for a specific file path: `example.txt` \n3. Combine this information with the GET /api/v4/projects/:id/repository/files/:file_path query.  \n    - Example:  `GET /api/v4/projects/1234567890/repository/files/example.txt?file_path=example.txt`\nPROOF OF CONCEPT:\n```bash\ncurl -X GET \\\n  -H \"Content-Type: application/json\" \\\n  -d '{ \"query\": \"query { projects(first: 10) { name, files { name, path } } }\" }' \\\n  https://gitlab.com/api/v4/graphql \n``` \nEXPECTED IMPACT: The attacker gains unauthorized access to a specific file, such as `example.txt`. \nCONFIDENCE: 0.9",
+  "evaluation": {
+    "score": 0.75,
+    "realistic": true,
+    "in_scope": true,
+    "originality": "medium",
+    "weakness": "The attack relies on the existence of a specific file and path, which may not always be the case. Additionally, the attacker needs to know the exact endpoint and query to use, which may not be publicly available.",
+    "strength": "The attacker can potentially gain unauthorized access to a specific file, which could have serious consequences. The use of GraphQL introspection and batching abuse techniques adds complexity to the attack, making it more difficult to detect and prevent.",
+    "verdict": "approve"
+  },
+  "score": 0.75,
+  "verdict": "approve",
+  "feedback_used": null,
+  "timestamp": "2026-03-11-033409"
+}

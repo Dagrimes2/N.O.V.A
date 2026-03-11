@@ -1,0 +1,19 @@
+{
+  "mode": "attack_sim",
+  "program": "GitLab",
+  "iteration": 2,
+  "attack": "## TITLE: Fast-Track Membership\nTARGET: /api/v4/groups/123/members\nTECHNIQUE: Race condition or TOCTOU in API\nSTEPS:\n1. Utilize a tool like `curl` to create a POST request to `/api/v4/groups/123/members` with a payload containing a user ID that is a member of the target group. This is done by sending a request with a high-volume of requests to the target group.\n2. Send a request that has a `token` to verify user credentials. The request must be sent within a very short timeframe after the first request. \n3. Create a second request to `POST` `/api/v4/groups/123/members`  with the user ID from the first request, before the first request is completed.\n\nPROOF OF CONCEPT:\n```bash\ncurl -X POST -H \"Content-Type: application/json\" -H \"Authorization: token=your_token_here\" -d '{\"user_id\": 123}'  http://gitlab.com/api/v4/groups/123/members \n```\n\nEXPECTED IMPACT:  The attacker can potentially manipulate group membership by exploiting a race condition, gaining control of a user account or potentially gaining access to sensitive data.\n\nCONFIDENCE: 0.8",
+  "evaluation": {
+    "score": 0.7,
+    "realistic": true,
+    "in_scope": true,
+    "originality": "medium",
+    "weakness": "The technique used is not specific to the target endpoint, and the impact is not fully defined.",
+    "strength": "The PoC shows a real payload with actual values and the technique is correctly applied to the named endpoint.",
+    "verdict": "approve"
+  },
+  "score": 0.7,
+  "verdict": "approve",
+  "feedback_used": null,
+  "timestamp": "2026-03-11-032515"
+}

@@ -1,0 +1,18 @@
+{
+  "mode": "attack_sim",
+  "program": "GitLab",
+  "iteration": 2,
+  "attack": "## TITLE:  Memberlist Manipulation\nTARGET:  `POST /api/v4/groups/:id/members`\nTECHNIQUE: Race condition or TOCTOU in API\nSTEPS:\n1.  **Exploit:**  Identify a group with an outdated membership list.  Utilize a tool like `curl` to send a request to the API endpoint with an initial parameter. \n2.  **Timing:**  Immediately after the initial request, submit a second request to the same endpoint, but with a different parameter set.\n3. **Timing:**  The timing window must be critical.  Utilize a tool like `curl` to send a request to the API endpoint with a different parameter set. \n\nPROOF OF CONCEPT:\n```bash\ncurl -X POST -H \"Content-Type: application/json\" -d '{\"name\": \"John Doe\", \"email\": \"johndoe@example.com\"}'  http://gitlab.com/api/v4/groups/100/members  \ncurl -X POST -H \"Content-Type: application/json\" -d '{\"name\": \"Jane Doe\", \"email\": \"janedoe@example.com\"}'  http://gitlab.com/api/v4/groups/100/members  \n```\nEXPECTED IMPACT:  A successful exploit will allow the attacker to change the membership list of the targeted group.\nCONFIDENCE: 0.7",
+  "evaluation": {
+    "score": 0.65,
+    "realistic": true,
+    "in_scope": true,
+    "originality": "medium",
+    "weakness": "The attack relies on a timing window, which may not always be feasible in a real-world scenario.",
+    "strength": "The attack demonstrates a clear understanding of the target endpoint and the potential impact of a successful exploit.",
+    "verdict": "reject"
+  },
+  "score": 0.65,
+  "verdict": "reject",
+  "timestamp": "2026-03-11-011000"
+}

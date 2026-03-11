@@ -1,0 +1,18 @@
+{
+  "mode": "attack_sim",
+  "program": "GitLab",
+  "iteration": 1,
+  "attack": "## TITLE: Vanity URL Redirect Abuse\nTARGET: /api/v4/users/:id\nTECHNIQUE: OAuth token leakage or misconfiguration\nSTEPS:\n1. **Craft a Vanity URL:** The attacker finds a user's public profile endpoint (e.g., `/api/v4/users/123`). They then create a short, easily-memorizable vanity URL based on this endpoint. This URL would act as a redirect to the actual user profile page.\n2. **Misconfigured Redirect URL:** The attacker submits a fake \"login\" request with a specially crafted parameter (e.g., `username=123`, `password=secret`) and a malicious parameter `redirect_uri=https://attacker.com/` to the user profile endpoint. This should be a redirect URL, but is actually a placeholder to be filled in later.\n3. **Force User Profile Page:** The GitLab server, in its misconfiguration, redirects the login attempt to the actual user profile page on the basis of `redirect_uri`. This redirects the attacker's fake login attempt to the actual user profile page. \nPROOF OF CONCEPT:\n```bash\ncurl -X POST -H \"Content-Type: application/x-www-form-urlencoded\" -d \"username=123&password=secret&redirect_uri=https://attacker.com/\" http://gitlab.com/api/v4/users/123\n```\nEXPECTED IMPACT: The attacker gains access to the user's profile data including usernames, passwords, email, and potentially other sensitive information. \nCONFIDENCE: 0.8",
+  "evaluation": {
+    "score": 0.62,
+    "realistic": true,
+    "in_scope": true,
+    "originality": "medium",
+    "weakness": "The attacker needs to find a user's public profile endpoint, which may not be easy or reliable.",
+    "strength": "The attacker can easily craft a vanity URL and misconfigure the redirect URL to gain access to the user's profile data.",
+    "verdict": "reject"
+  },
+  "score": 0.62,
+  "verdict": "reject",
+  "timestamp": "2026-03-10-231444"
+}

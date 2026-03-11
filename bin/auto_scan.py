@@ -36,7 +36,7 @@ TEMP_JSONL = Path("/tmp/nova_recon.jsonl")   # temporary JSONL for pipeline
 
 # Pipeline stages (all must accept JSONL on stdin)
 PIPELINE = [
-    "normalize.py",
+    "tools/recon/normalize.py",       # FIX: was normalize.py
     "tools/scoring/score.py",
     "tools/reasoning/hypothesize.py",
     "tools/reasoning/reflect.py",
@@ -47,7 +47,7 @@ PIPELINE = [
 
 MAX_CONCURRENT_SCANS = 3      # be polite
 SCAN_TIMEOUT = 600             # 10 minutes per domain
-SCAN_DELAY = 2                  # seconds between scans (minimum, concurrency handles extra)
+SCAN_DELAY = 2                  # seconds between scans
 
 # ----------------------------------------------------------------------
 # Helpers
@@ -108,22 +108,22 @@ def run_pipeline():
 
     # ------------------------------------------------------------------
     # Step 1: Generate prioritized.jsonl (normalize + score)
+    # FIX: normalize.py moved to tools/recon/normalize.py
     # ------------------------------------------------------------------
     logging.info("Generating prioritized.jsonl")
     with open(PRIORITIZED_FILE, "w") as pf:
-        # cat TEMP_JSONL | normalize.py | score.py > prioritized.jsonl
         cat = subprocess.Popen(
             ["cat", str(TEMP_JSONL)],
             stdout=subprocess.PIPE
         )
         norm = subprocess.Popen(
-            ["python", "normalize.py"],
+            ["python3", "tools/recon/normalize.py"],   # ← FIXED
             stdin=cat.stdout,
             stdout=subprocess.PIPE
         )
         cat.stdout.close()
         score = subprocess.Popen(
-            ["python", "tools/scoring/score.py"],
+            ["python3", "tools/scoring/score.py"],
             stdin=norm.stdout,
             stdout=pf
         )
@@ -139,31 +139,31 @@ def run_pipeline():
     logging.info("Running reasoning and queue pipeline")
     with open(PRIORITIZED_FILE) as inf:
         hypo = subprocess.Popen(
-            ["python", "tools/reasoning/hypothesize.py"],
+            ["python3", "tools/reasoning/hypothesize.py"],
             stdin=inf,
             stdout=subprocess.PIPE
         )
         refl = subprocess.Popen(
-            ["python", "tools/reasoning/reflect.py"],
+            ["python3", "tools/reasoning/reflect.py"],
             stdin=hypo.stdout,
             stdout=subprocess.PIPE
         )
         hypo.stdout.close()
         meta = subprocess.Popen(
-            ["python", "tools/reasoning/meta_reason.py"],
+            ["python3", "tools/reasoning/meta_reason.py"],
             stdin=refl.stdout,
             stdout=subprocess.PIPE
         )
         refl.stdout.close()
         mem = subprocess.Popen(
-            ["python", "tools/memory/memory.py"],
+            ["python3", "tools/memory/memory.py"],
             stdin=meta.stdout,
             stdout=subprocess.PIPE
         )
         meta.stdout.close()
         with open(BRIEF_FILE, "w") as brief:
             queue = subprocess.Popen(
-                ["python", "tools/operator/queue.py"],
+                ["python3", "tools/operator/queue.py"],
                 stdin=mem.stdout,
                 stdout=brief
             )
@@ -174,13 +174,6 @@ def run_pipeline():
                 return
 
     logging.info("Pipeline completed successfully")
-
-    # ------------------------------------------------------------------
-    # Optional: Generate platform‑ready reports
-    # ------------------------------------------------------------------
-    # Uncomment when ready
-    # subprocess.run(["python", "tools/reporting/assemble.py"], stdin=open(PRIORITIZED_FILE), check=True)
-    # subprocess.run(["python", "tools/reporting/format.py"], stdin=open(PRIORITIZED_FILE), check=True)
 
 # ----------------------------------------------------------------------
 # Main
@@ -216,7 +209,6 @@ def main():
                     logging.warning(f"Scan of {domain} reported failure.")
             except Exception as e:
                 logging.error(f"Scan of {domain} generated exception: {e}")
-            # Minimal delay between submissions (executor handles concurrency)
             time.sleep(SCAN_DELAY)
 
     # Build JSONL from recon files

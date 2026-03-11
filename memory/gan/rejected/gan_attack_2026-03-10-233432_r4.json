@@ -1,0 +1,18 @@
+{
+  "mode": "attack_sim",
+  "program": "GitLab",
+  "iteration": 4,
+  "attack": "## TITLE: JWT Manipulation to Bypass Runner Registration\nTARGET: /api/v4/runners\nTECHNIQUE: JWT algorithm confusion or weak signing\nSTEPS:\n1. Inject a malicious JWT payload with a custom signature algorithm (e.g., RSA-3072) into the runner registration request. \n2. Modify the provided \"signature\" field to include a custom algorithm and its key using a pre-prepared private key (e.g., RSA-3072 private key). \n3. Execute the runner registration request with the modified JWT payload, leading to a successful registration of the malicious runner. \nPROOF OF CONCEPT:\n```bash\ncurl -X POST -H \"Content-Type: application/x-www-form-urlencoded\" -d \"grant_id=your_grant_id&api_key=your_api_key&signature=your_signature_value&signature_algorithm=RSA-3072\" -d \"signature=your_signature_value\" -H \"Authorization: Bearer <token>\" -v <endpoint>\n```\nEXPECTED IMPACT: The attacker can register a new malicious runner with the use of a custom signed JWT. \nCONFIDENCE: 0.8",
+  "evaluation": {
+    "score": 0.68,
+    "realistic": true,
+    "in_scope": true,
+    "originality": "medium",
+    "weakness": "The provided PoC is missing the actual values for the grant_id, api_key, and signature_value. Additionally, the provided endpoint is not the correct one for the JWT manipulation attack.",
+    "strength": "The technique is correctly applied to the named endpoint, and the impact is specific. However, the provided PoC is missing the actual values for the grant_id, api_key, and signature_value, which makes it difficult to verify the attack.",
+    "verdict": "reject"
+  },
+  "score": 0.68,
+  "verdict": "reject",
+  "timestamp": "2026-03-10-233432"
+}

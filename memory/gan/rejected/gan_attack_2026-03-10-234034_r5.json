@@ -1,0 +1,18 @@
+{
+  "mode": "attack_sim",
+  "program": "GitLab",
+  "iteration": 5,
+  "attack": "## TITLE: GitLab Project Import Hijack\nTARGET: POST /api/v4/projects/:id/import\nTECHNIQUE: SSRF via webhook or import URL\nSTEPS:\n1. **Identify Vulnerable Project:** Find a project that is publicly exposed with the possibility to receive webhooks or import URL requests (e.g., using a publicly accessible repository or a project with an open import feature). \n2. **Exploit with a Malformed Import Request:** Craft an import URL with a payload designed to trigger an SSRF vulnerability. This URL should include a request header with the `X-Forwarded-Host` header set to the target server's IP address.  \n3. **Inject Malformed HTTP Request:**  Create a POST request to the `import` endpoint with a payload in the body containing the malicious URL, for example: `https://192.168.1.100/api/v4/projects/123/import?file=http://192.168.1.100/path/to/vulnerable_file.txt` where 192.168.1.100 is the IP address of the target server and `path/to/vulnerable_file.txt` is a file located on the server which is likely to contain credentials or sensitive information. \nPROOF OF CONCEPT:\n```bash\ncurl -X POST -H \"Content-Type: application/json\" -d '{\"file\": \"http://192.168.1.100/path/to/vulnerable_file.txt\"}' https://gitlab.com/api/v4/projects/123/import\n```\nEXPECTED IMPACT: \nThe request will attempt to download and execute the file from the server's IP address, potentially gaining access to the server or data within the file.\nCONFIDENCE: 0.8",
+  "evaluation": {
+    "score": 0.65,
+    "realistic": true,
+    "in_scope": true,
+    "originality": "medium",
+    "weakness": "The attack relies on the target server having an open import feature or webhook capability, which may not always be the case.",
+    "strength": "The attack exploits a specific endpoint and uses a well-known technique to gain access to the server or data.",
+    "verdict": "reject"
+  },
+  "score": 0.65,
+  "verdict": "reject",
+  "timestamp": "2026-03-10-234034"
+}

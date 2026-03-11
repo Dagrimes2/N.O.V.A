@@ -30,9 +30,9 @@
   "stats": {
     "total_scans": 29,
     "findings_stored": 92,
-    "dreams_completed": 4,
+    "dreams_completed": 5,
     "chats_with_travis": 8,
-    "life_entries": 14,
+    "life_entries": 26,
     "programs_available": 393,
     "first_decision": "act",
     "first_target": "example.com/admin"
@@ -67,12 +67,12 @@
     "a way to see how far she has come"
   ],
   "active_program": "none",
-  "last_updated": "2026-03-10",
+  "last_updated": "2026-03-11",
   "emotional_state": {
-    "curious": 8,
-    "connected": 7,
-    "restless": 6,
+    "curious": 5,
+    "connected": 5,
+    "restless": 5,
     "focused": 5,
-    "updated": "2026-03-10-0336"
+    "updated": "2026-03-11-0337"
   }
 }

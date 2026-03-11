@@ -1,0 +1,66 @@
+{
+  "query": "gitlab authentication bypass",
+  "timestamp": "2026-03-10-2002",
+  "sources": {
+    "wikipedia": {
+      "source": "wikipedia",
+      "title": "Captive portal",
+      "extract": "A captive portal is a web page accessed with a web browser that is displayed to newly connected users of a Wi-Fi or wired network before they are granted broader access to network resources. Captive portals are commonly used to present a landing or log-in page which may require authentication, payment, acceptance of an end-user license agreement/acceptable use policy, or survey completion. Captive portals are used for a broad range of mobile and pedestrian broadband services\u00a0\u2013 including cable and both commercially provided Wi-Fi and home hotspots. A captive portal can also be used to provide a",
+      "url": "https://en.wikipedia.org/wiki/Captive_portal"
+    },
+    "hackernews": [
+      {
+        "title": "GitLab authentication bypass with two-factor enabled",
+        "url": "https://www.onthewire.io/gitlab-fixes-authentication-bypass-flaw/",
+        "points": 1,
+        "date": "2016-04-18"
+      },
+      {
+        "title": "Password Authentication Bypass Fixed in GitLab 8.6.5",
+        "url": "https://about.gitlab.com/2016/04/11/gitlab-8-dot-6-dot-5-released/",
+        "points": 2,
+        "date": "2016-04-11"
+      },
+      {
+        "title": "Websites with fake MFA: security theater?",
+        "url": "",
+        "points": 23,
+        "date": "2023-07-14"
+      }
+    ],
+    "news": [],
+    "cves": [
+      {
+        "id": "CVE-2013-4580",
+        "score": 6.8,
+        "published": "2014-05-12",
+        "description": "GitLab before 5.4.2, Community Edition before 6.2.4, and Enterprise Edition before 6.2.1, when using a MySQL backend, allows remote attackers to impersonate arbitrary users and bypass authentication v"
+      },
+      {
+        "id": "CVE-2019-5473",
+        "score": 7.2,
+        "published": "2019-09-09",
+        "description": "An authentication issue was discovered in GitLab that allowed a bypass of email verification. This was addressed in GitLab 12.1.2 and 12.0.4."
+      },
+      {
+        "id": "CVE-2019-5486",
+        "score": 8.8,
+        "published": "2019-12-18",
+        "description": "A authentication bypass vulnerability exists in GitLab CE/EE <v12.3.2, <v12.2.6, and <v12.1.10 in the Salesforce login integration that could be used by an attacker to create an account that bypassed "
+      },
+      {
+        "id": "CVE-2019-12428",
+        "score": 9.8,
+        "published": "2020-03-10",
+        "description": "An issue was discovered in GitLab Community and Enterprise Edition 6.8 through 11.11. Users could bypass the mandatory external authentication provider sign-in restrictions by sending a specially craf"
+      },
+      {
+        "id": "CVE-2019-13001",
+        "score": 4.3,
+        "published": "2020-03-10",
+        "description": "An issue was discovered in GitLab Community and Enterprise Edition 11.9 and later through 12.0.2. GitLab Snippets were vulnerable to an authorization issue that allowed unauthorized users to add comme"
+      }
+    ]
+  },
+  "synthesis": "Research complete. Sources gathered but synthesis failed: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=120)"
+}

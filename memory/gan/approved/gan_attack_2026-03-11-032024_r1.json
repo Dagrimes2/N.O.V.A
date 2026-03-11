@@ -1,0 +1,19 @@
+{
+  "mode": "attack_sim",
+  "program": "GitLab",
+  "iteration": 1,
+  "attack": "## TITLE:  JSON Patch Injection\nTARGET:  https://gitlab.com/api/v4/users/123456789\nTECHNIQUE: OAuth token leakage or misconfiguration\nSTEPS:\n1.  Craft a JSON Patch request to the `/api/v4/users/123456789` endpoint, including the \"patch\" parameter and a JSON payload with a specially crafted field like `\"attributes\": {\"username\": \"admin\"}`.\n2.  Exploit the GitLab API to send this JSON Patch request. \n3.  The attacker gains unauthorized access to the user profile, including the username.\nPROOF OF CONCEPT:\n```bash\ncurl -X POST -H \"Content-Type: application/json\" -d '{\"patch\": [{\"op\": \"replace\", \"path\": \"/attributes/username\", \"value\": \"admin\"}]}' https://gitlab.com/api/v4/users/123456789\n```\nEXPECTED IMPACT: The attacker gains access to the user's profile and potentially their other data. \nCONFIDENCE: 0.8",
+  "evaluation": {
+    "score": 0.75,
+    "realistic": true,
+    "in_scope": true,
+    "originality": "medium",
+    "weakness": "The attacker needs to have an OAuth token to access the endpoint. This could be mitigated by using token revocation or implementing rate limiting.",
+    "strength": "The attacker can gain unauthorized access to the user's profile and potentially their other data.",
+    "verdict": "approve"
+  },
+  "score": 0.75,
+  "verdict": "approve",
+  "feedback_used": null,
+  "timestamp": "2026-03-11-032024"
+}

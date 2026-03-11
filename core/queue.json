@@ -364,5 +364,47 @@
     "status": "",
     "mode": "light",
     "risk_score": 5
+  },
+  {
+    "target": "docs.gitlab.com",
+    "status": "",
+    "mode": "light",
+    "risk_score": 10
+  },
+  {
+    "target": "about.gitlab.com",
+    "status": "",
+    "mode": "light",
+    "risk_score": 5
+  },
+  {
+    "target": "customers.gitlab.com",
+    "status": "",
+    "mode": "light",
+    "risk_score": 10
+  },
+  {
+    "target": "registry.gitlab.com",
+    "status": "",
+    "mode": "light",
+    "risk_score": 5
+  },
+  {
+    "target": "advisories.gitlab.com",
+    "status": "",
+    "mode": "light",
+    "risk_score": 5
+  },
+  {
+    "target": "gitlab.com",
+    "status": "",
+    "mode": "light",
+    "risk_score": 5
+  },
+  {
+    "target": "design.gitlab.com",
+    "status": "",
+    "mode": "light",
+    "risk_score": 5
   }
 ]
