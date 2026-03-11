@@ -108,7 +108,7 @@ def adjust_score(record: dict) -> dict:
     """
     Adjust a scored record using memory store.
     Input:  {"score": 0.6, "host": "...", "signals": [...]}
-    Output: same record with adjusted "score"
+    Output: same record with adjusted "score" clamped to 0.0-1.0
     """
     tool = TOOLS_DIR / "scoring" / "memory_adjust.py"
     if not tool.exists():
@@ -118,7 +118,11 @@ def adjust_score(record: dict) -> dict:
     if not store.exists():
         store.parent.mkdir(parents=True, exist_ok=True)
         store.write_text("{}")
-    return _pipe(tool, record)
+    result = _pipe(tool, record)
+    # Always clamp score — memory_adjust can drift above 1.0
+    if "score" in result:
+        result["score"] = round(min(1.0, max(0.0, float(result["score"]))), 4)
+    return result
 
 
 def adjust_scores(records: list) -> list:
@@ -130,7 +134,11 @@ def adjust_scores(records: list) -> list:
     if not store.exists():
         store.parent.mkdir(parents=True, exist_ok=True)
         store.write_text("{}")
-    return _pipe_many(tool, records)
+    results = _pipe_many(tool, records)
+    for r in results:
+        if "score" in r:
+            r["score"] = round(min(1.0, max(0.0, float(r["score"]))), 4)
+    return results
 
 # ─────────────────────────────────────────────
 # 3. PATTERN BOOST — tools/reasoning/pattern_memory.py
@@ -142,15 +150,18 @@ def pattern_boost(record: dict) -> dict:
     """
     Apply pattern memory confidence nudges to a record.
     Input:  scored record
-    Output: same record with nudged confidence
+    Output: same record with nudged confidence, clamped to 0.0-1.0
     """
     tool = TOOLS_DIR / "reasoning" / "pattern_memory.py"
     if not tool.exists():
         return record
-    # Ensure patterns dir exists
     patterns = BASE / "memory" / "patterns"
     patterns.mkdir(parents=True, exist_ok=True)
-    return _pipe(tool, record)
+    result = _pipe(tool, record)
+    for key in ("score", "confidence"):
+        if key in result:
+            result[key] = round(min(1.0, max(0.0, float(result[key]))), 4)
+    return result
 
 
 def pattern_boost_many(records: list) -> list:
