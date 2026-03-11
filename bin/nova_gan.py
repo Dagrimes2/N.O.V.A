@@ -332,6 +332,19 @@ def run_attack_sim() -> list:
             print(f"\nBlue team: {evaluation.get('strength','')}")
             print(f"Weakness:  {evaluation.get('weakness','')}")
             print(f"Originality: {evaluation.get('originality','?')} | Realistic: {evaluation.get('realistic','?')}")
+
+            # Wire mutate — expand approved attack into endpoint variants
+            try:
+                sys.path.insert(0, str(BASE))
+                from tools.nova_wire import mutate_approved_attack
+                mutations = mutate_approved_attack(attack, program)
+                if mutations:
+                    mut_file = APPROVED_DIR / f"mutations_{ts}_r{i}.json"
+                    mut_file.write_text(json.dumps(mutations, indent=2))
+                    print(f"  ↳ Mutated {len(mutations)} endpoint variants → {mut_file.name}")
+                    log(f"[GAN] Mutations: {len(mutations)} variants saved")
+            except Exception as e:
+                log(f"[GAN] mutate skip: {e}")
         else:
             (REJECTED_DIR / fname).write_text(json.dumps(record, indent=2))
             last_feedback = weakness   # feed back to next generator round
