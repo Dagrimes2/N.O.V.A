@@ -1,31 +1,27 @@
 #!/usr/bin/env python3
 """
 Score normalized recon records to prioritize bug bounty targets.
-
 Input:  JSONL from normalize.py
 Output: JSONL with added fields:
   - score (int)
   - signals (list[str])
+After scoring, each record is passed through nova_wire full_pipeline
+for enrichment, memory adjustment, and pattern boosting.
 """
-
 from __future__ import annotations
-
 import json
 import sys
 from typing import Any, Dict, Iterable
 
 # ----------------- CONFIG -----------------
-
 AUTH_KEYWORDS = {
     "admin", "internal", "debug", "manage", "staff",
     "private", "config", "console", "root"
 }
-
 INTERESTING_PARAMS = {
     "id", "user", "user_id", "account", "account_id",
     "uid", "pid", "token", "key", "session"
 }
-
 ERROR_STATUS_SCORES = {
     401: 6,
     403: 8,
@@ -33,16 +29,21 @@ ERROR_STATUS_SCORES = {
     502: 4,
     503: 4,
 }
-
 METHOD_SCORES = {
     "POST": 3,
     "PUT": 4,
     "PATCH": 4,
     "DELETE": 6,
 }
-
 # ------------------------------------------
 
+# Wire into nova_wire full_pipeline (enrich → memory_adjust → pattern_boost)
+try:
+    sys.path.insert(0, str(__import__("pathlib").Path(__file__).parents[2]))
+    from tools.nova_wire import full_pipeline as _full_pipeline
+    WIRE_ENABLED = True
+except Exception:
+    WIRE_ENABLED = False
 
 def iter_jsonl(stream: Iterable[str]) -> Iterable[Dict[str, Any]]:
     for line in stream:
@@ -56,7 +57,6 @@ def iter_jsonl(stream: Iterable[str]) -> Iterable[Dict[str, Any]]:
         if isinstance(obj, dict):
             yield obj
 
-
 def is_numeric(value: Any) -> bool:
     try:
         int(value)
@@ -64,18 +64,16 @@ def is_numeric(value: Any) -> bool:
     except Exception:
         return False
 
-
 def score_record(rec: Dict[str, Any]) -> Dict[str, Any]:
-    # N.O.V.A proposal 2026-03-08: input validation
     if not isinstance(rec, dict):
         return {"score": 0, "signals": [], "error": "invalid input type"}
 
     score = 0
     signals = []
 
-    path = (rec.get("path") or "").lower()
+    path   = (rec.get("path")   or "").lower()
     method = (rec.get("method") or "GET").upper()
-    params = rec.get("params") or {}
+    params = rec.get("params")  or {}
     status = rec.get("status")
     length = rec.get("length")
 
@@ -94,11 +92,9 @@ def score_record(rec: Dict[str, Any]) -> Dict[str, Any]:
     # ---- Params analysis ----
     for key, value in params.items():
         key_l = str(key).lower()
-
         if key_l in INTERESTING_PARAMS:
             score += 4
             signals.append(f"interesting-param:{key_l}")
-
         if is_numeric(value):
             score += 6
             signals.append("numeric-id")
@@ -118,17 +114,23 @@ def score_record(rec: Dict[str, Any]) -> Dict[str, Any]:
             score += 2
             signals.append("empty-response")
 
-    rec["score"] = score
+    rec["score"]   = score
     rec["signals"] = signals
     return rec
-
 
 def main() -> int:
     for record in iter_jsonl(sys.stdin):
         scored = score_record(record)
+
+        # Pass through full pipeline: enrich → memory_adjust → pattern_boost
+        if WIRE_ENABLED:
+            try:
+                scored = _full_pipeline(scored)
+            except Exception:
+                pass  # pipeline failure never kills scoring
+
         sys.stdout.write(json.dumps(scored, separators=(",", ":")) + "\n")
     return 0
-
 
 if __name__ == "__main__":
     raise SystemExit(main())
