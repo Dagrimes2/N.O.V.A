@@ -212,6 +212,14 @@ def execute_task(task: dict) -> str:
     target = task.get("target", "")
 
     log(f"[EXECUTE] {action}: {target}")
+    # Desktop notification on every task
+    try:
+        import sys as _sys
+        _sys.path.insert(0, str(BASE / "tools"))
+        from nova_notify import notify_task
+        notify_task(action, target)
+    except Exception:
+        pass
 
     if action == "research":
         result = subprocess.run(
@@ -246,6 +254,13 @@ def execute_task(task: dict) -> str:
                 log(f"[SANDBOX] Scanning {target_domain} via nova-sandbox")
                 result = scan_target(target_domain, mode="basic")
                 output = result.get("stdout", "")[:300] or "Scan complete (no output)"
+                # Notify if output looks significant
+                try:
+                    from nova_notify import notify_finding
+                    if any(k in output.lower() for k in ["open", "http", "ssh", "ftp", "443", "8080"]):
+                        notify_finding(target_domain, 0.8, output[:120])
+                except Exception:
+                    pass
                 return f"Scanned {target_domain} via sandbox: {output}"
         except Exception as e:
             log(f"[SANDBOX] Fallback to host scan: {e}")
