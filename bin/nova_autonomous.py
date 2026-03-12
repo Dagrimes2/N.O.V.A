@@ -108,6 +108,19 @@ def decide_next_task(history: list) -> dict:
     restless = emotional_state.get("restless", 5)
     curious  = emotional_state.get("curious", 5)
 
+    # Load watchlist — prioritize "act" targets
+    watchlist_file = BASE / "memory/watchlist/watchlist.json"
+    watchlist_targets = []
+    if watchlist_file.exists():
+        try:
+            wl = json.loads(watchlist_file.read_text()).get("targets", {})
+            watchlist_targets = [
+                t for t, v in wl.items()
+                if v.get("decision") == "act" and v.get("confidence", 0) >= 0.7
+            ]
+        except:
+            pass
+
     recent_targets  = get_recent_targets(history, hours=24)
     recent_actions  = get_recent_actions(history, count=5)
 
@@ -116,6 +129,13 @@ def decide_next_task(history: list) -> dict:
     if recent_targets:
         cooldown_hint = f"\nYou have ALREADY done these recently — do NOT repeat them:\n"
         cooldown_hint += "\n".join(f"  - {t}" for t in recent_targets[-8:])
+
+    # Build watchlist hint — high-priority targets to act on
+    watchlist_hint = ""
+    if watchlist_targets:
+        watchlist_hint = f"\n🎯 HIGH PRIORITY — Watchlist targets flagged for action:\n"
+        watchlist_hint += "\n".join(f"  - {t}" for t in watchlist_targets[:5])
+        watchlist_hint += "\nConsider scanning or researching one of these first."
 
     # If last 3 actions are all the same type, force variety
     forced_exclude = ""
@@ -129,6 +149,7 @@ Your current state:
 - Emotional state: curious={curious}/10, restless={restless}/10
 - Recent memory: {memory[:200]}
 {cooldown_hint}
+{watchlist_hint}
 {forced_exclude}
 
 Available actions:
