@@ -231,6 +231,25 @@ def execute_task(task: dict) -> str:
         if not whitelist:
             return "No whitelisted targets — scan skipped"
         target_domain = random.choice(whitelist)
+        # Route scan through Docker sandbox
+        try:
+            import sys
+            sys.path.insert(0, str(BASE / "tools"))
+            from nova_docker import scan_target, container_running
+            mode_file = BASE / "core/mode.yaml"
+            use_sandbox = False
+            if mode_file.exists():
+                for line in mode_file.read_text().splitlines():
+                    if line.strip().startswith("use_sandbox"):
+                        use_sandbox = "true" in line.lower()
+            if use_sandbox and container_running():
+                log(f"[SANDBOX] Scanning {target_domain} via nova-sandbox")
+                result = scan_target(target_domain, mode="basic")
+                output = result.get("stdout", "")[:300] or "Scan complete (no output)"
+                return f"Scanned {target_domain} via sandbox: {output}"
+        except Exception as e:
+            log(f"[SANDBOX] Fallback to host scan: {e}")
+        # Fallback — host scan
         result = subprocess.run(
             ["python3", str(BASE / "bin/nova"), "scan", target_domain, "--light"],
             capture_output=True, text=True, cwd=str(BASE), timeout=120
