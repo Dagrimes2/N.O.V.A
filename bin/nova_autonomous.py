@@ -7,7 +7,7 @@ makes her own decisions within governance boundaries.
 Never harms. Never leaves the system. Always logs.
 Travis can check her work anytime with: nova autonomous status
 """
-import json, requests, subprocess, os, time, random, re
+import json, requests, subprocess, os, time, random, re, sys
 from pathlib import Path
 from datetime import datetime, timedelta
 
@@ -16,8 +16,18 @@ QUEUE_FILE  = BASE / "memory/autonomous_queue.json"
 LOG_FILE    = BASE / "logs/autonomous.log"
 NOTIF_FILE  = BASE / "memory/notifications.json"
 HISTORY_FILE = BASE / "memory/autonomous_history.json"
-OLLAMA_URL  = "http://localhost:11434/api/generate"
-MODEL       = os.getenv("NOVA_MODEL", "gemma2:2b")
+
+_nova_root = str(BASE)
+if _nova_root not in sys.path:
+    sys.path.insert(0, _nova_root)
+
+try:
+    from tools.config import cfg
+    OLLAMA_URL = cfg.ollama_url
+    MODEL      = cfg.model("reasoning")
+except Exception:
+    OLLAMA_URL = "http://localhost:11434/api/generate"
+    MODEL      = os.getenv("NOVA_MODEL", "gemma2:2b")
 
 LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
 
@@ -343,34 +353,87 @@ def check_notifications():
     except Exception as e:
         print(f"  Error reading notifications: {e}")
 
+def _build_agent_tasks(primary_task: dict, history: list) -> list[dict]:
+    """
+    From a primary task, generate up to 3 parallel agent tasks.
+    Always includes the primary. Adds complementary agents based on type.
+    """
+    tasks = [primary_task]
+    action = primary_task.get("action", "research")
+    target = primary_task.get("target", "")
+
+    recent_actions = get_recent_actions(history, count=5)
+
+    # Pair research with a life/reflect if Nova hasn't reflected recently
+    if action == "research" and "reflect" not in recent_actions[-3:]:
+        tasks.append({"action": "reflect", "target": "free time", "reason": "balance"})
+
+    # Pair scan with research on the same target for context
+    if action == "scan" and "research" not in recent_actions[-2:]:
+        tasks.append({
+            "action": "research",
+            "target": f"{target} security headers",
+            "reason": f"complementary research alongside scan of {target}"
+        })
+
+    # Pair propose/study with a summarize to distill findings
+    if action in ("propose", "study"):
+        tasks.append({"action": "reflect", "target": "self", "reason": "idle enrichment"})
+
+    return tasks[:3]  # hard cap
+
+
 def run_autonomous_cycle():
     log("[N.O.V.A] Autonomous cycle starting...")
 
     auto_approve_proposals()
 
     history = load_history()
-    task    = decide_next_task(history)
-    log(f"[N.O.V.A] Decided: {task}")
+    primary_task = decide_next_task(history)
+    log(f"[N.O.V.A] Primary decision: {primary_task}")
 
-    result = execute_task(task)
-    log(f"[N.O.V.A] Result: {result[:100]}")
+    # Build parallel task set (up to 3)
+    agent_tasks = _build_agent_tasks(primary_task, history)
+    log(f"[N.O.V.A] Dispatching {len(agent_tasks)} agents in parallel")
 
-    # Save to history
-    history.append({
-        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-        "action":    task.get("action",""),
-        "target":    task.get("target",""),
-        "reason":    task.get("reason",""),
-    })
+    try:
+        from tools.agents.agent_runner import AgentRunner
+        runner = AgentRunner()
+        for t in agent_tasks:
+            runner.dispatch(t["action"], t.get("target",""), reason=t.get("reason",""))
+        runner.wait_all(timeout=360)
+        results = runner.collect_results()
+
+        for r in results:
+            result_text = r.get("result","")
+            history.append({
+                "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "action":    r["type"],
+                "target":    r["target"],
+                "reason":    r.get("reason",""),
+            })
+            if any(kw in result_text.lower() for kw in
+                   ["cve", "vulnerability", "bypass", "injection", "exploit"]):
+                notify(
+                    "N.O.V.A Found Something",
+                    f"Agent {r['type']} on {r['target']}: {result_text[:100]}",
+                    "high"
+                )
+            log(f"[N.O.V.A] Agent {r['agent_id']} ({r['type']}): {result_text[:80]}")
+
+    except Exception as e:
+        # Fallback to legacy single-task execution
+        log(f"[N.O.V.A] Multi-agent failed ({e}), falling back to single task")
+        result = execute_task(primary_task)
+        log(f"[N.O.V.A] Result: {result[:100]}")
+        history.append({
+            "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "action":    primary_task.get("action",""),
+            "target":    primary_task.get("target",""),
+            "reason":    primary_task.get("reason",""),
+        })
+
     save_history(history)
-
-    if any(kw in result.lower() for kw in ["cve", "vulnerability", "bypass", "injection", "exploit"]):
-        notify(
-            "N.O.V.A Found Something",
-            f"During autonomous {task.get('action','research')}: {result[:100]}",
-            "high"
-        )
-
     log("[N.O.V.A] Autonomous cycle complete.")
 
 if __name__ == "__main__":

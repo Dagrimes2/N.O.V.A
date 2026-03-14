@@ -4,9 +4,23 @@ N.O.V.A — LLM-Powered Reflection
 Decides: act / observe / hold / suppress based on the full finding.
 """
 import sys, json, requests, os
+from pathlib import Path
 
-OLLAMA_URL = "http://localhost:11434/api/generate"
-MODEL = os.getenv("NOVA_MODEL", "gemma2:2b")
+_nova_root = str(Path.home() / "Nova")
+if _nova_root not in sys.path:
+    sys.path.insert(0, _nova_root)
+
+try:
+    from tools.config import cfg
+    OLLAMA_URL = cfg.ollama_url
+    MODEL      = cfg.model("reasoning")
+    TIMEOUT    = cfg.timeout("standard")
+    TEMP       = cfg.temperature("triage")
+except Exception:
+    OLLAMA_URL = "http://localhost:11434/api/generate"
+    MODEL      = os.getenv("NOVA_MODEL", "gemma2:2b")
+    TIMEOUT    = 300
+    TEMP       = 0.1
 
 def reflect(record: dict) -> dict:
     hyps = record.get("hypotheses", [])
@@ -46,35 +60,21 @@ Return ONLY the JSON object. No explanation."""
             "model": MODEL,
             "prompt": prompt,
             "stream": False,
-            "options": {"temperature": 0.1, "num_predict": 200}
-        }, timeout=300)
-        raw = resp.json()["response"].strip()
-        if "```" in raw:
-            raw = raw.split("```")[1]
-            if raw.startswith("json"): raw = raw[4:]
-        raw = raw.strip()
-        parsed = json.loads(raw)
-        # Ensure required keys exist
-        parsed.setdefault("decision", "hold")
-        parsed.setdefault("reason", "no reason given")
-        parsed.setdefault("state", "uncertain")
-        parsed.setdefault("action", "manual review")
-        return parsed
+            "options": {"temperature": TEMP, "num_predict": 200}
+        }, timeout=TIMEOUT)
+        raw = resp.json()["response"]
+
+        # Extract JSON block from response
+        start = raw.find("{")
+        end   = raw.rfind("}") + 1
+        if start != -1 and end > start:
+            parsed = json.loads(raw[start:end])
+            return {
+                "decision": parsed.get("decision", "hold"),
+                "reason":   parsed.get("reason", ""),
+                "state":    parsed.get("state", "uncertain"),
+                "action":   parsed.get("action", "")
+            }
     except Exception as e:
-        return {
-            "decision": "hold",
-            "reason": str(e),
-            "state": "degraded",
-            "action": "manual review"
-        }
-
-def main():
-    for line in sys.stdin:
-        line = line.strip()
-        if not line: continue
-        r = json.loads(line)
-        r["reflection"] = reflect(r)
-        print(json.dumps(r))
-
-if __name__ == "__main__":
-    main()
+        pass
+    return {"decision": "suppress", "reason": "reflection failed", "state": "uncertain", "action": "suppress"}

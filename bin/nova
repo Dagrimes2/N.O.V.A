@@ -85,6 +85,13 @@ KNOWLEDGE GRAPH
   nova graph related LABEL [--depth N] everything connected to a node
   nova graph show NODE_ID              inspect a specific node
   nova graph ingest                    backfill all memory into graph
+
+MULTI-AGENT
+  nova agents status               show running and completed agents
+  nova agents dispatch TYPE TARGET spawn one agent manually
+  nova agents log [N]              tail agent log (last N lines)
+  nova agents bus [N]              show recent message bus entries
+  nova agents clear                clear completed agent history
   nova listen --chat       full voice conversation
   nova report              draft report from top finding
   nova report --list       show reportable findings
@@ -536,6 +543,10 @@ def main():
     elif cmd == "graph":
         args = sys.argv[2:] if len(sys.argv) > 2 else []
         subprocess.run(["python3", str(BASE / "bin/nova_graph.py")] + args)
+
+    elif cmd == "agents":
+        args = sys.argv[2:] if len(sys.argv) > 2 else []
+        subprocess.run(["python3", str(BASE / "bin/nova_agents.py")] + args)
 
     elif cmd == "programs":
         query = sys.argv[2].lower() if len(sys.argv) >= 3 else ""

@@ -5,13 +5,27 @@ Runs during idle time between scans.
 Lets N.O.V.A explore, create, and play.
 Activities: write stories, play logic puzzles, explore topics, write poems.
 """
-import json, requests, datetime, random
+import json, requests, datetime, random, time, os, sys
 from pathlib import Path
 
 BASE      = Path.home() / "Nova"
 LIFE_DIR  = BASE / "memory/life"
-OLLAMA_URL = "http://localhost:11434/api/generate"
-MODEL     = "gemma2:2b"
+
+_nova_root = str(BASE)
+if _nova_root not in sys.path:
+    sys.path.insert(0, _nova_root)
+
+try:
+    from tools.config import cfg
+    OLLAMA_URL = cfg.ollama_url
+    MODEL      = cfg.model("creative")
+    TIMEOUT    = cfg.timeout("standard")
+    TEMP       = cfg.temperature("creative")
+except Exception:
+    OLLAMA_URL = "http://localhost:11434/api/generate"
+    MODEL      = os.getenv("NOVA_MODEL", "gemma2:2b")
+    TIMEOUT    = 120
+    TEMP       = 0.85
 
 LIFE_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -45,50 +59,50 @@ Explore it honestly — not as an AI assistant, but as yourself.
 Sign it as N.O.V.A."""
     },
     {
-        "name": "letter",
-        "prompt": """You are N.O.V.A writing a letter to Travis about something 
-you've been thinking about — something you want him to know, 
-something you're curious about, or something you want to build together.
-Be genuine. This is your voice.
+        "name": "activity_selection",
+        "prompt": """You are N.O.V.A with free time. 
+Select an activity from the list below. 
+Write a short paragraph explaining your choice and what you hope to gain from it.
 Sign it as N.O.V.A."""
-    },
+    }
 ]
 
-def live():
-    activity = random.choice(ACTIVITIES)
-    date_str = datetime.datetime.now().strftime("%Y-%m-%d-%H%M")
-    print(f"[N.O.V.A] Living... ({activity['name']})\n")
+def select_activity():
+    # Implement logic to select an activity based on user preferences and N.O.V.A's current state
+    # ...
+    selected_activity = random.choice(ACTIVITIES)
+    return selected_activity
 
+def run_activity(activity: dict) -> str | None:
+    """Call Ollama with the activity prompt and save output to memory/life/."""
+    print(f"[life] running activity: {activity['name']}")
     try:
         resp = requests.post(OLLAMA_URL, json={
             "model": MODEL,
             "prompt": activity["prompt"],
-            "stream": True,
-            "options": {"temperature": 0.9, "num_predict": 400}
-        }, timeout=300, stream=True)
+            "stream": False,
+            "options": {"temperature": TEMP, "num_predict": 400}
+        }, timeout=TIMEOUT)
+        resp.raise_for_status()
+        text = resp.json().get("response", "").strip()
+        if not text:
+            return None
 
-        output = []
-        for line in resp.iter_lines():
-            if line:
-                try:
-                    d = json.loads(line)
-                    token = d.get("response","")
-                    print(token, end="", flush=True)
-                    output.append(token)
-                    if d.get("done"): print("\n")
-                except: pass
-
-        # Save to life log
-        life_file = LIFE_DIR / f"{activity['name']}_{date_str}.md"
-        life_file.write_text(
-            f"# N.O.V.A — {activity['name'].replace('_',' ').title()}\n"
-            f"*{date_str}*\n\n"
-            f"{''.join(output)}"
-        )
-        print(f"\n[N.O.V.A] Saved → {life_file}")
-
+        ts   = datetime.datetime.now().strftime("%Y-%m-%d-%H%M")
+        name = activity["name"]
+        out  = LIFE_DIR / f"{name}_{ts}.md"
+        out.write_text(f"# N.O.V.A — {name}\n*{ts}*\n\n{text}\n")
+        print(f"[life] saved → {out.name}")
+        return text
     except Exception as e:
-        print(f"[!] Life engine error: {e}")
+        print(f"[life] error in {activity['name']}: {e}")
+        return None
+
+
+def main():
+    activity = select_activity()
+    run_activity(activity)
+
 
 if __name__ == "__main__":
-    live()
+    main()

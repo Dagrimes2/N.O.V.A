@@ -1,0 +1,42 @@
+# N.O.V.A Model Configuration
+# Edit here to change models without touching individual scripts.
+# Run: nova config models  to verify current settings.
+
+models:
+  # Fast reasoning — triage, scoring, hypothesis generation
+  reasoning:    "mistral:7b-instruct-q4_K_M"
+
+  # General purpose — summaries, research synthesis, chat
+  general:      "gemma2:2b"
+
+  # Creative work — dreams, life engine, philosophy, letters
+  creative:     "dolphin-mistral:latest"
+
+  # Code tasks — self-healing, proposal evaluation
+  code:         "codellama:7b-instruct"
+
+  # Vision — image analysis
+  vision:       "moondream:latest"
+
+  # Autonomous decisions — needs best reasoning available
+  autonomous:   "mistral:7b-instruct-q4_K_M"
+
+  # GAN generator / discriminator
+  gan_generator:     "gemma2:2b"
+  gan_discriminator: "mistral:7b-instruct-q4_K_M"
+
+temperatures:
+  reasoning:   0.1    # hypothesize, reflect — deterministic
+  triage:      0.1    # act/observe/hold decisions
+  balanced:    0.4    # research synthesis
+  autonomous:  0.7    # autonomous task selection
+  creative:    0.85   # dreams, life engine
+  summarize:   0.3    # memory summarization
+
+timeouts:
+  fast:        60     # quick tasks
+  standard:    180    # normal pipeline stages
+  heavy:       300    # GAN, deep reasoning
+  dream:       600    # dream generation (long context)
+
+ollama_url: "http://localhost:11434/api/generate"
