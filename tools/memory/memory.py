@@ -7,6 +7,17 @@ import sys, json, hashlib, os
 from pathlib import Path
 from datetime import datetime, timezone, timezone
 
+# Knowledge graph integration (non-fatal if unavailable)
+try:
+    import sys as _sys
+    _nova_root = str(Path.home() / "Nova")
+    if _nova_root not in _sys.path:
+        _sys.path.insert(0, _nova_root)
+    from tools.knowledge.graph import node_id_for, add_edge as _graph_edge
+    _GRAPH_ENABLED = True
+except Exception:
+    _GRAPH_ENABLED = False
+
 MEMORY_DIR = Path.home() / "Nova/memory/store"
 MEMORY_DIR.mkdir(parents=True, exist_ok=True)
 INDEX_FILE = MEMORY_DIR / "index.jsonl"
@@ -35,6 +46,41 @@ def get_similar(r: dict, n=3) -> list:
     scored.sort(reverse=True)
     return [s[1] for s in scored[:n]]
 
+def _graph_insert(r: dict):
+    """Push finding into knowledge graph (best-effort, never fails pipeline)."""
+    if not _GRAPH_ENABLED:
+        return
+    try:
+        host       = r.get("host","")
+        path       = r.get("path","")
+        signals    = r.get("signals",[])
+        decision   = r.get("reflection",{}).get("decision","hold")
+        confidence = float(r.get("confidence",0))
+        text       = to_text(r)
+
+        f_id = node_id_for("finding", text[:200], {
+            "host": host, "path": path,
+            "decision": decision, "confidence": confidence,
+            "signals": signals,
+            "timestamp": datetime.now(timezone.utc).isoformat()
+        })
+        if host:
+            t_id = node_id_for("target", host, {})
+            _graph_edge(f_id, t_id, "found_on", weight=confidence)
+        for sig in signals:
+            s_id = node_id_for("signal", sig, {})
+            _graph_edge(f_id, s_id, "triggered_by")
+        # Link hypotheses categories
+        for hyp in r.get("hypotheses",[]):
+            cat = hyp.get("category","")
+            if cat:
+                p_id = node_id_for("pattern", cat, {})
+                _graph_edge(f_id, p_id, "led_to",
+                            weight=hyp.get("confidence_modifier",0))
+    except Exception:
+        pass
+
+
 def store(r: dict):
     uid = hashlib.sha256(to_text(r).encode()).hexdigest()[:16]
     entry = {
@@ -49,6 +95,7 @@ def store(r: dict):
         with open(INDEX_FILE, "a") as f:
             f.write(json.dumps(entry) + "\n")
     except: pass
+    _graph_insert(r)
 
 def main():
     for line in sys.stdin:

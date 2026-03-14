@@ -78,6 +78,13 @@ MIND
   nova speak --intention    speak her morning intention
   nova speak --finding      speak latest security finding
   nova listen              listen once, print transcript
+
+KNOWLEDGE GRAPH
+  nova graph stats                     node/edge counts by type
+  nova graph query [--type T] [--label L]  find nodes
+  nova graph related LABEL [--depth N] everything connected to a node
+  nova graph show NODE_ID              inspect a specific node
+  nova graph ingest                    backfill all memory into graph
   nova listen --chat       full voice conversation
   nova report              draft report from top finding
   nova report --list       show reportable findings
@@ -525,6 +532,10 @@ def main():
     elif cmd == "listen":
         args = sys.argv[2:] if len(sys.argv) > 2 else []
         subprocess.run(["python3", str(BASE / "bin/nova_listen.py")] + args)
+
+    elif cmd == "graph":
+        args = sys.argv[2:] if len(sys.argv) > 2 else []
+        subprocess.run(["python3", str(BASE / "bin/nova_graph.py")] + args)
 
     elif cmd == "programs":
         query = sys.argv[2].lower() if len(sys.argv) >= 3 else ""
