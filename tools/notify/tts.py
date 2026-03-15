@@ -91,12 +91,65 @@ def speak_intention(intention: str) -> bool:
     return speak(intention, async_=True)
 
 
+def save_audio(text: str, path) -> bool:
+    """
+    Save TTS to an audio file instead of playing it.
+    Uses espeak-ng -w flag.
+    """
+    import subprocess
+    from pathlib import Path
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+
+    # Sanitise (same as speak())
+    clean = text.replace('"', "'").replace('\n', ' ').replace('\\', '')[:500]
+
+    try:
+        result = subprocess.run(
+            ["espeak-ng", "-w", str(path), clean],
+            capture_output=True, timeout=30
+        )
+        return result.returncode == 0
+    except Exception:
+        return False
+
+
+def morning_digest_speak(digest_text: str) -> bool:
+    """
+    Speak a brief version of the morning digest aloud.
+    Trims to first 280 chars — only the highlights.
+    """
+    # Extract just the actionable lines (skip decorative headers)
+    lines = [l.strip() for l in digest_text.splitlines()
+             if l.strip() and not l.startswith("─") and not l.startswith("═")
+             and not l.startswith("N.O.V.A")]
+    brief = " ".join(lines[:6])[:280]
+
+    if not brief:
+        return False
+
+    intro = "Good morning Travis. Nova's brief for today: "
+    return speak(intro + brief)
+
+
 def main():
     if not is_available():
         print("[tts] espeak-ng not found. Install with: sudo pacman -S espeak-ng")
         sys.exit(1)
 
-    text = " ".join(sys.argv[1:]) if len(sys.argv) > 1 else "N.O.V.A is online."
+    args = sys.argv[1:]
+
+    if "--save" in args:
+        idx = args.index("--save")
+        save_path = args[idx + 1] if idx + 1 < len(args) else "nova_speech.wav"
+        text_args = [a for i, a in enumerate(args) if i != idx and i != idx + 1]
+        text = " ".join(text_args)
+        if text:
+            ok = save_audio(text, save_path)
+            print(f"Saved to {save_path}" if ok else "Failed to save audio")
+        sys.exit(0)
+
+    text = " ".join(args) if args else "N.O.V.A is online."
     ok   = speak(text, async_=False)
     if ok:
         print(f"[tts] Spoke: {text[:60]}")

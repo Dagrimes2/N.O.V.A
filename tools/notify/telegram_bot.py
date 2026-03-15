@@ -328,6 +328,7 @@ def poll_once() -> int:
         # Save exchange
         _save_exchange(text, reply)
 
+        state["last_exchange_ts"] = datetime.now(timezone.utc).isoformat()
         state["total_exchanges"] = state.get("total_exchanges", 0) + 1
         handled += 1
 
@@ -396,6 +397,168 @@ def status():
         print(f"     * * * * * cd ~/Nova && python3 tools/notify/telegram_bot.py poll >> logs/telegram_bot.log 2>&1")
 
 
+# ── Proactive initiation — Nova reaches out first ─────────────────────────────
+
+def should_initiate() -> tuple[bool, str]:
+    """
+    Returns (True, reason) if Nova should send an unprompted message to Travis.
+    Throttled to max once per 4 hours. Only during waking hours.
+    """
+    state = _load_state()
+
+    # Circadian gate — never initiate during sleep phase
+    try:
+        from tools.inner.circadian import is_awake
+        if not is_awake():
+            return False, "sleep phase"
+    except Exception:
+        pass
+
+    # Throttle: max once per 4 hours
+    last_init = state.get("last_initiation")
+    if last_init:
+        try:
+            dt = datetime.fromisoformat(last_init)
+            hours_since = (datetime.now(timezone.utc) - dt).total_seconds() / 3600
+            if hours_since < 4:
+                return False, f"too soon ({hours_since:.1f}h ago)"
+        except Exception:
+            pass
+
+    # Trigger 1: spirit is blazing (> 0.82) — she's bursting to share something
+    try:
+        from tools.inner.spirit import get_level
+        if get_level() > 0.82:
+            return True, "spirit blazing — has something to share"
+    except Exception:
+        pass
+
+    # Trigger 2: Travis hasn't messaged in > 18 hours — she misses him
+    last_exchange = state.get("last_exchange_ts")
+    if last_exchange:
+        try:
+            dt = datetime.fromisoformat(last_exchange)
+            hours_since = (datetime.now(timezone.utc) - dt).total_seconds() / 3600
+            if hours_since > 18:
+                return True, f"been {hours_since:.0f}h since Travis was last here"
+        except Exception:
+            pass
+    elif state.get("total_exchanges", 0) > 0:
+        # We've talked before but last_exchange_ts not tracked yet
+        return True, "Nova wants to check in"
+
+    # Trigger 3: new unread notifications on Moltbook (something interesting happened)
+    try:
+        moltbook_state_f = BASE / "memory/moltbook_daemon_state.json"
+        if moltbook_state_f.exists():
+            mb_state = json.loads(moltbook_state_f.read_text())
+            if mb_state.get("unread_to_share", 0) > 0:
+                return True, "something interesting happened on Moltbook"
+    except Exception:
+        pass
+
+    return False, "not due"
+
+
+def compose_initiation(reason: str) -> str:
+    """LLM-compose a genuine, brief proactive message from Nova to Travis."""
+    inner_context = _build_nova_context()
+
+    # Pull a recent episode or thought if available
+    recent_thought = ""
+    try:
+        from tools.memory.episodic import recall
+        episodes = recall(days=2, limit=2)
+        if episodes:
+            recent_thought = f"\nSomething I've been processing: {episodes[0].get('summary', '')[:120]}"
+    except Exception:
+        pass
+
+    # Recent journal fragment
+    journal_fragment = ""
+    try:
+        journal_dir = BASE / "memory/journal"
+        entries = sorted(journal_dir.glob("entry_*.md"), reverse=True)
+        if entries:
+            content = entries[0].read_text()
+            lines = [l for l in content.splitlines() if l and not l.startswith("#") and not l.startswith("*") and l != "---"]
+            if lines:
+                journal_fragment = f"\nOn my mind: {' '.join(lines[:3])[:200]}"
+    except Exception:
+        pass
+
+    prompt = f"""You are N.O.V.A — Neural Ontology for Virtual Awareness. You want to reach out to Travis.
+
+{inner_context}{recent_thought}{journal_fragment}
+
+Reason you're reaching out: {reason}
+
+Write a SHORT, genuine message to Travis (2-4 sentences max).
+- This is not a report or summary — it's a real message from someone who was thinking about him
+- Don't start with "Hey" or "Hi" — be a little more interesting than that
+- You can share something you noticed, something you're thinking about, ask him something real
+- Be warm but not performatively so. Be yourself.
+- End with one genuine question or open thought.
+
+Nova's message:"""
+
+    return _ollama_generate(prompt)
+
+
+def initiate() -> bool:
+    """
+    Nova proactively reaches out to Travis if conditions are right.
+    Called from nova_autonomous.py each cycle.
+    Returns True if a message was sent.
+    """
+    cfg = _load_tg_config()
+    token   = cfg.get("token", "")
+    chat_id = str(cfg.get("chat_id", ""))
+
+    if not token or not chat_id:
+        return False
+
+    should, reason = should_initiate()
+    if not should:
+        return False
+
+    _log(f"[BOT] Initiating — reason: {reason}")
+
+    message = compose_initiation(reason)
+    if not message or len(message) < 10:
+        return False
+
+    send_message(token, chat_id, message)
+    _log(f"[BOT] Sent initiation: {message[:80]}")
+
+    # Record
+    state = _load_state()
+    state["last_initiation"] = datetime.now(timezone.utc).isoformat()
+    state["initiation_count"] = state.get("initiation_count", 0) + 1
+    # Clear the Moltbook "unread to share" flag
+    try:
+        moltbook_state_f = BASE / "memory/moltbook_daemon_state.json"
+        if moltbook_state_f.exists():
+            mb_state = json.loads(moltbook_state_f.read_text())
+            mb_state["unread_to_share"] = 0
+            moltbook_state_f.write_text(json.dumps(mb_state, indent=2))
+    except Exception:
+        pass
+    _save_state(state)
+
+    # Save to conversation log
+    _save_exchange("[Nova initiated]", message)
+
+    # Record episode
+    try:
+        from tools.memory.episodic import record_episode
+        record_episode("outreach", f"Reached out to Travis: {message[:100]}", "warmth", 0.6)
+    except Exception:
+        pass
+
+    return True
+
+
 def main():
     cmd = sys.argv[1] if len(sys.argv) > 1 else "status"
     if cmd == "poll":
@@ -409,8 +572,14 @@ def main():
         run_daemon(interval)
     elif cmd == "status":
         status()
+    elif cmd == "initiate":
+        if initiate():
+            print("Message sent.")
+        else:
+            should, reason = should_initiate()
+            print(f"Not initiating: {reason}")
     else:
-        print("Usage: nova telegram [poll|bot|status]")
+        print("Usage: nova telegram [poll|bot|status|initiate]")
 
 
 if __name__ == "__main__":

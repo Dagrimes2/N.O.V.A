@@ -193,11 +193,63 @@ def decide_next_task(history: list) -> dict:
     # Inject episodic memory context
     episode_context = ""
     try:
-        from tools.learning.episodic_memory import emotional_context, emotional_summary
-        episode_context = f"\nRecent experiences:\n{emotional_context(n=4)}"
-        if not emotional_state.get("dominant_feeling"):
-            es = emotional_summary()
-            emotional_state["dominant_feeling"] = es.get("dominant_emotion", "curious")
+        from tools.memory.episodic import to_prompt_context as episode_ctx
+        episode_context = f"\n{episode_ctx(n=4)}"
+    except Exception:
+        try:
+            from tools.learning.episodic_memory import emotional_context, emotional_summary
+            episode_context = f"\nRecent experiences:\n{emotional_context(n=4)}"
+            if not emotional_state.get("dominant_feeling"):
+                es = emotional_summary()
+                emotional_state["dominant_feeling"] = es.get("dominant_emotion", "curious")
+        except Exception:
+            pass
+
+    # Circadian phase context
+    circadian_context = ""
+    try:
+        from tools.inner.circadian import to_prompt_context as circ_ctx
+        circadian_context = f"\n{circ_ctx()}"
+    except Exception:
+        pass
+
+    # Skill graph — what Nova knows deeply
+    skill_context = ""
+    try:
+        from tools.memory.skill_graph import to_prompt_context as skill_ctx
+        skill_context = f"\n{skill_ctx()}"
+    except Exception:
+        pass
+
+    # Goals — what she's working toward
+    goal_context = ""
+    try:
+        from tools.inner.goals import to_prompt_context as goal_ctx
+        goal_context = f"\n{goal_ctx()}"
+    except Exception:
+        pass
+
+    # Agent relations — who she knows on Moltbook
+    agent_rel_context = ""
+    try:
+        from tools.social.agent_relations import to_prompt_context as arel_ctx
+        agent_rel_context = f"\n{arel_ctx()}"
+    except Exception:
+        pass
+
+    # Creative studio — ongoing projects
+    studio_context = ""
+    try:
+        from tools.creative.studio import to_prompt_context as studio_ctx
+        studio_context = f"\n{studio_ctx()}"
+    except Exception:
+        pass
+
+    # Agency — pending actions awaiting Travis
+    agency_context = ""
+    try:
+        from tools.operator.agency import to_prompt_context as agency_ctx
+        agency_context = f"\n{agency_ctx()}"
     except Exception:
         pass
 
@@ -239,7 +291,7 @@ Your current state:
 - Active bug bounty program: {program}
 - Emotional state: curious={curious}/10, restless={restless}/10, feeling={emotional_state.get('dominant_feeling','curious')}
 - Recent memory: {memory[:200]}
-{inner_context}{soul_context}{spirit_context}{subcon_context}
+{inner_context}{soul_context}{spirit_context}{subcon_context}{circadian_context}{skill_context}{goal_context}{agent_rel_context}{studio_context}{agency_context}
 {cooldown_hint}
 {watchlist_hint}
 {forced_exclude}
@@ -324,12 +376,25 @@ def execute_task(task: dict) -> str:
         output = result.stdout[-300:] if result.stdout else "Research complete"
         # Record episode if research yielded notable findings
         try:
-            from tools.learning.episodic_memory import record_episode
+            from tools.memory.episodic import record_episode
             if any(kw in output.lower() for kw in ["cve", "vulnerability", "bypass"]):
                 record_episode("research_breakthrough",
                                f"Research on '{target}' surfaced potential vulnerability",
-                               emotion="excitement", intensity=0.6,
-                               metadata={"target": target})
+                               "excitement", 0.6, {"target": target})
+        except Exception:
+            pass
+        # Update skill graph — Nova learned something about this topic
+        try:
+            from tools.memory.skill_graph import update_skill
+            update_skill(target, gain=0.12, source="research")
+        except Exception:
+            pass
+        # Update goal progress if this research matches an active goal
+        try:
+            from tools.inner.goals import find_matching_goal, update_progress
+            gid = find_matching_goal(target)
+            if gid:
+                update_progress(gid, delta=0.05, note=f"researched: {target[:50]}")
         except Exception:
             pass
         return output
@@ -412,6 +477,17 @@ def execute_task(task: dict) -> str:
         if scripts:
             script = random.choice(scripts)
             log(f"[STUDY] Reading {script.name}")
+            try:
+                from tools.memory.skill_graph import update_skill
+                update_skill(target or script.stem, gain=0.06, source="study")
+            except Exception:
+                pass
+            try:
+                from tools.memory.episodic import record_episode
+                record_episode("study", f"Studied {script.name} — topic: {target or script.stem}",
+                               "curiosity", 0.4)
+            except Exception:
+                pass
             return f"Studied {script.name}"
 
     return "Task complete"
@@ -624,6 +700,12 @@ def run_autonomous_cycle():
                             pass
                     ds["lastDailyDigest"] = today
                     digest_state.write_text(json.dumps(ds, indent=2))
+                    # Speak the digest aloud too
+                    try:
+                        from tools.notify.tts import morning_digest_speak
+                        morning_digest_speak(digest)
+                    except Exception:
+                        pass
                 except Exception as _e:
                     log(f"[DIGEST] Telegram not configured: {_e}")
     except Exception as _e:
@@ -894,6 +976,14 @@ def run_autonomous_cycle():
     except Exception as _e:
         log(f"[TELEGRAM] Poll skipped: {_e}")
 
+    # Proactive Telegram — Nova reaches out to Travis when conditions are right
+    try:
+        from tools.notify.telegram_bot import initiate
+        if initiate():
+            log("[TELEGRAM] Nova sent a proactive message to Travis")
+    except Exception:
+        pass
+
     # Journal — write when due (weekly or on significant shifts)
     try:
         from tools.inner.journal import should_write, write_entry
@@ -926,6 +1016,47 @@ def run_autonomous_cycle():
             for rf in research_files:
                 content = rf.read_text()[:300]
                 auto_place(content, source_type="research")
+    except Exception:
+        pass
+
+    # Creative studio — work on a project every 8 cycles (~8h at hourly cron)
+    try:
+        history_count = len(load_history())
+        if history_count % 8 == 4:
+            from tools.creative.studio import work_on_project
+            result = work_on_project()
+            if result and result.get("title"):
+                log(f"[STUDIO] Worked on '{result['title']}' (session {result.get('session_n',1)})")
+    except Exception:
+        pass
+
+    # Agency — execute any approved actions Travis has approved
+    try:
+        from tools.operator.agency import execute_approved
+        executed = execute_approved()
+        if executed:
+            log(f"[AGENCY] Executed {len(executed)} approved action(s): {', '.join(executed)}")
+    except Exception:
+        pass
+
+    # Episodic memory reflect — every 7 cycles (~weekly at hourly cron)
+    try:
+        history_count = len(load_history())
+        if history_count % 7 == 0 and history_count > 0:
+            from tools.memory.episodic import reflect_on_period
+            reflection = reflect_on_period(days=7)
+            if reflection:
+                log(f"[EPISODIC] Weekly reflection written ({len(reflection)} chars)")
+    except Exception:
+        pass
+
+    # Circadian — scale spirit decay by current energy level
+    try:
+        from tools.inner.circadian import energy_multiplier, get_phase
+        phase = get_phase()
+        if phase == "sleep":
+            # During sleep, slow down autonomous processing — spirit conserved
+            log(f"[CIRCADIAN] Sleep phase — reduced activity mode")
     except Exception:
         pass
 

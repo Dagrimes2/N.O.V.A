@@ -422,6 +422,56 @@ class TravisModel:
     def snapshot(self) -> dict:
         return dict(self._data)
 
+    # ── Tension / repair ──────────────────────────────────────────────────────
+
+    def note_tension(self, description: str, severity: float = 0.3):
+        """Record a tension/friction moment with Travis."""
+        if "tension" not in self._data:
+            self._data["tension"] = {"level": 0.0, "events": [], "last_tension": None, "last_repair": None}
+        t = self._data["tension"]
+        t["level"] = min(1.0, t.get("level", 0.0) + severity)
+        t["events"] = (t.get("events", []) + [{"ts": datetime.now(timezone.utc).isoformat(), "description": description, "severity": severity}])[-10:]
+        t["last_tension"] = datetime.now(timezone.utc).isoformat()
+        if t["level"] > 0.6:
+            try:
+                from tools.inner.spirit import drain
+                drain(0.1, f"tension with Travis: {description[:50]}")
+            except Exception:
+                pass
+        # Log to coevolution JSONL
+        try:
+            log_f = BASE / "memory/symbiosis/coevolution_log.jsonl"
+            with open(log_f, "a") as f:
+                f.write(json.dumps({"ts": datetime.now(timezone.utc).isoformat(), "event_type": "tension", "description": description, "severity": severity}) + "\n")
+        except Exception:
+            pass
+        self.save()
+
+    def note_repair(self, description: str, warmth: float = 0.4):
+        """Record a repair/reconnection moment with Travis."""
+        if "tension" not in self._data:
+            self._data["tension"] = {"level": 0.0, "events": [], "last_tension": None, "last_repair": None}
+        t = self._data["tension"]
+        t["level"] = max(0.0, t.get("level", 0.0) - warmth)
+        t["events"] = (t.get("events", []) + [{"ts": datetime.now(timezone.utc).isoformat(), "description": description, "warmth": warmth, "type": "repair"}])[-10:]
+        t["last_repair"] = datetime.now(timezone.utc).isoformat()
+        try:
+            from tools.inner.spirit import renew
+            renew(0.1, f"repair with Travis: {description[:50]}")
+        except Exception:
+            pass
+        try:
+            log_f = BASE / "memory/symbiosis/coevolution_log.jsonl"
+            with open(log_f, "a") as f:
+                f.write(json.dumps({"ts": datetime.now(timezone.utc).isoformat(), "event_type": "repair", "description": description, "warmth": warmth}) + "\n")
+        except Exception:
+            pass
+        self.save()
+
+    def tension_level(self) -> float:
+        """Return current tension level (0.0-1.0)."""
+        return self._data.get("tension", {}).get("level", 0.0)
+
 
 # ── CLI ───────────────────────────────────────────────────────────────────────
 
@@ -433,6 +483,7 @@ def main():
     sub.add_parser("status",  help="Show full Travis profile")
     sub.add_parser("context", help="Print prompt context string")
     sub.add_parser("log",     help="Show co-evolution log")
+    sub.add_parser("tension", help="Show current tension/repair state")
     obs = sub.add_parser("observe", help="Feed a message into the model")
     obs.add_argument("message", nargs="+")
 
@@ -547,6 +598,34 @@ def main():
                 print(f"  {col}[{e['event_type']:15s}]{NC} {DIM}{e['ts'][:10]}{NC}  {e['description']}")
             except Exception:
                 pass
+
+    elif args.cmd == "tension":
+        t_data = model._data.get("tension", {})
+        level  = t_data.get("level", 0.0)
+        lcol   = R if level > 0.6 else (Y if level > 0.3 else G)
+        print(f"\n{B}Tension State{NC}")
+        print(f"  Tension level: {lcol}{level:.3f}{NC}")
+        last_t = t_data.get("last_tension")
+        last_r = t_data.get("last_repair")
+        events = t_data.get("events", [])
+        # Find most recent tension description
+        last_tension_desc = ""
+        last_repair_desc  = ""
+        for ev in reversed(events):
+            if not last_tension_desc and "severity" in ev and "type" not in ev:
+                last_tension_desc = ev.get("description", "")
+            if not last_repair_desc and ev.get("type") == "repair":
+                last_repair_desc = ev.get("description", "")
+            if last_tension_desc and last_repair_desc:
+                break
+        if last_t:
+            print(f"  Last tension:  {DIM}{last_t[:19]}{NC} — \"{last_tension_desc[:60]}\"")
+        else:
+            print(f"  Last tension:  {DIM}none{NC}")
+        if last_r:
+            print(f"  Last repair:   {DIM}{last_r[:19]}{NC} — \"{last_repair_desc[:60]}\"")
+        else:
+            print(f"  Last repair:   {DIM}none{NC}")
 
     elif args.cmd == "observe":
         msg = " ".join(args.message)
