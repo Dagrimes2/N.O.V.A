@@ -444,6 +444,34 @@ def _build_agent_tasks(primary_task: dict, history: list) -> list[dict]:
 def run_autonomous_cycle():
     log("[N.O.V.A] Autonomous cycle starting...")
 
+    # ── Network check — graceful offline degradation ──────────────────────────
+    try:
+        from tools.net.network import net as _net
+        if not _net.is_online():
+            log("[N.O.V.A] Offline — running offline-safe cycle only (reflect/life/propose)")
+            # Offline cycle: only actions that don't need internet
+            history = load_history()
+            offline_task = {"action": "reflect", "target": "offline contemplation",
+                            "reason": "network unavailable"}
+            result = execute_task(offline_task)
+            history.append({
+                "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "action": "reflect", "target": "offline", "reason": "offline cycle"
+            })
+            save_history(history)
+            log("[N.O.V.A] Offline cycle complete.")
+            # Queue a full autonomous cycle for when we're back
+            _net.defer({"type": "autonomous", "reason": "deferred from offline cycle"})
+            return
+        # Online — drain any pending deferred tasks first
+        pending = _net.pending_count()
+        if pending > 0:
+            log(f"[N.O.V.A] Draining {pending} deferred tasks before cycle...")
+            _net.drain_queue()
+    except Exception:
+        pass
+    # ─────────────────────────────────────────────────────────────────────────
+
     auto_approve_proposals()
 
     history = load_history()

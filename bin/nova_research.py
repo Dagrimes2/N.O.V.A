@@ -14,9 +14,26 @@ import xml.etree.ElementTree as ET
 
 BASE        = Path.home() / "Nova"
 RESEARCH_DIR= BASE / "memory/research"
-OLLAMA_URL  = "http://localhost:11434/api/generate"
-MODEL       = os.getenv("NOVA_MODEL", "gemma2:2b")
 HEADERS     = {"User-Agent": "NOVA-research/2.0 (educational)"}
+
+_nova_root = str(BASE)
+if _nova_root not in sys.path:
+    sys.path.insert(0, _nova_root)
+
+try:
+    from tools.config import cfg
+    OLLAMA_URL = cfg.ollama_url
+    MODEL      = cfg.model("general")
+except Exception:
+    OLLAMA_URL = "http://localhost:11434/api/generate"
+    MODEL      = os.getenv("NOVA_MODEL", "gemma2:2b")
+
+try:
+    from tools.net.network import net as _net
+    _NET_ENABLED = True
+except Exception:
+    _net = None
+    _NET_ENABLED = False
 
 RESEARCH_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -242,7 +259,39 @@ def save_research(query: str, data: dict, synthesis: str):
     outfile.write_text(json.dumps(note, indent=2))
     return outfile
 
+def _find_cached_research(query: str) -> dict:
+    """Return the most recent research file matching this query, or {}."""
+    if not RESEARCH_DIR.exists():
+        return {}
+    q = query.lower()
+    matches = []
+    for f in sorted(RESEARCH_DIR.glob("research_*.json"), reverse=True)[:20]:
+        try:
+            data = json.loads(f.read_text())
+            if q in data.get("query", "").lower():
+                matches.append(data)
+        except Exception:
+            pass
+    return matches[0] if matches else {}
+
+
 def research(query: str, cve_mode: bool = False):
+    # ── Offline guard ─────────────────────────────────────────────────────────
+    if _NET_ENABLED and not _net.is_online():
+        print(f"[N.O.V.A] Offline — deferring research: {query}")
+        _net.defer({"type": "research", "query": query})
+        # Try to return cached results for this query if available
+        cached = _find_cached_research(query)
+        if cached:
+            print(f"[N.O.V.A] Returning cached research from {cached.get('timestamp','?')}")
+            print(f"\n{'═'*55}")
+            print(f"N.O.V.A (cached): {cached.get('synthesis','No synthesis available.')}")
+            print(f"{'═'*55}")
+        else:
+            print("[N.O.V.A] No cached research for this query — will run when back online.")
+        return
+    # ─────────────────────────────────────────────────────────────────────────
+
     print(f"\n[N.O.V.A] Researching: {query}")
     data = {}
 

@@ -93,6 +93,12 @@ MULTI-AGENT
   nova agents bus [N]              show recent message bus entries
   nova agents clear                clear completed agent history
 
+NETWORK
+  nova net status                  online/offline + cache stats
+  nova net drain                   run deferred task queue now
+  nova net clear                   clear stale cache entries
+  nova net queue                   show pending deferred tasks
+
 INNER LIFE
   nova feel status                 current mood, valence, arousal, needs
   nova feel tick [--action TYPE]   advance one cycle (builds needs with time)
@@ -565,6 +571,10 @@ def main():
     elif cmd == "agents":
         args = sys.argv[2:] if len(sys.argv) > 2 else []
         subprocess.run(["python3", str(BASE / "bin/nova_agents.py")] + args)
+
+    elif cmd == "net":
+        args = sys.argv[2:] if len(sys.argv) > 2 else []
+        subprocess.run(["python3", str(BASE / "tools/net/network.py")] + args)
 
     elif cmd == "feel":
         sub = sys.argv[2] if len(sys.argv) > 2 else "status"
