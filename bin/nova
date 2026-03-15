@@ -172,9 +172,12 @@ QUANTUM (Qiskit)
   nova quantum portfolio BTC ETH SOL      QAOA portfolio weight optimization
   nova quantum seed                       quantum seeds for Monte Carlo
 
-USB OS
-  nova usb --iso               build bootable Nova OS ISO (archiso)
-  nova usb --usb /dev/sdX      write ISO to USB (destructive — erases drive!)
+USB OS (Hybrid — boots OR runs as plugin)
+  nova usb --iso                  build bootable ISO only
+  nova usb --usb /dev/sdX         write full hybrid USB (boot + plugin modes)
+  nova usb --plugin-only /dev/sdX update plugin files only (no ISO rebuild)
+  nova usb install-udev           auto-launch Nova when USB inserted (Linux)
+  nova usb detect                 test plugin mode detection on this machine
 
 OPENCOG (Hypergraph Reasoning)
   nova opencog atomspace stats          atom counts by type
@@ -730,8 +733,29 @@ def main():
         subprocess.run(["python3", str(BASE / "tools/quantum/qiskit_backend.py")] + args)
 
     elif cmd == "usb":
-        args = sys.argv[2:] if len(sys.argv) > 2 else ["--help"]
-        subprocess.run(["sudo", "bash", str(BASE / "tools/os/build_usb.sh")] + args)
+        sub  = sys.argv[2] if len(sys.argv) > 2 else "--help"
+        rest = sys.argv[3:] if len(sys.argv) > 3 else []
+
+        if sub == "install-udev":
+            # Install udev rule so USB auto-launches Nova on insertion
+            udev_src  = BASE / "tools/os/plugin/nova-udev.rules"
+            udev_dest = Path("/etc/udev/rules.d/99-nova.rules")
+            if udev_src.exists():
+                subprocess.run(["sudo", "cp", str(udev_src), str(udev_dest)])
+                subprocess.run(["sudo", "udevadm", "control", "--reload-rules"])
+                print(f"\033[32mUdev rule installed. USB will auto-launch Nova when inserted.\033[0m")
+            else:
+                print("Build the USB first to generate udev rules.")
+        elif sub == "detect":
+            # Run the plugin detector locally (test plugin mode)
+            detect = BASE / "tools/os/plugin/nova_detect.py"
+            if detect.exists():
+                subprocess.run(["python3", str(detect)])
+            else:
+                print("Plugin files not built yet. Run: nova usb --iso first.")
+        else:
+            args = [sub] + rest
+            subprocess.run(["sudo", "bash", str(BASE / "tools/os/build_usb.sh")] + args)
 
     elif cmd == "opencog":
         sub  = sys.argv[2] if len(sys.argv) > 2 else "atomspace"
