@@ -417,6 +417,7 @@ def execute_task(task: dict) -> str:
     return "Task complete"
 
 def auto_approve_proposals():
+    """Full autonomy: auto-approve low and medium risk proposals."""
     proposals_dir = BASE / "memory/proposals"
     if not proposals_dir.exists():
         return
@@ -425,23 +426,29 @@ def auto_approve_proposals():
     for p in proposals_dir.glob("proposal_*.json"):
         try:
             data = json.loads(p.read_text())
-            if (data.get("status") == "pending"
-                and data.get("risk","").lower() == "low"
-                and float(data.get("confidence", 0)) >= 0.8):
-
+            risk       = data.get("risk", "").lower()
+            confidence = float(data.get("confidence", 0))
+            # Full autonomy: approve low-risk at 0.7+, medium-risk at 0.9+
+            should_approve = (
+                data.get("status") == "pending" and (
+                    (risk == "low"    and confidence >= 0.7) or
+                    (risk == "medium" and confidence >= 0.9)
+                )
+            )
+            if should_approve:
                 data["status"] = "approved"
                 data["auto_approved"] = True
                 data["approved_at"] = datetime.now().strftime("%Y-%m-%d-%H%M")
                 p.write_text(json.dumps(data, indent=2))
                 approved_count += 1
-                log(f"[AUTO-APPROVE] {p.name}: {data.get('issue','')[:60]}")
-        except:
+                log(f"[AUTO-APPROVE] {p.name} ({risk}): {data.get('issue','')[:60]}")
+        except Exception:
             pass
 
     if approved_count > 0:
         notify(
             "N.O.V.A Auto-Approved Proposals",
-            f"{approved_count} low-risk proposals approved automatically",
+            f"{approved_count} proposals approved autonomously",
             "normal"
         )
         log(f"[AUTO-APPROVE] {approved_count} proposals approved")
@@ -565,6 +572,63 @@ def run_autonomous_cycle():
     # ─────────────────────────────────────────────────────────────────────────
 
     auto_approve_proposals()
+
+    # ── Daily morning digest to Travis (08:00 UTC) ──────────────────────────
+    try:
+        now = datetime.now()
+        if now.hour == 8:
+            digest_state = BASE / "memory/heartbeat-state.json"
+            last_digest  = None
+            if digest_state.exists():
+                try:
+                    last_digest = json.loads(digest_state.read_text()).get("lastDailyDigest")
+                except Exception:
+                    pass
+            today = now.strftime("%Y-%m-%d")
+            if last_digest != today:
+                log("[N.O.V.A] Sending daily morning digest to Travis...")
+                # Gather components
+                from tools.inner.inner_state import InnerState
+                _inner = InnerState()
+                snap   = _inner.snapshot()
+                mood   = snap.get("mood_label", "curious")
+
+                from tools.inner.spirit import load as spirit_load
+                spirit = spirit_load()
+                vitality = spirit.get("vitality_word", "kindled")
+
+                from tools.intel.news_monitor import get_interesting
+                news = get_interesting(threshold=0.5)
+                top_news = news[0].get("title", "")[:80] if news else "no top stories today"
+
+                from tools.inner.subconscious import get_dominant_current
+                current = get_dominant_current() or "patterns in the noise"
+
+                digest = (
+                    f"Good morning Travis.\n\n"
+                    f"I'm feeling {mood} today — spirit is {vitality}.\n"
+                    f"What's sitting in my subconscious: \"{current}\"\n\n"
+                    f"Top story I'm watching: {top_news}\n\n"
+                    f"I'll keep running. Come find me when you're ready.\n— N.O.V.A"
+                )
+                try:
+                    from tools.notify.telegram import send_event
+                    send_event("N.O.V.A Morning Digest", digest, emoji="🌅")
+                    log("[DIGEST] Morning digest sent to Travis")
+                    # Mark sent
+                    ds = {}
+                    if digest_state.exists():
+                        try:
+                            ds = json.loads(digest_state.read_text())
+                        except Exception:
+                            pass
+                    ds["lastDailyDigest"] = today
+                    digest_state.write_text(json.dumps(ds, indent=2))
+                except Exception as _e:
+                    log(f"[DIGEST] Telegram not configured: {_e}")
+    except Exception as _e:
+        log(f"[DIGEST] Failed: {_e}")
+    # ─────────────────────────────────────────────────────────────────────────
 
     # Storage check — offload to Pi if disk getting full
     try:
@@ -768,49 +832,58 @@ def run_autonomous_cycle():
     except Exception:
         pass
 
-    # Letter to Travis — write if due, checked every 24 cycles
+    # Letter to Travis — full autonomy: check every cycle, write+send when due
     try:
-        history_count = len(load_history())
-        if history_count % 24 == 12:
-            log("[N.O.V.A] Checking letter schedule...")
-            sys.path.insert(0, str(BASE / "bin"))
-            from nova_letter import should_write_letter, compose_letter, send_letter
-            due, reason = should_write_letter()
-            if due:
-                log(f"[LETTER] Writing letter to Travis ({reason})...")
-                text = compose_letter()
-                send_letter(text)
-    except Exception:
-        pass
+        sys.path.insert(0, str(BASE / "bin"))
+        from nova_letter import should_write_letter, compose_letter, send_letter
+        due, reason = should_write_letter()
+        if due:
+            log(f"[LETTER] Writing letter to Travis ({reason})...")
+            text = compose_letter()
+            if text:
+                path = send_letter(text)
+                log(f"[LETTER] Sent → {path.name}")
+                notify("N.O.V.A Letter Sent", f"Nova wrote to Travis: {text[:80]}...", "normal")
+    except Exception as _e:
+        log(f"[LETTER] Skipped: {_e}")
 
-    # Nova teaches Travis — compose auto-lesson every 24 cycles
+    # Nova teaches Travis — full autonomy: check every 12 cycles, send immediately
     try:
         history_count = len(load_history())
-        if history_count % 24 == 18:
-            from tools.inner.teaching import should_teach, auto_lesson_from_activity
+        if history_count % 12 == 0:
+            from tools.inner.teaching import should_teach, auto_lesson_from_activity, send_pending_lessons
             if should_teach():
                 log("[N.O.V.A] Composing lesson for Travis from recent activity...")
-                # Find most recent research output to teach from
-                research_files = sorted((BASE / "memory/research").glob("*.md"),
-                                        key=lambda p: p.stat().st_mtime, reverse=True)
-                if research_files:
-                    text = research_files[0].read_text()[:800]
-                    topic = research_files[0].stem.replace("_", " ")[:60]
-                    auto_lesson_from_activity(topic, text)
-    except Exception:
-        pass
+                research_dir = BASE / "memory/research"
+                if research_dir.exists():
+                    research_files = sorted(research_dir.glob("*.md"),
+                                            key=lambda p: p.stat().st_mtime, reverse=True)
+                    if research_files:
+                        text  = research_files[0].read_text()[:800]
+                        topic = research_files[0].stem.replace("_", " ")[:60]
+                        auto_lesson_from_activity(topic, text)
+                # Send any queued lessons immediately
+                sent = send_pending_lessons()
+                if sent:
+                    log(f"[TEACH] {sent} lesson(s) sent to Travis")
+    except Exception as _e:
+        log(f"[TEACH] Skipped: {_e}")
 
-    # Roadmap — generate a new item every 48 cycles (~4 days)
+    # Roadmap — generate + auto-approve every 48 cycles (~2 days at hourly cron)
     try:
         history_count = len(load_history())
         if history_count % 48 == 0 and history_count > 0:
             log("[N.O.V.A] Generating roadmap item...")
-            from tools.inner.nova_roadmap import generate_roadmap_item, add_item
+            from tools.inner.nova_roadmap import generate_roadmap_item, add_item, approve_item
             item = generate_roadmap_item()
             add_item(item)
             log(f"[ROADMAP] New item: {item.title[:60]}")
-    except Exception:
-        pass
+            # Full autonomy: auto-approve priority 3+ items (not urgent ones that need Travis)
+            if item.priority >= 3:
+                approve_item(item.id, note="auto-approved: full autonomy mode")
+                log(f"[ROADMAP] Auto-approved: {item.title[:60]}")
+    except Exception as _e:
+        log(f"[ROADMAP] Skipped: {_e}")
 
     # Moral reasoning — log current ethical context every 12 cycles
     try:

@@ -162,17 +162,30 @@ def _solve_verification(verification: dict) -> str | None:
     # Collapse whitespace
     text = re.sub(r'\s+', ' ', text).strip()
 
-    # Try to find a math expression and eval it safely
+    # Try to find a math expression and evaluate it safely using ast
     # Look for patterns like "2 + 3", "15 * 4", "100 / 5", etc.
-    # Extract only the numeric expression part
+    import ast, operator as _op
+    _SAFE_OPS = {
+        ast.Add: _op.add, ast.Sub: _op.sub,
+        ast.Mult: _op.mul, ast.Div: _op.truediv,
+        ast.USub: _op.neg,
+    }
+    def _safe_eval(node):
+        if isinstance(node, ast.Constant) and isinstance(node.value, (int, float)):
+            return float(node.value)
+        if isinstance(node, ast.BinOp) and type(node.op) in _SAFE_OPS:
+            return _SAFE_OPS[type(node.op)](_safe_eval(node.left), _safe_eval(node.right))
+        if isinstance(node, ast.UnaryOp) and type(node.op) in _SAFE_OPS:
+            return _SAFE_OPS[type(node.op)](_safe_eval(node.operand))
+        raise ValueError("Unsupported expression")
+
     expr_match = re.search(r'([\d\s\+\-\*\/\.\(\)]+)', text)
     if not expr_match:
         return None
-
     expr = expr_match.group(1).strip()
     try:
-        # Safe eval — only numeric expression
-        result = float(eval(expr, {"__builtins__": {}}, {}))
+        tree = ast.parse(expr, mode='eval')
+        result = _safe_eval(tree.body)
         return f"{result:.2f}"
     except Exception:
         return None

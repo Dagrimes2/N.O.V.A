@@ -123,11 +123,14 @@ def should_teach() -> bool:
     cutoff = last
     hours_back = max(24, since.total_seconds() / 3600)
     files = _get_recent_activity_files(int(hours_back))
-    interesting = [
-        f for f in files
-        if any(kw in f.read_text().lower() for kw in LESSON_WORTHY_TOPICS
-               if len(f.read_text()) > 50)
-    ]
+    interesting = []
+    for f in files:
+        try:
+            content = f.read_text().lower()
+            if len(content) > 50 and any(kw in content for kw in LESSON_WORTHY_TOPICS):
+                interesting.append(f)
+        except Exception:
+            pass
     return len(interesting) >= 3
 
 

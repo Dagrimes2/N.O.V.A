@@ -442,7 +442,10 @@ def main():
             return
         content = args[1]
         room    = args[2]
-        weight  = float(args[3]) if len(args) > 3 else 0.5
+        try:
+            weight = float(args[3]) if len(args) > 3 else 0.5
+        except (ValueError, IndexError):
+            weight = 0.5
         item_id = place(content, room, weight=weight)
         print(f"  {G}Placed in {room}:{NC} id={item_id}")
 

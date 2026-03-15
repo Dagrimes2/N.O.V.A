@@ -213,7 +213,7 @@ def scan_for_cves(text: str) -> list:
     Extract CVE-XXXX-XXXXX patterns from text.
     Returns list of unique CVE IDs.
     """
-    found = re.findall(r'CVE-\d{4}-\d{4,7}', text, re.IGNORECASE)
+    found = re.findall(r'CVE-\d{4}-\d+', text, re.IGNORECASE)
     seen = set()
     unique = []
     for cve in found:

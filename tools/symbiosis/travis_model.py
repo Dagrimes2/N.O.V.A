@@ -246,7 +246,11 @@ class TravisModel:
             counts[dominant] = counts.get(dominant, 0) + 1
             self._data["tone_counts"] = counts
 
-        # Emotional rhythm
+        # Emotional rhythm — ensure key exists for older saved models
+        if "emotional_rhythm" not in self._data:
+            self._data["emotional_rhythm"] = {
+                "energized_times": [], "tired_times": [], "typical_energy": "variable"
+            }
         hour = now.hour
         rhythm = self._data["emotional_rhythm"]
         if tone_scores.get("excited", 0) > 0 or tone_scores.get("focused", 0) > 0:
@@ -377,7 +381,7 @@ class TravisModel:
             return "tired"
         if tones.count("excited") >= 2 or tones.count("focused") >= 2:
             return "energized"
-        return self._data["emotional_rhythm"].get("typical_energy", "variable")
+        return self._data.get("emotional_rhythm", {}).get("typical_energy", "variable")
 
     # ── Prompt context ────────────────────────────────────────────────────────
 
@@ -457,19 +461,25 @@ def main():
                 print(f"    {C}{k:14s}{NC} {G}{bar}{NC} {v:.3f}")
 
         # Known interests
-        print(f"\n  {B}Known interests (seeded):{NC}")
-        for ki in snap["known_interests"]:
-            print(f"    {DIM}•{NC} {ki}")
+        known_interests = snap.get("known_interests", [])
+        if known_interests:
+            print(f"\n  {B}Known interests (seeded):{NC}")
+            for ki in known_interests:
+                print(f"    {DIM}•{NC} {ki}")
 
         # Known goals
-        print(f"\n  {B}Known goals:{NC}")
-        for g in snap["known_goals"][:4]:
-            print(f"    {Y}→{NC} {g}")
+        known_goals = snap.get("known_goals", [])
+        if known_goals:
+            print(f"\n  {B}Known goals:{NC}")
+            for g in known_goals[:4]:
+                print(f"    {Y}→{NC} {g}")
 
         # Things that matter
-        print(f"\n  {B}Things that matter to Travis:{NC}")
-        for t in snap["things_that_matter"][:4]:
-            print(f"    {M}♦{NC} {t}")
+        things_that_matter = snap.get("things_that_matter", [])
+        if things_that_matter:
+            print(f"\n  {B}Things that matter to Travis:{NC}")
+            for t in things_that_matter[:4]:
+                print(f"    {M}♦{NC} {t}")
 
         # Communication style
         style = snap.get("communication_style", {})
@@ -515,9 +525,11 @@ def main():
             for q in snap["open_questions"][-3:]:
                 print(f"    {Y}?{NC} {DIM}{q['ts']}{NC} {q['q']}")
 
-        print(f"\n  {DIM}Arrival patterns:{NC}")
-        for ap in snap["arrival_patterns"]:
-            print(f"    — {ap}")
+        arrival_patterns = snap.get("arrival_patterns", [])
+        if arrival_patterns:
+            print(f"\n  {DIM}Arrival patterns:{NC}")
+            for ap in arrival_patterns:
+                print(f"    — {ap}")
 
     elif args.cmd == "context":
         print(model.to_prompt_context())
