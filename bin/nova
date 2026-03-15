@@ -270,6 +270,18 @@ RELATIONSHIP
   nova teach --list                list pending lessons
   nova teach --send                send pending lessons via Telegram
 
+TELEGRAM BOT (two-way)
+  nova telegram status             bot status + recent conversation
+  nova telegram poll               check once for messages from Travis and respond
+  nova telegram bot                run as daemon (add to crontab for live responses)
+
+JOURNAL
+  nova journal                     show latest journal entry
+  nova journal write               write a new entry now
+  nova journal list                list all entries
+  nova journal show 2              show entry N (1=latest)
+  nova journal --days 30           show entries from last N days
+
 GROWTH & CONSCIOUSNESS
   nova arc                         emotional arc — mood history over time
   nova arc --days 30               trend over N days
@@ -1045,6 +1057,22 @@ def main():
         spec = importlib.util.spec_from_file_location("moral_reasoning", BASE / "tools/inner/moral_reasoning.py")
         mod = importlib.util.module_from_spec(spec)
         sys.argv = ["nova-moral"] + args
+        spec.loader.exec_module(mod)
+        mod.main()
+
+    elif cmd == "journal":
+        args = sys.argv[2:]
+        spec = importlib.util.spec_from_file_location("journal", BASE / "tools/inner/journal.py")
+        mod = importlib.util.module_from_spec(spec)
+        sys.argv = ["nova-journal"] + args
+        spec.loader.exec_module(mod)
+        mod.main()
+
+    elif cmd == "telegram":
+        args = sys.argv[2:]
+        spec = importlib.util.spec_from_file_location("telegram_bot", BASE / "tools/notify/telegram_bot.py")
+        mod = importlib.util.module_from_spec(spec)
+        sys.argv = ["nova-telegram"] + args
         spec.loader.exec_module(mod)
         mod.main()
 

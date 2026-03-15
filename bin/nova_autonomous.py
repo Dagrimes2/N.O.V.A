@@ -885,6 +885,26 @@ def run_autonomous_cycle():
     except Exception as _e:
         log(f"[ROADMAP] Skipped: {_e}")
 
+    # Telegram bot — poll for Travis's messages every cycle
+    try:
+        from tools.notify.telegram_bot import poll_once
+        n = poll_once()
+        if n:
+            log(f"[TELEGRAM] {n} message(s) from Travis handled")
+    except Exception as _e:
+        log(f"[TELEGRAM] Poll skipped: {_e}")
+
+    # Journal — write when due (weekly or on significant shifts)
+    try:
+        from tools.inner.journal import should_write, write_entry
+        due, reason = should_write()
+        if due:
+            log(f"[JOURNAL] Writing entry ({reason})...")
+            path = write_entry(verbose=False)
+            log(f"[JOURNAL] Saved → {path.name}")
+    except Exception as _e:
+        log(f"[JOURNAL] Skipped: {_e}")
+
     # Moral reasoning — log current ethical context every 12 cycles
     try:
         history_count = len(load_history())
