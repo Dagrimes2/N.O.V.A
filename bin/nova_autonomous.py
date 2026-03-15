@@ -538,6 +538,97 @@ def run_autonomous_cycle():
     except Exception:
         pass
 
+    # Mastodon auto-post — if configured and interval elapsed
+    try:
+        from tools.social.mastodon_client import should_auto_post, compose_auto_post, post
+        if should_auto_post():
+            text = compose_auto_post()
+            result = post(text, post_type="autonomous")
+            if result.get("ok"):
+                log(f"[SOCIAL] Posted to Mastodon → {result.get('url','')}")
+    except Exception:
+        pass
+
+    # Weekly market brief — if 7+ days since last
+    try:
+        from bin.nova_market_brief import should_write as mkt_should_write, write_brief
+        if mkt_should_write():
+            log("[N.O.V.A] Writing weekly market brief...")
+            write_brief()
+    except Exception:
+        pass
+
+    # Paper trading — check stop-losses each cycle
+    try:
+        from tools.markets.paper_trading import check_stops
+        triggered = check_stops()
+        if triggered:
+            log(f"[MARKETS] {len(triggered)} stop-losses triggered")
+    except Exception:
+        pass
+
+    # Price alerts — check every cycle (lightweight)
+    try:
+        from tools.markets.alerts import check_alerts
+        fired = check_alerts(verbose=False)
+        if fired:
+            log(f"[ALERTS] {len(fired)} price alert(s) triggered: "
+                f"{', '.join(a['symbol'] for a in fired)}")
+    except Exception:
+        pass
+
+    # CVE monitor — poll every 4 cycles (~8 hours)
+    try:
+        history_count = len(load_history())
+        if history_count % 4 == 0:
+            from tools.security.cve_monitor import poll as cve_poll
+            new_cves = cve_poll(verbose=False)
+            if new_cves:
+                log(f"[CVE] {len(new_cves)} new CVEs found")
+    except Exception:
+        pass
+
+    # Auto-report high-score findings
+    try:
+        from tools.security.auto_report import auto_draft_high_scores
+        auto_draft_high_scores(min_score=8.0)
+    except Exception:
+        pass
+
+    # OpenCog ECAN — decay + seed from history every cycle
+    try:
+        from tools.opencog.ecan import get_ecan
+        ecan = get_ecan()
+        ecan.decay()
+        ecan.seed_from_history()
+        ecan.close()
+    except Exception:
+        pass
+
+    # Memory consolidation — promote episodic → semantic, every 6 cycles (~12h)
+    try:
+        history_count = len(load_history())
+        if history_count % 6 == 0 and history_count > 0:
+            log("[N.O.V.A] Running memory consolidation...")
+            from tools.inner.memory_consolidate import consolidate
+            result = consolidate(verbose=False)
+            if result["facts_added"] > 0:
+                log(f"[MEMORY] Consolidated {result['episodes_processed']} episodes "
+                    f"→ {result['facts_added']} semantic facts")
+    except Exception:
+        pass
+
+    # Dream arc analysis — update after each dream cycle (~daily)
+    try:
+        history_count = len(load_history())
+        if history_count % 12 == 0 and history_count > 0:
+            log("[N.O.V.A] Updating dream arcs...")
+            from tools.inner.dream_continuity import analyze_dreams
+            data = analyze_dreams()
+            log(f"[DREAMS] {len(data['arcs'])} narrative arcs tracked")
+    except Exception:
+        pass
+
     history = load_history()
     primary_task = decide_next_task(history)
     log(f"[N.O.V.A] Primary decision: {primary_task}")

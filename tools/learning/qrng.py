@@ -37,11 +37,28 @@ _FETCH_COOLDOWN = 60.0   # seconds between network calls
 
 
 def _fetch_quantum_bytes(n: int = 1024) -> bytes:
-    """Fetch n quantum random bytes from ANU. Returns empty on failure."""
+    """
+    Fetch n quantum random bytes.
+    Priority: Qiskit (real/simulated quantum) → ANU QRNG API → empty.
+    """
     global _last_fetch
     now = time.monotonic()
     if now - _last_fetch < _FETCH_COOLDOWN:
         return b""
+
+    # 1. Try Qiskit (local Aer simulator or IBM Quantum)
+    try:
+        from tools.quantum.qiskit_backend import quantum_random_bytes, detect_backend
+        info = detect_backend()
+        if info["type"] in ("qiskit_aer", "qiskit_ibm"):
+            result = quantum_random_bytes(n)
+            if result:
+                _last_fetch = time.monotonic()
+                return result
+    except Exception:
+        pass
+
+    # 2. Try ANU QRNG REST API
     try:
         import urllib.request
         import json as _json
@@ -52,6 +69,7 @@ def _fetch_quantum_bytes(n: int = 1024) -> bytes:
                 return bytes(data["data"][:n])
     except Exception:
         pass
+
     return b""
 
 

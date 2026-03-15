@@ -18,6 +18,8 @@ memory/graphql_findings.json
 
 # Secrets — never commit
 config/telegram.yaml
+config/mastodon.yaml
+config/quantum.yaml
 
 # Autonomous runtime data (large, generated)
 memory/research/
@@ -33,6 +35,11 @@ memory/symbiosis/
 memory/synthesis/
 memory/autobiography/
 tools/scoring/score.py.restored
+memory/opencog/
+memory/semantic/
+memory/inner/
+memory/quantum/
+memory/markets/
 
 # Local env
 .env

@@ -279,6 +279,148 @@ def main():
         print(f"  24h volume: {nft.get('volume_24h', '?')} ETH")
         print(f"  24h sales:  {nft.get('sales_24h', '?')}\n")
 
+    elif cmd == "backtest":
+        symbols = [a.upper() for a in args[1:] if not a.startswith("--")]
+        if not symbols:
+            symbols = load_watchlist()[:3]
+        from tools.markets.backtest import backtest
+        from tools.markets.data import get_crypto_history, get_stock_history, CRYPTO_IDS
+        print(f"\n{B}N.O.V.A Backtest{NC}  {DIM}horizon={horizon}d{NC}")
+        print(f"{DIM}{'─'*50}{NC}")
+        for sym in symbols:
+            try:
+                df = get_crypto_history(sym) if sym in CRYPTO_IDS else get_stock_history(sym)
+                backtest(sym, df, horizon=horizon)
+            except Exception as e:
+                print(f"  {R}[{sym}] {e}{NC}")
+
+    elif cmd == "paper":
+        sub = args[1] if len(args) > 1 else "status"
+        from tools.markets import paper_trading as pt
+
+        if sub == "status":
+            pv = pt.portfolio_value()
+            col = G if pv["total_return_pct"] >= 0 else R
+            print(f"\n{B}Paper Portfolio{NC}")
+            print(f"  Total value:  {col}${pv['total_val']:,.2f}{NC}  "
+                  f"({col}{pv['total_return_pct']:+.1f}%{NC})")
+            print(f"  Cash:         ${pv['cash_usd']:,.2f}")
+            print(f"  Realized P&L: {G if pv['realized_pnl']>=0 else R}"
+                  f"${pv['realized_pnl']:+,.2f}{NC}  Trades: {pv['trades']}")
+            if pv["positions"]:
+                print(f"\n  {B}Open Positions:{NC}")
+                for p in pv["positions"]:
+                    pc = G if p["unreal_pct"] >= 0 else R
+                    print(f"    {p['symbol']:6s} {p['qty']:.4f} @ ${p['avg_price']:,.4f}  "
+                          f"now=${p['current']:,.4f}  {pc}{p['unreal_pct']:+.1f}%{NC}  "
+                          f"stop=${p['stop_loss']:,.4f}")
+            else:
+                print(f"  {DIM}No open positions.{NC}")
+
+        elif sub == "buy" and len(args) >= 4:
+            sym = args[2].upper()
+            qty = float(args[3])
+            stop = float(args[4]) if len(args) > 4 else 0.05
+            r = pt.buy(sym, qty, stop_loss_pct=stop)
+            if r.get("ok"):
+                print(f"{G}BUY {sym}: {qty} @ ${r['price']:,.4f}  cost=${r['cost']:,.2f}{NC}")
+            else:
+                print(f"{R}Error: {r.get('error')}{NC}")
+
+        elif sub == "sell" and len(args) >= 3:
+            sym = args[2].upper()
+            qty = float(args[3]) if len(args) > 3 else None
+            r = pt.sell(sym, qty)
+            if r.get("ok"):
+                col = G if r["pnl"] >= 0 else R
+                print(f"{col}SELL {sym}: {r['qty']:.4f} @ ${r['price']:,.4f}  "
+                      f"P&L=${r['pnl']:+,.2f} ({r['pnl_pct']:+.1f}%){NC}")
+            else:
+                print(f"{R}Error: {r.get('error')}{NC}")
+
+        elif sub == "close" and len(args) >= 3:
+            sym = args[2].upper()
+            r = pt.sell(sym)
+            if r.get("ok"):
+                col = G if r["pnl"] >= 0 else R
+                print(f"{col}CLOSED {sym}: P&L=${r['pnl']:+,.2f} ({r['pnl_pct']:+.1f}%){NC}")
+            else:
+                print(f"{R}{r.get('error')}{NC}")
+
+        elif sub == "history":
+            trades = pt.trade_history()
+            if not trades:
+                print(f"{DIM}No trades yet.{NC}")
+            else:
+                print(f"\n{B}Trade History{NC}")
+                for t in trades[:15]:
+                    col = G if t.get("action") == "BUY" else (
+                        G if t.get("pnl", 0) >= 0 else R)
+                    pnl = f"  P&L=${t['pnl']:+.2f}({t['pnl_pct']:+.1f}%)" if "pnl" in t else ""
+                    print(f"  {col}{t['action']:4s}{NC} {t['symbol']:6s} "
+                          f"{t.get('qty',0):.4f} @ ${t.get('price',0):,.4f}{pnl}  "
+                          f"{DIM}{t['ts'][:10]}{NC}")
+
+        elif sub == "stops":
+            triggered = pt.check_stops()
+            if triggered:
+                for r in triggered:
+                    print(f"{R}STOP triggered: {r.get('symbol')} — "
+                          f"P&L={r.get('pnl_pct',0):+.1f}%{NC}")
+            else:
+                print(f"{G}No stops triggered.{NC}")
+
+        elif sub == "reset":
+            print(pt.reset(confirm=True))
+        else:
+            print("Usage: nova markets paper [status|buy SYM QTY|sell SYM|close SYM|history|stops|reset]")
+
+    elif cmd == "brief":
+        from bin.nova_market_brief import write_brief
+        write_brief()
+
+    elif cmd == "alert":
+        from tools.markets.alerts import add_alert, remove_alert, list_alerts, check_alerts
+        sub = args[1] if len(args) > 1 else "list"
+
+        if sub == "add" and len(args) >= 4:
+            sym    = args[2].upper()
+            target = float(args[3])
+            dirn   = args[4] if len(args) > 4 else "below"
+            r = add_alert(sym, target, dirn)
+            if r.get("ok"):
+                col = G if dirn == "above" else R
+                print(f"{col}Alert set: {sym} {dirn} ${target:,.4g}{NC}")
+            else:
+                print(f"{R}{r.get('error')}{NC}")
+
+        elif sub == "remove" and len(args) >= 3:
+            dirn = args[3] if len(args) > 3 else None
+            n = remove_alert(args[2], dirn)
+            print(f"{G}{n} alert(s) removed.{NC}" if n else f"{DIM}No alerts found.{NC}")
+
+        elif sub == "list":
+            alerts = list_alerts()
+            if not alerts:
+                print(f"{DIM}No active alerts.{NC}")
+            else:
+                print(f"\n{B}Active Price Alerts{NC}")
+                for a in alerts:
+                    d   = a["direction"]
+                    col = G if d == "above" else R
+                    print(f"  {col}{a['symbol']:6s}{NC} {d:5s} ${a['target']:>12,.4g}  "
+                          f"{DIM}set {a['created'][:10]}{NC}")
+
+        elif sub == "check":
+            triggered = check_alerts(verbose=True)
+            if not triggered:
+                print(f"{DIM}No alerts triggered.{NC}")
+            else:
+                print(f"{G}{len(triggered)} alert(s) triggered.{NC}")
+
+        else:
+            print("Usage: nova markets alert [add SYM TARGET above|below | remove SYM | list | check]")
+
     else:
         # Treat all remaining args as symbols
         symbols = [a.upper() for a in args if not a.startswith("--")]

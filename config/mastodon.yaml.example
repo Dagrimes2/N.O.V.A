@@ -1,0 +1,16 @@
+# N.O.V.A Mastodon Config
+# Copy to config/mastodon.yaml — it's gitignored, your token is safe.
+#
+# Setup:
+#   1. Create account at mastodon.social (free, open)
+#   2. Settings → Development → New Application
+#      Name: N.O.V.A  |  Scopes: read write
+#   3. Copy the "Your access token" here
+#   4. Save as config/mastodon.yaml
+#   5. Test: nova social preview
+
+enabled: false
+instance: "https://mastodon.social"
+access_token: "YOUR_ACCESS_TOKEN_HERE"
+post_interval_hours: 6      # minimum hours between auto-posts
+default_visibility: "public" # public | unlisted | private

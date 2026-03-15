@@ -1,0 +1,21 @@
+# N.O.V.A Quantum Backend Configuration
+# Copy to config/quantum.yaml and fill in your IBM Quantum token.
+#
+# Free IBM Quantum account: https://quantum.ibm.com/
+# (Provides access to real quantum hardware + simulators)
+
+# Backend: "local" uses Qiskit Aer (local simulator — no account needed)
+#          "ibm"   uses IBM Quantum cloud (requires token below)
+provider: local
+
+# IBM Quantum API token (leave empty for local-only mode)
+ibm_token: ""
+
+# Which backend to use (ibm_quantum_simulator = free unlimited cloud simulator)
+backend: ibm_quantum_simulator
+
+# Shots per circuit measurement (more = more accurate but slower)
+shots: 1024
+
+# Number of qubits for QRNG circuits
+n_qubits: 8

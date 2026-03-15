@@ -129,14 +129,51 @@ INTEGRITY & DEDUP
   nova scanmem check <target>      check if target is on cooldown
 
 MARKETS
-  nova markets                          analyze default watchlist
-  nova markets BTC ETH SOL              analyze specific assets
-  nova markets AAPL NVDA --type stock   stock analysis
-  nova markets --horizon 14             14-day Monte Carlo horizon
-  nova markets add BTC ETH              add to watchlist
-  nova markets remove DOGE              remove from watchlist
-  nova markets fng                      Fear & Greed index
-  nova markets nft boredapeyachtclub    NFT floor price
+  nova markets                              analyze default watchlist
+  nova markets BTC ETH SOL                  analyze specific assets
+  nova markets AAPL NVDA --type stock       stock analysis
+  nova markets --horizon 14                 14-day Monte Carlo horizon
+  nova markets add BTC ETH                  add to watchlist
+  nova markets remove DOGE                  remove from watchlist
+  nova markets fng                          Fear & Greed index
+  nova markets nft boredapeyachtclub        NFT floor price
+  nova markets alert add BTC 65000 below    price alert when BTC < $65k
+  nova markets alert list                   show active alerts
+  nova markets alert check                  check all alerts now
+
+INNER LIFE — CREATIVE & MEMORY
+  nova create poem              write a poem in Nova's voice
+  nova create haiku             write haiku
+  nova create reflection        write a philosophical reflection
+  nova create fragment          write a dream fragment
+  nova create list              list recent creative works
+  nova dream arcs               show active dream narrative arcs
+  nova dream themes             recurring dream symbols
+  nova dream arc-update         reanalyze all dreams + update arcs
+  nova memory consolidate       promote episodic → semantic memory
+  nova memory semantic          show learned semantic facts
+
+QUANTUM (Qiskit)
+  nova quantum status                     backend status (local Aer / IBM)
+  nova quantum qrng [--bits 256]          generate true quantum random bytes
+  nova quantum portfolio BTC ETH SOL      QAOA portfolio weight optimization
+  nova quantum seed                       quantum seeds for Monte Carlo
+
+USB OS
+  nova usb --iso               build bootable Nova OS ISO (archiso)
+  nova usb --usb /dev/sdX      write ISO to USB (destructive — erases drive!)
+
+OPENCOG (Hypergraph Reasoning)
+  nova opencog atomspace stats          atom counts by type
+  nova opencog atomspace query TYPE     find atoms of a type
+  nova opencog atomspace assert S P O   add knowledge triple
+  nova opencog pln infer CONCEPT        forward-chain PLN inference
+  nova opencog pln seed-security        seed security vulnerability hierarchy
+  nova opencog pln seed-markets         seed crypto/stock knowledge
+  nova opencog ecan status              attention economy status
+  nova opencog ecan boost NAME          boost attention on a concept
+  nova opencog ecan dream               tonight's dream themes from ECAN
+  nova opencog seed                     ingest all memory → AtomSpace
 
 NOTIFICATIONS
   nova notify telegram "msg"       send test Telegram message
@@ -501,9 +538,6 @@ def main():
     elif cmd == "think" and len(sys.argv) >= 3:
         nova_think(" ".join(sys.argv[2:]))
 
-    elif cmd == "dream":
-        nova_dream()
-
     elif cmd == "life":
         nova_life()
 
@@ -613,7 +647,9 @@ def main():
     elif cmd == "memory":
         sub  = sys.argv[2] if len(sys.argv) > 2 else "search"
         rest = sys.argv[3:] if len(sys.argv) > 3 else []
-        if sub == "search":
+        if sub in ("consolidate", "semantic", "facts", "stats"):
+            subprocess.run(["python3", str(BASE / "tools/inner/memory_consolidate.py"), sub] + rest)
+        elif sub == "search":
             subprocess.run(["python3", str(BASE / "tools/memory/search.py")] + rest)
         else:
             subprocess.run(["python3", str(BASE / "tools/memory/search.py")] + [sub] + rest)
@@ -640,6 +676,68 @@ def main():
     elif cmd == "markets":
         args = sys.argv[2:] if len(sys.argv) > 2 else []
         subprocess.run(["python3", str(BASE / "bin/nova_markets.py")] + args)
+
+    elif cmd == "social":
+        args = sys.argv[2:] if len(sys.argv) > 2 else []
+        subprocess.run(["python3", str(BASE / "tools/social/mastodon_client.py")] + args)
+
+    elif cmd == "security":
+        sub  = sys.argv[2] if len(sys.argv) > 2 else "cve"
+        rest = sys.argv[3:] if len(sys.argv) > 3 else []
+        if sub == "cve":
+            subprocess.run(["python3", str(BASE / "tools/security/cve_monitor.py")] + rest)
+        elif sub == "report":
+            subprocess.run(["python3", str(BASE / "tools/security/auto_report.py")] + rest)
+        else:
+            print("Usage: nova security [cve|report] [args]")
+
+    elif cmd == "dream" and len(sys.argv) > 2 and sys.argv[2] in ("arcs", "themes", "arc-update", "context"):
+        sub  = sys.argv[2]
+        rest = sys.argv[3:] if len(sys.argv) > 3 else []
+        subprocess.run(["python3", str(BASE / "tools/inner/dream_continuity.py"), sub] + rest)
+
+    elif cmd == "dream":
+        nova_dream()
+
+    elif cmd == "create":
+        sub  = sys.argv[2] if len(sys.argv) > 2 else "poem"
+        rest = sys.argv[3:] if len(sys.argv) > 3 else []
+        subprocess.run(["python3", str(BASE / "tools/inner/creative.py"), sub] + rest)
+
+    elif cmd == "quantum":
+        args = sys.argv[2:] if len(sys.argv) > 2 else ["status"]
+        subprocess.run(["python3", str(BASE / "tools/quantum/qiskit_backend.py")] + args)
+
+    elif cmd == "usb":
+        args = sys.argv[2:] if len(sys.argv) > 2 else ["--help"]
+        subprocess.run(["sudo", "bash", str(BASE / "tools/os/build_usb.sh")] + args)
+
+    elif cmd == "opencog":
+        sub  = sys.argv[2] if len(sys.argv) > 2 else "atomspace"
+        rest = sys.argv[3:] if len(sys.argv) > 3 else []
+        if sub == "atomspace":
+            subprocess.run(["python3", str(BASE / "tools/opencog/atomspace.py")] + rest)
+        elif sub == "pln":
+            subprocess.run(["python3", str(BASE / "tools/opencog/pln.py")] + rest)
+        elif sub == "ecan":
+            subprocess.run(["python3", str(BASE / "tools/opencog/ecan.py")] + rest)
+        elif sub == "seed":
+            # Seed all knowledge into AtomSpace
+            from tools.opencog.atomspace import get_atomspace
+            from tools.opencog.pln import PLNEngine
+            from tools.opencog.ecan import get_ecan
+            as_ = get_atomspace()
+            n1  = as_.ingest_from_knowledge_graph()
+            pln = PLNEngine(as_)
+            n2  = pln.seed_security_knowledge()
+            n3  = pln.seed_market_knowledge()
+            ecan = get_ecan()
+            n4  = ecan.seed_from_history()
+            print(f"AtomSpace seeded: {n1} graph nodes, {n2} security, {n3} market atoms")
+            print(f"ECAN seeded: {n4} attention signals from history")
+            as_.close(); ecan.close()
+        else:
+            print("Usage: nova opencog [atomspace|pln|ecan|seed] [args]")
 
     elif cmd == "programs":
         query = sys.argv[2].lower() if len(sys.argv) >= 3 else ""

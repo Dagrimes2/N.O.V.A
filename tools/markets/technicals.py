@@ -109,9 +109,10 @@ def analyze(df: pd.DataFrame) -> dict:
         return {"error": "insufficient data", "signal": "neutral", "confidence": 0.0}
 
     df = df.copy()
-    # Ensure numeric
+    # Ensure numeric — only columns that exist
     for col in ["open", "high", "low", "close"]:
-        df[col] = pd.to_numeric(df[col], errors="coerce")
+        if col in df.columns:
+            df[col] = pd.to_numeric(df[col], errors="coerce")
     df = df.dropna(subset=["close"])
     close = df["close"]
 
