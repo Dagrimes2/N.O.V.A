@@ -1,0 +1,14 @@
+[
+  {
+    "id": "d54d0300",
+    "title": "Roadmap generation failed",
+    "description": "HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=180)",
+    "category": "capability",
+    "priority": 3,
+    "status": "proposed",
+    "nova_reasoning": "LLM unavailable",
+    "travis_notes": "",
+    "created": "2026-03-15T07:57:18.714983+00:00",
+    "updated": "2026-03-15T07:57:18.715006+00:00"
+  }
+]
