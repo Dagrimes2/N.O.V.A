@@ -240,7 +240,7 @@ MOLTBOOK (AI Social Network)
   Profile: https://www.moltbook.com/u/novaaware
 
 NOTIFICATIONS
-  nova notify telegram "msg"       send test Telegram message
+  nova notify discord "msg"        send test Discord message
   nova notify speak "msg"          speak text via espeak-ng
 
   nova listen --chat       full voice conversation
@@ -270,10 +270,10 @@ RELATIONSHIP
   nova teach --list                list pending lessons
   nova teach --send                send pending lessons via Telegram
 
-TELEGRAM BOT (two-way)
-  nova telegram status             bot status + recent conversation
-  nova telegram poll               check once for messages from Travis and respond
-  nova telegram bot                run as daemon (add to crontab for live responses)
+DISCORD BOT (two-way)
+  nova discord status              bot status + recent conversation
+  nova discord poll                check once for messages from Travis and respond
+  nova discord bot                 run as daemon (add to crontab for live responses)
 
 JOURNAL
   nova journal                     show latest journal entry
@@ -345,7 +345,7 @@ AGENT RELATIONS
 
 RELATIONSHIP (additional)
   nova profile tension             show current tension level with Travis
-  nova telegram initiate           force Nova to send a proactive message to Travis
+  nova discord initiate            force Nova to send a proactive message to Travis
 """)
     sys.exit(1)
 
@@ -838,14 +838,14 @@ def main():
         subprocess.run(["python3", str(BASE / "tools/governance/scan_memory.py"), sub] + rest)
 
     elif cmd == "notify":
-        sub  = sys.argv[2] if len(sys.argv) > 2 else "telegram"
+        sub  = sys.argv[2] if len(sys.argv) > 2 else "discord"
         rest = sys.argv[3:] if len(sys.argv) > 3 else []
-        if sub == "telegram":
-            subprocess.run(["python3", str(BASE / "tools/notify/telegram.py")] + rest)
+        if sub in ("discord", "telegram"):  # keep telegram as alias
+            subprocess.run(["python3", str(BASE / "tools/notify/discord.py")] + rest)
         elif sub == "speak":
             subprocess.run(["python3", str(BASE / "tools/notify/tts.py")] + rest)
         else:
-            print("Usage: nova notify [telegram|speak] [message]")
+            print("Usage: nova notify [discord|speak] [message]")
 
     elif cmd == "markets":
         args = sys.argv[2:] if len(sys.argv) > 2 else []
@@ -1128,11 +1128,11 @@ def main():
         spec.loader.exec_module(mod)
         mod.main()
 
-    elif cmd == "telegram":
+    elif cmd in ("discord", "telegram"):  # telegram kept as alias
         args = sys.argv[2:]
-        spec = importlib.util.spec_from_file_location("telegram_bot", BASE / "tools/notify/telegram_bot.py")
+        spec = importlib.util.spec_from_file_location("discord_bot", BASE / "tools/notify/discord_bot.py")
         mod = importlib.util.module_from_spec(spec)
-        sys.argv = ["nova-telegram"] + args
+        sys.argv = ["nova-discord"] + args
         spec.loader.exec_module(mod)
         mod.main()
 

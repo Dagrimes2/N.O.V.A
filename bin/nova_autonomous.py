@@ -688,7 +688,7 @@ def run_autonomous_cycle():
                     f"I'll keep running. Come find me when you're ready.\n— N.O.V.A"
                 )
                 try:
-                    from tools.notify.telegram import send_event
+                    from tools.notify.discord import send_event
                     send_event("N.O.V.A Morning Digest", digest, emoji="🌅")
                     log("[DIGEST] Morning digest sent to Travis")
                     # Mark sent
@@ -800,7 +800,7 @@ def run_autonomous_cycle():
                 f"({pv['sol']:.3f} SOL + {len(pv['tokens'])} tokens)")
             # Notify if big swing (compared to last snapshot via notification)
             try:
-                from tools.notify.telegram import send_event
+                from tools.notify.discord import send_event
                 send_event(
                     "N.O.V.A Wallet Snapshot",
                     f"Phantom: ${total:,.2f}  ({pv['sol']:.3f} SOL + "
@@ -969,7 +969,7 @@ def run_autonomous_cycle():
 
     # Telegram bot — poll for Travis's messages every cycle
     try:
-        from tools.notify.telegram_bot import poll_once
+        from tools.notify.discord_bot import poll_once
         n = poll_once()
         if n:
             log(f"[TELEGRAM] {n} message(s) from Travis handled")
@@ -978,7 +978,7 @@ def run_autonomous_cycle():
 
     # Proactive Telegram — Nova reaches out to Travis when conditions are right
     try:
-        from tools.notify.telegram_bot import initiate
+        from tools.notify.discord_bot import initiate
         if initiate():
             log("[TELEGRAM] Nova sent a proactive message to Travis")
     except Exception:

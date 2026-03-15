@@ -150,7 +150,7 @@ Format as Markdown."""
 
     # Notify Travis
     try:
-        from tools.notify.telegram import send_event
+        from tools.notify.discord import send_event
         send_event(
             f"N.O.V.A Draft Report — {severity}",
             f"{vuln_type} on {host}{path}\nScore: {score}  Confidence: {conf:.0%}\nFile: {out.name}",

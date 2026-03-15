@@ -315,7 +315,7 @@ def send_letter(text: str) -> Path:
 
     # Send via Telegram
     try:
-        from tools.notify.telegram import send_event
+        from tools.notify.discord import send_event
         preview = text[:400] + ("..." if len(text) > 400 else "")
         send_event(
             title=f"Letter to Travis — {ts}",

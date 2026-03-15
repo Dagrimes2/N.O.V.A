@@ -1,0 +1,25 @@
+# N.O.V.A Discord Configuration
+# Copy to config/discord.yaml and fill in your values
+#
+# Setup:
+#   1. Go to discord.com/developers → New Application → Bot
+#   2. Under Bot → Privileged Gateway Intents → enable "Message Content Intent"
+#   3. Copy your bot token below
+#   4. Invite bot to your server:
+#      https://discord.com/api/oauth2/authorize?client_id=YOUR_APP_ID&permissions=3072&scope=bot
+#   5. In Discord: User Settings → Advanced → enable Developer Mode
+#   6. Right-click your Nova channel → Copy Channel ID
+#   7. Optional: channel settings → Integrations → Webhooks → copy URL
+#      (webhook is faster for outgoing-only notifications)
+
+# Bot token (from Discord Developer Portal → Bot → Token)
+token: "YOUR_BOT_TOKEN"
+
+# Channel ID (right-click channel → Copy ID)
+channel_id: "YOUR_CHANNEL_ID"
+
+# Webhook URL (optional — for outgoing notifications, faster than bot API)
+# webhook_url: "https://discord.com/api/webhooks/..."
+
+# Minimum finding score to alert on (0-10)
+min_score: 7.0

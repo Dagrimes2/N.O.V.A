@@ -56,30 +56,13 @@ def _github_pat() -> str:
     return ""
 
 
-# ── Telegram notification helper ─────────────────────────────────────────────
+# ── Discord notification helper ───────────────────────────────────────────────
 
-def _notify_telegram(message: str):
-    """Best-effort Telegram notification to Travis."""
+def _notify_travis(message: str):
+    """Best-effort Discord notification to Travis."""
     try:
-        from tools.operator.queue import notify_travis  # type: ignore
-        notify_travis(message)
-        return
-    except Exception:
-        pass
-    try:
-        from tools.config import cfg  # type: ignore
-        token   = getattr(cfg, "telegram_token", None) or ""
-        chat_id = getattr(cfg, "telegram_chat_id", None) or ""
-        if not token or not chat_id:
-            return
-        payload = json.dumps({"chat_id": chat_id, "text": message}).encode()
-        req = urllib.request.Request(
-            f"https://api.telegram.org/bot{token}/sendMessage",
-            data=payload,
-            headers={"Content-Type": "application/json"},
-            method="POST",
-        )
-        urllib.request.urlopen(req, timeout=10)
+        from tools.notify.discord import send
+        send(message)
     except Exception:
         pass
 
@@ -166,7 +149,7 @@ def propose_action(
     _append_proposal(proposal)
 
     # Notify Travis
-    _notify_telegram(
+    _notify_travis(
         f"Nova wants to: {description}. To approve: nova agency approve {prop_id}"
     )
 

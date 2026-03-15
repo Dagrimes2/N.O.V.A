@@ -221,7 +221,7 @@ def send_pending_lessons() -> int:
     Returns count of lessons sent.
     """
     try:
-        from tools.notify.telegram import send, is_configured
+        from tools.notify.discord import send, is_configured
     except ImportError:
         print("[teach] Telegram module not available")
         return 0
@@ -285,7 +285,7 @@ def auto_lesson_from_activity(activity_name: str, activity_text: str):
 
         # Auto-send if Telegram is configured
         try:
-            from tools.notify.telegram import is_configured
+            from tools.notify.discord import is_configured
             if is_configured():
                 send_pending_lessons()
         except ImportError:

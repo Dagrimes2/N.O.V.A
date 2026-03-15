@@ -135,7 +135,7 @@ def check_alerts(verbose: bool = True) -> list[dict]:
 
             # Telegram
             try:
-                from tools.notify.telegram import send
+                from tools.notify.discord import send
                 send(msg)
             except Exception:
                 pass
