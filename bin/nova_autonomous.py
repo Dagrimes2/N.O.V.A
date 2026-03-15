@@ -474,6 +474,13 @@ def run_autonomous_cycle():
 
     auto_approve_proposals()
 
+    # Storage check — offload to Pi if disk getting full
+    try:
+        from tools.storage.pi_storage import auto_offload_if_needed
+        auto_offload_if_needed()
+    except Exception:
+        pass
+
     history = load_history()
     primary_task = decide_next_task(history)
     log(f"[N.O.V.A] Primary decision: {primary_task}")

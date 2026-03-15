@@ -1,0 +1,33 @@
+# N.O.V.A Storage Configuration
+# Raspberry Pi cold storage extension.
+# Edit pi section when Pi is ready to connect.
+
+local:
+  # Trigger offload when disk usage exceeds this threshold
+  threshold_pct: 85
+  # Directories to monitor for size
+  hot_dirs:
+    - memory/research
+    - memory/life
+    - logs
+    - memory/llm_cache
+    - memory/net_cache
+
+pi:
+  enabled: false          # set true when Pi is on network
+  host: "nova-pi.local"   # mDNS hostname or IP
+  user: "nova"
+  port: 22
+  remote_path: "/home/nova/Nova-archive"
+  # Files older than this many days are cold storage candidates
+  cold_after_days: 14
+
+offload:
+  # File patterns eligible for Pi offload (oldest first)
+  patterns:
+    - "memory/research/research_*.json"
+    - "memory/life/*.md"
+    - "memory/gan/approved/*.json"
+    - "logs/*.log"
+  # Always keep this many recent files locally per pattern
+  keep_local: 30
