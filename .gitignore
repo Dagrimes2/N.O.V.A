@@ -16,6 +16,9 @@ memory/customers_cookies.txt
 memory/customers_sourcemap.json
 memory/graphql_findings.json
 
+# Secrets — never commit
+config/telegram.yaml
+
 # Autonomous runtime data (large, generated)
 memory/research/
 memory/proposals/

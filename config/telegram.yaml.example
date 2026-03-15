@@ -1,0 +1,16 @@
+# N.O.V.A Telegram Alert Config
+# Copy this to config/telegram.yaml and fill in your values.
+# telegram.yaml is gitignored — your token is safe.
+#
+# Setup:
+#   1. Message @BotFather on Telegram → /newbot → get TOKEN
+#   2. Message your new bot once, then visit:
+#      https://api.telegram.org/bot<TOKEN>/getUpdates
+#      Find "chat":{"id": YOUR_CHAT_ID}
+#   3. Save this file as config/telegram.yaml
+#   4. Test: nova notify telegram "hello"
+
+enabled: false
+token: "YOUR_BOT_TOKEN_HERE"
+chat_id: "YOUR_CHAT_ID_HERE"
+min_score: 7.0

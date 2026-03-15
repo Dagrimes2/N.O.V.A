@@ -60,6 +60,13 @@ try:
 except Exception:
     _EPISODE_ENABLED = False
 
+# Wire Telegram alerts for high-score findings
+try:
+    from tools.notify.telegram import send_finding as _tg_finding
+    _TELEGRAM_ENABLED = True
+except Exception:
+    _TELEGRAM_ENABLED = False
+
 
 def iter_jsonl(stream: Iterable[str]) -> Iterable[Dict[str, Any]]:
     for line in stream:
@@ -166,6 +173,16 @@ def score_record(rec: Dict[str, Any]) -> Dict[str, Any]:
     if _EPISODE_ENABLED:
         try:
             _maybe_episode(rec)
+        except Exception:
+            pass
+
+    # Telegram alert for high-score findings
+    if _TELEGRAM_ENABLED and rec.get("confidence", 0) >= 0.7:
+        try:
+            host    = rec.get("host", rec.get("url", "unknown"))
+            summary = f"Path: {rec.get('path','?')}  Signals: {', '.join(signals)}"
+            program = rec.get("program", "")
+            _tg_finding(host, float(score), summary, program)
         except Exception:
             pass
 

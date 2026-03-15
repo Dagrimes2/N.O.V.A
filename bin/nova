@@ -116,6 +116,22 @@ LEARNING & MEMORY
   nova learn episodes              recent episodic memory
   nova learn context               emotional context narrative
   nova learn qrng status           quantum entropy source status
+
+MEMORY SEARCH
+  nova memory search <query>               full-text across all memory
+  nova memory search <query> --type TYPE   filter: research|graph|creative|dream|episode
+
+INTEGRITY & DEDUP
+  nova integrity check             verify source code hasn't been modified
+  nova integrity baseline          rebuild hash baseline (after intentional edits)
+  nova scanmem list                show recently scanned targets (72h)
+  nova scanmem stats               total targets, scans, last 24h
+  nova scanmem check <target>      check if target is on cooldown
+
+NOTIFICATIONS
+  nova notify telegram "msg"       send test Telegram message
+  nova notify speak "msg"          speak text via espeak-ng
+
   nova listen --chat       full voice conversation
   nova report              draft report from top finding
   nova report --list       show reportable findings
@@ -323,48 +339,8 @@ What would an AI like you find meaningful, interesting, or fun?
 Be honest. This is your time.""")
 
 def nova_status():
-    """Show N.O.V.A system status."""
-    print("\n╔══════════════════════════════════════╗")
-    print("║         N.O.V.A STATUS               ║")
-    print("╚══════════════════════════════════════╝\n")
-
-    # Active program
-    prog = load_active_program()
-    print(f"  Program    : {prog['name'] if prog else 'none set'}")
-
-    # Memory
-    index = MEMORY / "index.jsonl"
-    mem_count = 0
-    if index.exists():
-        mem_count = sum(1 for _ in open(index))
-    print(f"  Memories   : {mem_count} findings stored")
-
-    # Dreams
-    dream_count = len(list(DREAMS.glob("dream_*.md"))) if DREAMS.exists() else 0
-    last_dream = "never"
-    if dream_count > 0:
-        last_dream = sorted(DREAMS.glob("dream_*.md"))[-1].stem.replace("dream_","")
-    print(f"  Dreams     : {dream_count} logged (last: {last_dream})")
-
-    # Reports
-    report_count = len(list(REPORTS.glob("*_recon.json")))
-    print(f"  Reports    : {report_count} recon files")
-
-    # Ollama
-    try:
-        resp = requests.get("http://localhost:11434/api/tags", timeout=3)
-        models = [m["name"] for m in resp.json().get("models",[])]
-        print(f"  Ollama     : ✓ running — {len(models)} models")
-        for m in models:
-            print(f"               · {m}")
-    except:
-        print("  Ollama     : ✗ not running")
-
-    # Queue
-    q = load_json(QUEUE) or []
-    print(f"  Queue      : {len(q)} items")
-    print(f"  Model      : {MODEL}")
-    print(f"  Time       : {datetime.now().strftime('%Y-%m-%d %H:%M')}\n")
+    """Show N.O.V.A full system status dashboard."""
+    subprocess.run(["python3", str(BASE / "bin/nova_status.py")])
 
 # -----------------------------
 # Sync — pull live bounty programs
@@ -623,6 +599,33 @@ def main():
             subprocess.run(["python3", str(BASE / "tools/learning/qrng.py")] + rest)
         else:
             subprocess.run(["python3", str(BASE / "tools/learning/outcome_tracker.py"), "stats"])
+
+    elif cmd == "memory":
+        sub  = sys.argv[2] if len(sys.argv) > 2 else "search"
+        rest = sys.argv[3:] if len(sys.argv) > 3 else []
+        if sub == "search":
+            subprocess.run(["python3", str(BASE / "tools/memory/search.py")] + rest)
+        else:
+            subprocess.run(["python3", str(BASE / "tools/memory/search.py")] + [sub] + rest)
+
+    elif cmd == "integrity":
+        sub = sys.argv[2] if len(sys.argv) > 2 else "check"
+        subprocess.run(["python3", str(BASE / "tools/governance/file_integrity.py"), sub])
+
+    elif cmd == "scanmem":
+        sub  = sys.argv[2] if len(sys.argv) > 2 else "list"
+        rest = sys.argv[3:] if len(sys.argv) > 3 else []
+        subprocess.run(["python3", str(BASE / "tools/governance/scan_memory.py"), sub] + rest)
+
+    elif cmd == "notify":
+        sub  = sys.argv[2] if len(sys.argv) > 2 else "telegram"
+        rest = sys.argv[3:] if len(sys.argv) > 3 else []
+        if sub == "telegram":
+            subprocess.run(["python3", str(BASE / "tools/notify/telegram.py")] + rest)
+        elif sub == "speak":
+            subprocess.run(["python3", str(BASE / "tools/notify/tts.py")] + rest)
+        else:
+            print("Usage: nova notify [telegram|speak] [message]")
 
     elif cmd == "programs":
         query = sys.argv[2].lower() if len(sys.argv) >= 3 else ""

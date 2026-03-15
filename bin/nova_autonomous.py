@@ -306,7 +306,18 @@ def execute_task(task: dict) -> str:
                 pass
         if not whitelist:
             return "No whitelisted targets — scan skipped"
-        target_domain = random.choice(whitelist)
+
+        # Scan deduplication — skip targets scanned within cooldown window
+        try:
+            from tools.governance.scan_memory import was_scanned_recently, record_scan, time_since_last_scan
+            fresh_targets = [t for t in whitelist if not was_scanned_recently(t, hours=24)]
+            if not fresh_targets:
+                log("[SCAN] All whitelisted targets scanned within 24h — skipping")
+                return "All targets on cooldown — scan deferred"
+            target_domain = random.choice(fresh_targets)
+            log(f"[SCAN] Chose {target_domain} (last scan: {time_since_last_scan(target_domain)})")
+        except Exception:
+            target_domain = random.choice(whitelist)
         # Route scan through Docker sandbox
         try:
             import sys
@@ -337,6 +348,11 @@ def execute_task(task: dict) -> str:
             ["python3", str(BASE / "bin/nova"), "scan", target_domain, "--light"],
             capture_output=True, text=True, cwd=str(BASE), timeout=120
         )
+        try:
+            from tools.governance.scan_memory import record_scan
+            record_scan(target_domain)
+        except Exception:
+            pass
         return f"Scanned {target_domain}"
 
     elif action == "reflect":
@@ -443,6 +459,28 @@ def _build_agent_tasks(primary_task: dict, history: list) -> list[dict]:
 
 def run_autonomous_cycle():
     log("[N.O.V.A] Autonomous cycle starting...")
+
+    # ── Integrity check — ensure source code hasn't been tampered with ─────────
+    try:
+        from tools.governance.file_integrity import verify, load_baseline
+        baseline = load_baseline()
+        if baseline:
+            tampered = verify()
+            if tampered:
+                log(f"[INTEGRITY] WARNING — tampered files detected: {tampered}")
+                notify(
+                    "N.O.V.A Integrity Alert",
+                    f"Source code modified unexpectedly: {', '.join(tampered)}",
+                    priority="high"
+                )
+                # Abort cycle if code was tampered — don't run untrusted code paths
+                log("[INTEGRITY] Aborting cycle until Travis reviews changes.")
+                return
+        else:
+            log("[INTEGRITY] No baseline yet — run 'nova integrity baseline' to establish one")
+    except Exception as e:
+        log(f"[INTEGRITY] Check failed (non-fatal): {e}")
+    # ─────────────────────────────────────────────────────────────────────────
 
     # ── Network check — graceful offline degradation ──────────────────────────
     try:

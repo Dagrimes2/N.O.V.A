@@ -182,5 +182,14 @@ def main():
     print(f"[N.O.V.A] Dream complete → {dream_file}")
     print(f"[N.O.V.A] Morning intention: {intention}")
 
+    # Speak the morning intention aloud
+    try:
+        import sys as _sys
+        _sys.path.insert(0, str(BASE))
+        from tools.notify.tts import speak_intention
+        speak_intention(intention)
+    except Exception:
+        pass
+
 if __name__ == "__main__":
     main()
