@@ -2,6 +2,7 @@
   "name": "MOD Supply Chain VDP",
   "platform": "hackerone",
   "in_scope": [
+    "*.roke.co.uk",
     "accessto.l3harris.com",
     "ardeinc.com",
     "autodiscover.thorntontomasetti.com",
@@ -128,6 +129,7 @@
     "vpn-il1.thorntontomasetti.com",
     "vpn-uk-1.thorntontomasetti.com",
     "vpn.thorntontomasetti.com",
+    "www.ellipse.studio",
     "www.l3driver.com",
     "www.prolinx.co.uk",
     "www.pspcpartnerportal.com",
@@ -135,5 +137,5 @@
   ],
   "out_of_scope": [],
   "url": "https://hackerone.com/mod_supply_chain_vdp",
-  "synced_at": "2026-03-10T04:02:02.408965"
+  "synced_at": "2026-03-15T00:52:15.693201"
 }

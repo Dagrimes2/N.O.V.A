@@ -9,9 +9,10 @@
     "api*.hubapi.com",
     "api*.hubspot.com",
     "app*.hubspot.com",
-    "chatspot.ai"
+    "chatspot.ai",
+    "hubspot.net"
   ],
   "out_of_scope": [],
   "url": "https://hackerone.com/hubspot",
-  "synced_at": "2026-03-10T04:02:02.415950"
+  "synced_at": "2026-03-15T00:52:15.697196"
 }

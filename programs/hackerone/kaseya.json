@@ -18,6 +18,7 @@
     "*.graphus.ai",
     "*.idagent.com",
     "*.infocyte.com",
+    "*.inky.com",
     "*.itglue.com",
     "*.kaseya.com",
     "*.kaseya.net",
@@ -28,6 +29,7 @@
     "*.pulseway.com",
     "*.rapidfiretools.com",
     "*.rocketcyber.com",
+    "*.saasalerts.com",
     "*.scorpionsoft.com",
     "*.soonr.com",
     "*.spanning.com",
@@ -41,5 +43,5 @@
   ],
   "out_of_scope": [],
   "url": "https://hackerone.com/kaseya",
-  "synced_at": "2026-03-10T04:02:02.412484"
+  "synced_at": "2026-03-15T00:52:15.695398"
 }

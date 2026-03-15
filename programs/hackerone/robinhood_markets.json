@@ -5,19 +5,8 @@
     "*.1integrations.com",
     "*.x1.co",
     "*.x1creditcard.com",
-    "7671800.bitstamp.net",
-    "7671800.team.bitstamp.net",
-    "_16928ca3f53f40a48a751be40fa24e4c.bitstamp.net",
-    "_domainconnect.bitstamp.net",
     "api.robinhood.com",
-    "autodiscover.bitstamp.net",
-    "bounces.bitstamp.net",
     "cashier.robinhood.com",
-    "em1198.bitstamp.net",
-    "em4296.team.bitstamp.net",
-    "em9457.team.bitstamp.net",
-    "enterpriseenrollment.bitstamp.net",
-    "enterpriseregistration.bitstamp.net",
     "fusion.tradepmr.com",
     "*.say.rocks",
     "*.saytechnologies.com",
@@ -26,12 +15,10 @@
     "minerva.robinhood.com",
     "nummus.robinhood.com",
     "oak.robinhood.net",
-    "status.bitstamp.net",
-    "url6884.team.bitstamp.net",
     "www.bitstamp.net",
     "www.tradepmr.com"
   ],
   "out_of_scope": [],
   "url": "https://hackerone.com/robinhood_markets",
-  "synced_at": "2026-03-10T04:02:02.411003"
+  "synced_at": "2026-03-15T00:52:15.694403"
 }

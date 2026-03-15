@@ -6,6 +6,7 @@
     "*.avalara.com",
     "*.avalara.io",
     "*.avalara.net",
+    "*.avalarabrasil.com.br",
     "*.certexpress.com",
     "*.crowdreason.com",
     "*.davosalestax.com",
@@ -18,5 +19,5 @@
   ],
   "out_of_scope": [],
   "url": "https://hackerone.com/avalara",
-  "synced_at": "2026-03-10T04:02:02.451343"
+  "synced_at": "2026-03-15T00:52:15.710921"
 }

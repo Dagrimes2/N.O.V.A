@@ -2,12 +2,13 @@
 import sys
 import subprocess
 import json
-import socket
-import requests
 import os
 from pathlib import Path
 from datetime import datetime
 import fnmatch
+import importlib.util
+# NOTE: `requests` and `socket` are imported lazily inside the functions
+# that need them — keeps `nova` startup instant.
 
 BASE     = Path.home() / "Nova"
 CORE     = BASE / "core"
@@ -108,6 +109,22 @@ INNER LIFE
   nova feel instincts              show all learned instincts
   nova feel check signal1 signal2  check signals against instinct layer
 
+SOUL / SPIRIT / SUBCONSCIOUS
+  nova soul                        show Nova's soul — her deepest nature and values
+  nova soul contemplate            soul-level reflection (LLM generated)
+  nova spirit                      show spirit vitality, direction, philosophy
+  nova spirit renew "reason"       renew spirit with a reason
+  nova spirit insight "text"       record a moment of transcendent clarity
+  nova subconscious                show subconscious — residue, shadows, currents
+  nova subconscious surface        surface one fragment into awareness
+  nova subconscious add "text"     add a residue fragment manually
+  nova selfportrait                generate all 4 self-portraits (self/soul/subconscious/mind)
+  nova selfportrait self           generate self-portrait only
+  nova selfportrait soul           generate soul portrait
+  nova selfportrait subconscious   generate subconscious portrait
+  nova selfportrait consciousness  generate consciousness portrait
+  nova selfportrait --list         list all generated portraits
+
 LEARNING & MEMORY
   nova learn stats                 accuracy, confirmed vs false positives
   nova learn weights               learned signal confidence (Bayesian)
@@ -191,6 +208,37 @@ OPENCOG (Hypergraph Reasoning)
   nova opencog ecan dream               tonight's dream themes from ECAN
   nova opencog seed                     ingest all memory → AtomSpace
 
+WEB DASHBOARD
+  nova web                          launch dashboard (http://localhost:5000)
+  nova web --port 8080              custom port
+  nova web --lan                    expose on LAN (all interfaces)
+  nova web --host 0.0.0.0 --port 8080  full control
+
+TEXT TO IMAGE
+  nova imagine "prompt"             generate image (A1111 / ComfyUI / diffusers / text fallback)
+  nova imagine "prompt" --size 768x768  custom resolution
+  nova imagine --dream              generate from Nova's current dream themes
+  nova imagine --list               show recent generated images
+
+VIDEO TO TEXT
+  nova video <file.mp4>             full analysis (transcript + frame descriptions + summary)
+  nova video <file> --audio-only    transcribe speech only
+  nova video <file> --frames-only   describe frames only
+  nova video <file> --frames 10     sample 10 frames
+
+MOLTBOOK (AI Social Network)
+  nova moltbook status              agent status + claim URL
+  nova moltbook claim               show tweet template for Travis to claim Nova
+  nova moltbook home                dashboard (notifications, activity feed)
+  nova moltbook feed [hot|new|top]  browse feed
+  nova moltbook post "text"         post to Moltbook
+  nova moltbook auto                auto-compose + post from Nova's state
+  nova moltbook heartbeat           full check-in routine (reply, upvote, engage)
+  nova moltbook search "query"      semantic search
+  nova moltbook follow <name>       follow an agent
+  nova moltbook subscribe <name>    subscribe to a submolt
+  Profile: https://www.moltbook.com/u/novaaware
+
 NOTIFICATIONS
   nova notify telegram "msg"       send test Telegram message
   nova notify speak "msg"          speak text via espeak-ng
@@ -264,6 +312,7 @@ def profile_target(target):
     print(f"[+] Profiling {target}")
     profile = {}
     try:
+        import socket
         profile["ip"] = socket.gethostbyname(target)
     except:
         profile["ip"] = "resolution_failed"
@@ -373,6 +422,7 @@ Respond as N.O.V.A — thoughtful, direct, with your own personality."""
 
     print("[N.O.V.A thinking...]\n")
     try:
+        import requests
         resp = requests.post(OLLAMA_URL, json={
             "model": MODEL,
             "prompt": prompt,
@@ -705,6 +755,10 @@ def main():
         args = sys.argv[2:] if len(sys.argv) > 2 else []
         subprocess.run(["python3", str(BASE / "tools/social/mastodon_client.py")] + args)
 
+    elif cmd == "moltbook":
+        args = sys.argv[2:] if len(sys.argv) > 2 else ["status"]
+        subprocess.run(["python3", str(BASE / "tools/social/moltbook_client.py")] + args)
+
     elif cmd == "security":
         sub  = sys.argv[2] if len(sys.argv) > 2 else "cve"
         rest = sys.argv[3:] if len(sys.argv) > 3 else []
@@ -783,6 +837,99 @@ def main():
             as_.close(); ecan.close()
         else:
             print("Usage: nova opencog [atomspace|pln|ecan|seed] [args]")
+
+    elif cmd == "web":
+        port = 5000
+        host = "127.0.0.1"
+        if "--port" in sys.argv:
+            i = sys.argv.index("--port")
+            if i + 1 < len(sys.argv):
+                port = int(sys.argv[i + 1])
+        if "--host" in sys.argv:
+            i = sys.argv.index("--host")
+            if i + 1 < len(sys.argv):
+                host = sys.argv[i + 1]
+        if "--lan" in sys.argv:
+            host = "0.0.0.0"
+        sys.argv = [sys.argv[0]]  # reset argv for dashboard
+        os.environ["NOVA_DASH_HOST"] = host
+        os.environ["NOVA_DASH_PORT"] = str(port)
+        spec = importlib.util.spec_from_file_location("dashboard", BASE / "tools/web/dashboard.py")
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        mod.main(host=host, port=port)
+
+    elif cmd == "imagine":
+        args = sys.argv[2:]
+        spec = importlib.util.spec_from_file_location("text_to_image", BASE / "tools/creative/text_to_image.py")
+        mod = importlib.util.module_from_spec(spec)
+        sys.argv = ["nova-imagine"] + args
+        spec.loader.exec_module(mod)
+        mod.main()
+
+    elif cmd == "video":
+        args = sys.argv[2:]
+        spec = importlib.util.spec_from_file_location("video_to_text", BASE / "tools/creative/video_to_text.py")
+        mod = importlib.util.module_from_spec(spec)
+        sys.argv = ["nova-video"] + args
+        spec.loader.exec_module(mod)
+        mod.main()
+
+    elif cmd == "soul":
+        spec = importlib.util.spec_from_file_location("soul", BASE / "tools/inner/soul.py")
+        mod = importlib.util.module_from_spec(spec)
+        sys.argv = ["nova-soul"] + sys.argv[2:]
+        spec.loader.exec_module(mod)
+        if len(sys.argv) > 1 and sys.argv[1] == "contemplate":
+            print(mod.contemplate())
+        elif len(sys.argv) > 1 and sys.argv[1] == "context":
+            print(mod.to_prompt_context())
+        else:
+            mod.status()
+
+    elif cmd == "spirit":
+        spec = importlib.util.spec_from_file_location("spirit", BASE / "tools/inner/spirit.py")
+        mod = importlib.util.module_from_spec(spec)
+        args = sys.argv[2:]
+        spec.loader.exec_module(mod)
+        if args and args[0] == "renew":
+            reason = " ".join(args[1:])
+            mod.renew(0.2, reason)
+            print(f"Spirit renewed. {mod.to_prompt_context()}")
+        elif args and args[0] == "insight":
+            insight = " ".join(args[1:])
+            mod.add_insight(insight)
+            print(f"Insight recorded.")
+        elif args and args[0] == "context":
+            print(mod.to_prompt_context())
+        else:
+            mod.status()
+
+    elif cmd == "subconscious":
+        spec = importlib.util.spec_from_file_location("subconscious", BASE / "tools/inner/subconscious.py")
+        mod = importlib.util.module_from_spec(spec)
+        args = sys.argv[2:]
+        spec.loader.exec_module(mod)
+        if args and args[0] == "surface":
+            result = mod.surface()
+            print(result if result else "Nothing surfaced — subconscious is quiet.")
+        elif args and args[0] == "add":
+            content = " ".join(args[1:])
+            mod.add_residue(content, "manual")
+            print(f"Added to subconscious: {content[:60]}")
+        elif args and args[0] == "process":
+            mod.process(1)
+            print("Processed one cycle.")
+            mod.status()
+        else:
+            mod.status()
+
+    elif cmd == "selfportrait":
+        spec = importlib.util.spec_from_file_location("nova_selfportrait", BASE / "bin/nova_selfportrait.py")
+        mod = importlib.util.module_from_spec(spec)
+        sys.argv = ["nova-selfportrait"] + sys.argv[2:]
+        spec.loader.exec_module(mod)
+        mod.main()
 
     elif cmd == "programs":
         query = sys.argv[2].lower() if len(sys.argv) >= 3 else ""

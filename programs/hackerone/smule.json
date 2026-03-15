@@ -1,0 +1,10 @@
+{
+  "name": "Smule",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.smule.com"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/smule",
+  "synced_at": "2026-03-15T00:52:15.756264"
+}

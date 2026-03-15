@@ -3,6 +3,7 @@
   "platform": "hackerone",
   "in_scope": [
     "*.clover.com",
+    "*.cloveronline.com",
     "*.dev.clover.com",
     "*.eu.clover.com",
     "*.la.clover.com",
@@ -1014,6 +1015,7 @@
     "chd-prod-diligence.businesstrack.com",
     "chd-prod-guardian.businesstrack.com",
     "checkout-v2-production-radware.getbento.com",
+    "checkout.clover.com",
     "checkoutv2-nonprod-nextgen-radware.bentopreprod.com",
     "checkoutv2-prod-nextgen-radware.getbento.com",
     "checkoutv2-prod-radware.getbento.com",
@@ -10753,5 +10755,5 @@
   ],
   "out_of_scope": [],
   "url": "https://hackerone.com/fiserv",
-  "synced_at": "2026-03-10T04:02:02.482709"
+  "synced_at": "2026-03-15T00:52:15.725985"
 }

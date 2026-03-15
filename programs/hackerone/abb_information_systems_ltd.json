@@ -587,6 +587,7 @@
     "www.baldorvip.com",
     "www.gateway.baldor.abb.com",
     "docusave.baldor.com",
+    "pdc.abb.com",
     "testconfig.baldor.com",
     "hu.abb.com",
     "hu.inside.abb.com",
@@ -1041,5 +1042,5 @@
   ],
   "out_of_scope": [],
   "url": "https://hackerone.com/abb",
-  "synced_at": "2026-03-10T04:02:02.450236"
+  "synced_at": "2026-03-15T00:52:15.710608"
 }

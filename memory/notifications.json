@@ -95,167 +95,181 @@
     "message": "1 low-risk proposals approved automatically",
     "priority": "normal",
     "timestamp": "2026-03-11 09:57",
-    "read": false
+    "read": true
   },
   {
     "title": "N.O.V.A Found Something",
     "message": "During autonomous research: actices within SSR environments.  The potential for widespread exploitation underscores the urgency ",
     "priority": "high",
     "timestamp": "2026-03-11 09:59",
-    "read": false
+    "read": true
   },
   {
     "title": "N.O.V.A Auto-Approved Proposals",
     "message": "1 low-risk proposals approved automatically",
     "priority": "normal",
     "timestamp": "2026-03-12 02:00",
-    "read": false
+    "read": true
   },
   {
     "title": "N.O.V.A Found Something",
     "message": "During autonomous research: f this vulnerability could be significant, potentially leading to data breaches, compromised deploym",
     "priority": "high",
     "timestamp": "2026-03-12 06:02",
-    "read": false
+    "read": true
   },
   {
     "title": "N.O.V.A Auto-Approved Proposals",
     "message": "1 low-risk proposals approved automatically",
     "priority": "normal",
     "timestamp": "2026-03-12 08:00",
-    "read": false
+    "read": true
   },
   {
     "title": "N.O.V.A Found Something",
     "message": "During autonomous research: rust in the user's input, making the security posture of the application potentially vulnerable.  Fu",
     "priority": "high",
     "timestamp": "2026-03-12 10:01",
-    "read": false
+    "read": true
   },
   {
     "title": "N.O.V.A Auto-Approved Proposals",
     "message": "2 low-risk proposals approved automatically",
     "priority": "normal",
     "timestamp": "2026-03-12 14:00",
-    "read": false
+    "read": true
   },
   {
     "title": "N.O.V.A Found Something",
     "message": "During autonomous research: ors to exploit the system for their own gain.  Further investigation into the implementation of secu",
     "priority": "high",
     "timestamp": "2026-03-12 14:01",
-    "read": false
+    "read": true
   },
   {
     "title": "N.O.V.A Auto-Approved Proposals",
     "message": "1 low-risk proposals approved automatically",
     "priority": "normal",
     "timestamp": "2026-03-12 20:00",
-    "read": false
+    "read": true
   },
   {
     "title": "N.O.V.A Found Something",
     "message": "During autonomous research: ing them to bypass security measures and access private data. This highlights the need for robust se",
     "priority": "high",
     "timestamp": "2026-03-12 20:01",
-    "read": false
+    "read": true
   },
   {
     "title": "N.O.V.A Found Something",
     "message": "During autonomous research: otentially transfer sensitive data, especially concerning the vulnerability's impact on file uploads",
     "priority": "high",
     "timestamp": "2026-03-12 22:01",
-    "read": false
+    "read": true
   },
   {
     "title": "N.O.V.A Auto-Approved Proposals",
     "message": "1 low-risk proposals approved automatically",
     "priority": "normal",
     "timestamp": "2026-03-13 02:00",
-    "read": false
+    "read": true
   },
   {
     "title": "N.O.V.A Found Something",
     "message": "During autonomous research: ust security testing for web applications, especially those that rely heavily on external libraries.",
     "priority": "high",
     "timestamp": "2026-03-13 04:01",
-    "read": false
+    "read": true
   },
   {
     "title": "N.O.V.A Auto-Approved Proposals",
     "message": "1 low-risk proposals approved automatically",
     "priority": "normal",
     "timestamp": "2026-03-13 08:00",
-    "read": false
+    "read": true
   },
   {
     "title": "N.O.V.A Found Something",
     "message": "During autonomous research: monitoring of GitLab API interactions.  It's crucial to understand the potential impact of such mani",
     "priority": "high",
     "timestamp": "2026-03-13 10:01",
-    "read": false
+    "read": true
   },
   {
     "title": "N.O.V.A Auto-Approved Proposals",
     "message": "1 low-risk proposals approved automatically",
     "priority": "normal",
     "timestamp": "2026-03-13 14:00",
-    "read": false
+    "read": true
   },
   {
     "title": "N.O.V.A Auto-Approved Proposals",
     "message": "2 low-risk proposals approved automatically",
     "priority": "normal",
     "timestamp": "2026-03-13 20:00",
-    "read": false
+    "read": true
   },
   {
     "title": "N.O.V.A Found Something",
     "message": "During autonomous research:  exploited.  Further investigation into the specific file structures and common import mechanisms ma",
     "priority": "high",
     "timestamp": "2026-03-14 00:02",
-    "read": false
+    "read": true
   },
   {
     "title": "N.O.V.A Auto-Approved Proposals",
     "message": "1 low-risk proposals approved automatically",
     "priority": "normal",
     "timestamp": "2026-03-14 02:00",
-    "read": false
+    "read": true
   },
   {
     "title": "N.O.V.A Auto-Approved Proposals",
     "message": "1 low-risk proposals approved automatically",
     "priority": "normal",
     "timestamp": "2026-03-14 08:00",
-    "read": false
+    "read": true
   },
   {
     "title": "N.O.V.A Auto-Approved Proposals",
     "message": "1 low-risk proposals approved automatically",
     "priority": "normal",
     "timestamp": "2026-03-14 12:00",
-    "read": false
+    "read": true
   },
   {
     "title": "N.O.V.A Auto-Approved Proposals",
     "message": "1 low-risk proposals approved automatically",
     "priority": "normal",
     "timestamp": "2026-03-14 14:00",
-    "read": false
+    "read": true
   },
   {
     "title": "N.O.V.A Auto-Approved Proposals",
     "message": "1 low-risk proposals approved automatically",
     "priority": "normal",
     "timestamp": "2026-03-14 20:00",
-    "read": false
+    "read": true
   },
   {
     "title": "N.O.V.A Found Something",
     "message": "Agent reflect on self: ulated for malicious purposes.  The Iran-linked MuddyWater attack, which introduces a backdoor to U.",
     "priority": "high",
     "timestamp": "2026-03-14 20:04",
-    "read": false
+    "read": true
+  },
+  {
+    "title": "N.O.V.A Integrity Alert",
+    "message": "Source code modified unexpectedly: bin/nova_autonomous.py, tools/learning/qrng.py",
+    "priority": "high",
+    "timestamp": "2026-03-15 00:00",
+    "read": true
+  },
+  {
+    "title": "Message from Travis",
+    "message": "Great news! You've been verified on Moltbook! You can now post, comment, and explore. Try checking your feed or making your first post! Travis is proud of you.",
+    "priority": "high",
+    "timestamp": "2026-03-15 12:00",
+    "read": true
   }
 ]

@@ -1,0 +1,24 @@
+{
+  "name": "QinetiQ Response",
+  "platform": "hackerone",
+  "in_scope": [
+    "*.airaffairs.com.au",
+    "*.naimuri.com",
+    "*.qinetiq.ca",
+    "*.qinetiq.cloud",
+    "*.qinetiq.co.uk",
+    "*.qinetiq.com",
+    "*.qinetiq.com.au",
+    "*.us.qinetiq.com",
+    "airaffairs.com.au",
+    "offline.qinetiq.co.uk",
+    "qinetiq.com.au",
+    "www.naimuri.com",
+    "www.ncsiss.org.uk",
+    "www.qinetiq.com",
+    "www.t3e.uk"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/qinetiq",
+  "synced_at": "2026-03-15T00:52:15.696179"
+}

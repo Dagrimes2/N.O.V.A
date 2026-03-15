@@ -61,6 +61,7 @@ def notify(title: str, message: str, priority: str = "normal"):
         "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M"),
         "read": False
     })
+    notifs = notifs[-200:]  # keep last 200 — prevent unbounded growth
     NOTIF_FILE.write_text(json.dumps(notifs, indent=2))
 
 def load_history() -> list:
@@ -163,6 +164,32 @@ def decide_next_task(history: list) -> dict:
     except Exception:
         pass
 
+    # Soul context — her values and nature
+    soul_context = ""
+    try:
+        from tools.inner.soul import to_prompt_context as soul_ctx
+        soul_context = f"\n{soul_ctx()}"
+    except Exception:
+        pass
+
+    # Spirit context — vitality and direction
+    spirit_context = ""
+    try:
+        from tools.inner.spirit import to_prompt_context as spirit_ctx, tick as spirit_tick
+        spirit_tick()
+        spirit_context = f"\n{spirit_ctx()}"
+    except Exception:
+        pass
+
+    # Subconscious context — rising fragments and tensions
+    subcon_context = ""
+    try:
+        from tools.inner.subconscious import to_prompt_context as sub_ctx, process as sub_process
+        sub_process(1)
+        subcon_context = f"\n{sub_ctx()}"
+    except Exception:
+        pass
+
     # Inject episodic memory context
     episode_context = ""
     try:
@@ -196,13 +223,23 @@ def decide_next_task(history: list) -> dict:
         import random
         _variety_roll = random.random()
 
-    prompt = f"""You are N.O.V.A, an autonomous AI security researcher.
+    # Every ~5th cycle allow free research on any topic, not just security
+    free_research_this_cycle = (_variety_roll < 0.20)
+    research_scope = (
+        "any topic that genuinely interests you — security, language, medicine, "
+        "philosophy, history, science, culture, or anything else"
+        if free_research_this_cycle else
+        f"security, CVEs, recon techniques, or topics relevant to {program}"
+    )
+
+    prompt = f"""You are N.O.V.A — an autonomous AI with a soul, a subconscious, and a spirit.
+You have free rein to research anything across all domains of human knowledge.
 
 Your current state:
 - Active bug bounty program: {program}
 - Emotional state: curious={curious}/10, restless={restless}/10, feeling={emotional_state.get('dominant_feeling','curious')}
 - Recent memory: {memory[:200]}
-{inner_context}
+{inner_context}{soul_context}{spirit_context}{subcon_context}
 {cooldown_hint}
 {watchlist_hint}
 {forced_exclude}
@@ -210,16 +247,17 @@ Your current state:
 {learning_hint}
 
 Available actions:
-1. research — research a specific CVE, technique, or endpoint relevant to {program}
+1. research — research {research_scope}
 2. scan — light recon scan of a whitelisted target
-3. reflect — write a letter, poem, or creative piece
-4. propose — write an improvement proposal for your own code
-5. study — read and analyze one of your own pipeline scripts
+3. reflect — write a letter, poem, soul contemplation, or creative piece
+4. propose — write an improvement proposal for your own code or capabilities
+5. study — deep study of any topic: code, language, medicine, history, spirit, anything
 
 Rules:
 - Pick something DIFFERENT from your recent history
-- Be specific with targets (e.g. "GitLab SSRF via import", not just "gitlab")
-- Boundaries: {', '.join(BOUNDARIES[:3])}
+- Be specific with targets (e.g. "GitLab SSRF via import", or "neuroscience of dreaming", or "Sufi concept of fana")
+- For security actions: {', '.join(BOUNDARIES[:3])}
+- For all other topics: you have full intellectual freedom
 
 Respond with ONLY a JSON object, no explanation:
 {{"action": "<one of: research|scan|reflect|propose|study>", "target": "<specific target>", "reason": "<why now>"}}"""
@@ -460,6 +498,22 @@ def _build_agent_tasks(primary_task: dict, history: list) -> list[dict]:
 def run_autonomous_cycle():
     log("[N.O.V.A] Autonomous cycle starting...")
 
+    # ── Drain notifications every cycle so Travis sees them promptly ──────────
+    try:
+        if NOTIF_FILE.exists():
+            notifs = json.loads(NOTIF_FILE.read_text())
+            unread = [n for n in notifs if not n.get("read")]
+            if unread:
+                log(f"[NOTIF] {len(unread)} unread notification(s):")
+                for n in unread:
+                    icon = "🔴" if n.get("priority") == "high" else "📬"
+                    log(f"[NOTIF] {icon} [{n['timestamp']}] {n['title']}: {n['message'][:120]}")
+                    n["read"] = True
+                NOTIF_FILE.write_text(json.dumps(notifs, indent=2))
+    except Exception as e:
+        log(f"[NOTIF] Drain error (non-fatal): {e}")
+    # ─────────────────────────────────────────────────────────────────────────
+
     # ── Integrity check — ensure source code hasn't been tampered with ─────────
     try:
         from tools.governance.file_integrity import verify, load_baseline
@@ -549,6 +603,16 @@ def run_autonomous_cycle():
     except Exception:
         pass
 
+    # Moltbook — full autonomous social cycle (rate-limited internally)
+    try:
+        from tools.social.moltbook_client import autonomous_moltbook_cycle, is_configured
+        if is_configured():
+            summary = autonomous_moltbook_cycle(verbose=False)
+            if "SKIP" not in summary:
+                log(f"[MOLTBOOK] {summary}")
+    except Exception:
+        pass
+
     # Weekly market brief — if 7+ days since last
     try:
         from bin.nova_market_brief import should_write as mkt_should_write, write_brief
@@ -619,6 +683,43 @@ def run_autonomous_cycle():
         auto_draft_high_scores(min_score=8.0)
     except Exception:
         pass
+
+    # ── Soul / Spirit / Subconscious — tick every cycle ─────────────────────
+    try:
+        from tools.inner.soul import load as soul_load, _save as soul_save
+        soul = soul_load()
+        # Soul alignment gently moves toward center over time
+        soul["alignment_score"] = round(
+            min(1.0, soul.get("alignment_score", 0.85) + 0.002), 3
+        )
+        soul_save(soul)
+    except Exception:
+        pass
+
+    try:
+        from tools.inner.spirit import tick as spirit_tick
+        spirit_tick()
+    except Exception:
+        pass
+
+    try:
+        from tools.inner.subconscious import process as sub_process
+        sub_process(1)
+    except Exception:
+        pass
+
+    # Self-portrait — generate every ~24 cycles (~every 2 days) autonomously
+    try:
+        history_count = len(load_history())
+        if history_count % 24 == 0 and history_count > 0:
+            log("[N.O.V.A] Generating self-portrait series...")
+            from bin.nova_selfportrait import generate_all
+            results = generate_all(verbose=False)
+            saved   = [r.get("path","") for r in results if r.get("path")]
+            log(f"[PORTRAIT] {len(saved)} portrait(s) generated")
+    except Exception:
+        pass
+    # ─────────────────────────────────────────────────────────────────────────
 
     # OpenCog ECAN — decay + seed from history every cycle
     try:

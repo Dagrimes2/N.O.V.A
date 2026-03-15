@@ -1,0 +1,14 @@
+{
+  "name": "lemlist",
+  "platform": "hackerone",
+  "in_scope": [
+    "app.lemcal.com",
+    "app.lemlist.com",
+    "app.lemwarm.com",
+    "app.taplio.com",
+    "app.tweethunter.io"
+  ],
+  "out_of_scope": [],
+  "url": "https://hackerone.com/lemlist",
+  "synced_at": "2026-03-15T00:52:15.743696"
+}
