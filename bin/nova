@@ -128,6 +128,16 @@ INTEGRITY & DEDUP
   nova scanmem stats               total targets, scans, last 24h
   nova scanmem check <target>      check if target is on cooldown
 
+MARKETS
+  nova markets                          analyze default watchlist
+  nova markets BTC ETH SOL              analyze specific assets
+  nova markets AAPL NVDA --type stock   stock analysis
+  nova markets --horizon 14             14-day Monte Carlo horizon
+  nova markets add BTC ETH              add to watchlist
+  nova markets remove DOGE              remove from watchlist
+  nova markets fng                      Fear & Greed index
+  nova markets nft boredapeyachtclub    NFT floor price
+
 NOTIFICATIONS
   nova notify telegram "msg"       send test Telegram message
   nova notify speak "msg"          speak text via espeak-ng
@@ -626,6 +636,10 @@ def main():
             subprocess.run(["python3", str(BASE / "tools/notify/tts.py")] + rest)
         else:
             print("Usage: nova notify [telegram|speak] [message]")
+
+    elif cmd == "markets":
+        args = sys.argv[2:] if len(sys.argv) > 2 else []
+        subprocess.run(["python3", str(BASE / "bin/nova_markets.py")] + args)
 
     elif cmd == "programs":
         query = sys.argv[2].lower() if len(sys.argv) >= 3 else ""
