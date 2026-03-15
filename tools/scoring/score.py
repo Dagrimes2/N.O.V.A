@@ -5,6 +5,7 @@ Input:  JSONL from normalize.py
 Output: JSONL with added fields:
   - score (int)
   - signals (list[str])
+  - confidence (float) — Bayesian-adjusted from learned signal weights
 After scoring, each record is passed through nova_wire full_pipeline
 for enrichment, memory adjustment, and pattern boosting.
 """
@@ -45,6 +46,21 @@ try:
 except Exception:
     WIRE_ENABLED = False
 
+# Wire Bayesian signal weights from outcome tracker
+try:
+    from tools.learning.outcome_tracker import get_signal_confidence as _sig_conf
+    _LEARNING_ENABLED = True
+except Exception:
+    _LEARNING_ENABLED = False
+
+# Wire episodic memory — record notable findings automatically
+try:
+    from tools.learning.episodic_memory import maybe_record_from_finding as _maybe_episode
+    _EPISODE_ENABLED = True
+except Exception:
+    _EPISODE_ENABLED = False
+
+
 def iter_jsonl(stream: Iterable[str]) -> Iterable[Dict[str, Any]]:
     for line in stream:
         line = line.strip()
@@ -54,8 +70,11 @@ def iter_jsonl(stream: Iterable[str]) -> Iterable[Dict[str, Any]]:
             obj = json.loads(line)
         except json.JSONDecodeError:
             continue
+        if "signal_strength" not in obj:
+            obj["signal_strength"] = 0
         if isinstance(obj, dict):
             yield obj
+
 
 def is_numeric(value: Any) -> bool:
     try:
@@ -64,16 +83,41 @@ def is_numeric(value: Any) -> bool:
     except Exception:
         return False
 
+
+def _bayesian_confidence(signals: list[str], base_score: int) -> float:
+    """
+    Compute a confidence score that blends:
+      - Normalized base score (0–1)
+      - Bayesian P(real | signal) learned from past outcomes
+    New signals default to 0.5 (neutral — no bias toward false positives).
+    """
+    if not _LEARNING_ENABLED:
+        # No learning yet — use simple normalization
+        return min(1.0, base_score / 30.0)
+
+    if not signals:
+        return min(1.0, base_score / 30.0)
+
+    # Average learned confidence across all triggered signals
+    learned = sum(_sig_conf(s) for s in signals) / len(signals)
+
+    # Blend 60% learned, 40% base score (base score anchors early on)
+    base_norm = min(1.0, base_score / 30.0)
+    blended   = 0.6 * learned + 0.4 * base_norm
+
+    return round(min(1.0, max(0.0, blended)), 4)
+
+
 def score_record(rec: Dict[str, Any]) -> Dict[str, Any]:
     if not isinstance(rec, dict):
         return {"score": 0, "signals": [], "error": "invalid input type"}
 
-    score = 0
+    score   = 0
     signals = []
 
-    path   = (rec.get("path")   or "").lower()
+    path   = (rec.get("path") or "").lower()
     method = (rec.get("method") or "GET").upper()
-    params = rec.get("params")  or {}
+    params = rec.get("params") or {}
     status = rec.get("status")
     length = rec.get("length")
 
@@ -114,23 +158,28 @@ def score_record(rec: Dict[str, Any]) -> Dict[str, Any]:
             score += 2
             signals.append("empty-response")
 
-    rec["score"]   = score
-    rec["signals"] = signals
+    rec["score"]      = score
+    rec["signals"]    = signals
+    rec["confidence"] = _bayesian_confidence(signals, score)
+
+    # Auto-record notable findings as episodes
+    if _EPISODE_ENABLED:
+        try:
+            _maybe_episode(rec)
+        except Exception:
+            pass
+
     return rec
+
 
 def main() -> int:
     for record in iter_jsonl(sys.stdin):
         scored = score_record(record)
-
-        # Pass through full pipeline: enrich → memory_adjust → pattern_boost
         if WIRE_ENABLED:
-            try:
-                scored = _full_pipeline(scored)
-            except Exception:
-                pass  # pipeline failure never kills scoring
-
+            scored = _full_pipeline(scored)
         sys.stdout.write(json.dumps(scored, separators=(",", ":")) + "\n")
     return 0
+
 
 if __name__ == "__main__":
     raise SystemExit(main())

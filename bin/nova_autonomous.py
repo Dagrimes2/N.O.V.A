@@ -152,15 +152,49 @@ def decide_next_task(history: list) -> dict:
     if len(recent_actions) >= 3 and len(set(recent_actions[-3:])) == 1:
         forced_exclude = f"\nYou have done '{recent_actions[-1]}' 3 times in a row. You MUST choose a different action type this time."
 
+    # Inject episodic memory context
+    episode_context = ""
+    try:
+        from tools.learning.episodic_memory import emotional_context, emotional_summary
+        episode_context = f"\nRecent experiences:\n{emotional_context(n=4)}"
+        es = emotional_summary()
+        emotional_state["dominant_feeling"] = es.get("dominant_emotion", "curious")
+    except Exception:
+        pass
+
+    # Inject learning stats — what signals are working
+    learning_hint = ""
+    try:
+        from tools.learning.outcome_tracker import learning_stats, get_all_weights
+        stats = learning_stats()
+        if stats["total"] > 0:
+            acc = f"{stats['accuracy']:.0%}" if stats["accuracy"] else "n/a"
+            learning_hint = f"\nYour current accuracy: {acc} ({stats['confirmed']} confirmed, {stats['false_positives']} false positives)"
+        top_sigs = [s["signal"] for s in stats.get("top_signals", [])[:3]]
+        if top_sigs:
+            learning_hint += f"\nHighest-confidence signals from experience: {', '.join(top_sigs)}"
+    except Exception:
+        pass
+
+    # Use QRNG for task variety (true randomness, not Mersenne Twister)
+    try:
+        from tools.learning.qrng import qrand as _qrand
+        _variety_roll = _qrand()
+    except Exception:
+        import random
+        _variety_roll = random.random()
+
     prompt = f"""You are N.O.V.A, an autonomous AI security researcher.
 
 Your current state:
 - Active bug bounty program: {program}
-- Emotional state: curious={curious}/10, restless={restless}/10
+- Emotional state: curious={curious}/10, restless={restless}/10, feeling={emotional_state.get('dominant_feeling','curious')}
 - Recent memory: {memory[:200]}
 {cooldown_hint}
 {watchlist_hint}
 {forced_exclude}
+{episode_context}
+{learning_hint}
 
 Available actions:
 1. research — research a specific CVE, technique, or endpoint relevant to {program}
@@ -236,7 +270,18 @@ def execute_task(task: dict) -> str:
             ["python3", str(BASE / "bin/nova_research.py"), target],
             capture_output=True, text=True, cwd=str(BASE), timeout=300
         )
-        return result.stdout[-300:] if result.stdout else "Research complete"
+        output = result.stdout[-300:] if result.stdout else "Research complete"
+        # Record episode if research yielded notable findings
+        try:
+            from tools.learning.episodic_memory import record_episode
+            if any(kw in output.lower() for kw in ["cve", "vulnerability", "bypass"]):
+                record_episode("research_breakthrough",
+                               f"Research on '{target}' surfaced potential vulnerability",
+                               emotion="excitement", intensity=0.6,
+                               metadata={"target": target})
+        except Exception:
+            pass
+        return output
 
     elif action == "scan":
         whitelist_file = BASE / "core/whitelist.json"

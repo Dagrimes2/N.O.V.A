@@ -92,6 +92,15 @@ MULTI-AGENT
   nova agents log [N]              tail agent log (last N lines)
   nova agents bus [N]              show recent message bus entries
   nova agents clear                clear completed agent history
+
+LEARNING & MEMORY
+  nova learn stats                 accuracy, confirmed vs false positives
+  nova learn weights               learned signal confidence (Bayesian)
+  nova learn recent [--n N]        recent outcomes
+  nova learn mark ID OUTCOME       mark confirmed/false_positive/partial
+  nova learn episodes              recent episodic memory
+  nova learn context               emotional context narrative
+  nova learn qrng status           quantum entropy source status
   nova listen --chat       full voice conversation
   nova report              draft report from top finding
   nova report --list       show reportable findings
@@ -547,6 +556,20 @@ def main():
     elif cmd == "agents":
         args = sys.argv[2:] if len(sys.argv) > 2 else []
         subprocess.run(["python3", str(BASE / "bin/nova_agents.py")] + args)
+
+    elif cmd == "learn":
+        sub = sys.argv[2] if len(sys.argv) > 2 else "stats"
+        rest = sys.argv[3:] if len(sys.argv) > 3 else []
+        if sub in ("stats", "recent", "mark", "weights"):
+            subprocess.run(["python3", str(BASE / "tools/learning/outcome_tracker.py"), sub] + rest)
+        elif sub in ("episodes", "ep"):
+            subprocess.run(["python3", str(BASE / "tools/learning/episodic_memory.py"), "recent"] + rest)
+        elif sub == "context":
+            subprocess.run(["python3", str(BASE / "tools/learning/episodic_memory.py"), "context"])
+        elif sub == "qrng":
+            subprocess.run(["python3", str(BASE / "tools/learning/qrng.py")] + rest)
+        else:
+            subprocess.run(["python3", str(BASE / "tools/learning/outcome_tracker.py"), "stats"])
 
     elif cmd == "programs":
         query = sys.argv[2].lower() if len(sys.argv) >= 3 else ""
