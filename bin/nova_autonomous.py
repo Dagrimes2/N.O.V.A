@@ -481,6 +481,25 @@ def run_autonomous_cycle():
     except Exception:
         pass
 
+    # Weekly autobiography — if it's been 7+ days
+    try:
+        from bin.nova_autobiography import should_write, write_entry
+        if should_write():
+            log("[N.O.V.A] Writing weekly autobiography...")
+            write_entry()
+    except Exception:
+        pass
+
+    # Cross-domain synthesis — run every ~10 cycles
+    try:
+        history_count = len(load_history())
+        if history_count % 10 == 0 and history_count > 0:
+            log("[N.O.V.A] Running cross-domain synthesis...")
+            from tools.synthesis.cross_domain import run_synthesis
+            run_synthesis(verbose=False)
+    except Exception:
+        pass
+
     history = load_history()
     primary_task = decide_next_task(history)
     log(f"[N.O.V.A] Primary decision: {primary_task}")

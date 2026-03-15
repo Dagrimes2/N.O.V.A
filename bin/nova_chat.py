@@ -90,6 +90,26 @@ The tool result will be shown and you can reference it.\n\n"""
         if letters:
             context += f"A letter you wrote to Travis:\n{letters[-1].read_text()[:200]}\n\n"
 
+    # Inner state context
+    try:
+        _nova_root = str(BASE)
+        if _nova_root not in sys.path:
+            sys.path.insert(0, _nova_root)
+        from tools.inner.inner_state import InnerState
+        inner = InnerState()
+        inner.note_chat()  # satisfy connection need
+        context += f"\nYour inner state: {inner.to_prompt_context()}\n"
+    except Exception:
+        pass
+
+    # Travis model context
+    try:
+        from tools.symbiosis.travis_model import TravisModel
+        tm = TravisModel()
+        context += f"\nWhat you know about Travis: {tm.to_prompt_context()}\n"
+    except Exception:
+        pass
+
     context += "Now have a genuine conversation with Travis.\n"
     return context
 
@@ -145,6 +165,18 @@ def chat():
             user_input = corrected
 
         if not user_input: continue
+
+        # Observe Travis's message — update his model + inner state empathy
+        try:
+            _nova_root = str(BASE)
+            if _nova_root not in sys.path:
+                sys.path.insert(0, _nova_root)
+            from tools.symbiosis.travis_model import TravisModel
+            TravisModel().observe(user_input, context="chat")
+            from tools.inner.inner_state import InnerState
+            InnerState().read_travis_tone(user_input)
+        except Exception:
+            pass
 
         if user_input.lower() == "exit":
             print("\n[N.O.V.A] Signing off. Stay curious, Travis.")
