@@ -73,13 +73,16 @@ Decision rules:
 Return ONLY the JSON object. No explanation."""
 
     try:
-        resp = requests.post(OLLAMA_URL, json={
-            "model": MODEL,
-            "prompt": prompt,
-            "stream": False,
-            "options": {"temperature": TEMP, "num_predict": 200}
-        }, timeout=TIMEOUT)
-        raw = resp.json()["response"]
+        try:
+            from tools.llm.llm_cache import llm_call, TTL_REASONING
+            raw = llm_call(MODEL, prompt, temperature=TEMP,
+                           num_predict=200, ttl=TTL_REASONING)
+        except Exception:
+            resp = requests.post(OLLAMA_URL, json={
+                "model": MODEL, "prompt": prompt, "stream": False,
+                "options": {"temperature": TEMP, "num_predict": 200}
+            }, timeout=TIMEOUT)
+            raw = resp.json()["response"]
 
         # Extract JSON block from response
         start = raw.find("{")

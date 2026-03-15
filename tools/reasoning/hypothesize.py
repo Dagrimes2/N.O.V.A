@@ -65,13 +65,16 @@ Return ONLY this JSON object, no explanation, no markdown:
 }}"""
 
     try:
-        resp = requests.post(OLLAMA_URL, json={
-            "model":   MODEL,
-            "prompt":  prompt,
-            "stream":  False,
-            "options": {"temperature": TEMP, "num_predict": 300}
-        }, timeout=TIMEOUT)
-        raw = resp.json().get("response", "")
+        try:
+            from tools.llm.llm_cache import llm_call, TTL_REASONING
+            raw = llm_call(MODEL, prompt, temperature=TEMP,
+                           num_predict=300, ttl=TTL_REASONING)
+        except Exception:
+            resp = requests.post(OLLAMA_URL, json={
+                "model":   MODEL, "prompt": prompt, "stream": False,
+                "options": {"temperature": TEMP, "num_predict": 300}
+            }, timeout=TIMEOUT)
+            raw = resp.json().get("response", "")
         start = raw.find("{")
         end   = raw.rfind("}") + 1
         if start != -1 and end > start:
