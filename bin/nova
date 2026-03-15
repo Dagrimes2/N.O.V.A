@@ -346,6 +346,37 @@ AGENT RELATIONS
 RELATIONSHIP (additional)
   nova profile tension             show current tension level with Travis
   nova discord initiate            force Nova to send a proactive message to Travis
+
+MEMORY & SEARCH
+  nova rag status                  show RAG index stats
+  nova rag build                   index all memory files for semantic search
+  nova rag search QUERY            semantic search over all memory
+  nova conv-memory status          show conversation memory stats
+  nova conv-memory build           index past Discord conversations
+  nova conv-memory recall QUERY    find past exchanges relevant to query
+  nova attention status            show attention/salience scores
+  nova attention boost TOPIC       boost attention on a topic
+
+SYSTEM
+  nova health                      show CPU, RAM, disk, temperature, process status
+  nova router status               show LLM router stats and model routing table
+  nova router generate PROMPT      route a prompt to the right model
+
+CREATIVITY
+  nova self-code status            show self-coder proposals
+  nova self-code propose SPEC      propose a new module
+  nova dream-viz status            show dream visualization history
+  nova dream-viz visualize         visualize the latest dream
+  nova site status                 show personal website build status
+  nova site build                  rebuild Nova's personal website
+  nova site serve                  serve website locally on port 8080
+
+MARKETS
+  nova strategy status             show active paper-trading strategies
+  nova strategy generate SYMBOL    generate a new strategy for a symbol
+  nova strategy backtest ID        backtest a strategy
+  nova stt status                  show speech-to-text availability
+  nova stt listen                  listen and transcribe (15s)
 """)
     sys.exit(1)
 
@@ -1189,6 +1220,86 @@ def main():
         spec = importlib.util.spec_from_file_location("agency", BASE / "tools/operator/agency.py")
         mod = importlib.util.module_from_spec(spec)
         sys.argv = ["nova-agency"] + args
+        spec.loader.exec_module(mod)
+        mod.main()
+
+    elif cmd == "rag":
+        args = sys.argv[2:]
+        spec = importlib.util.spec_from_file_location("rag", BASE / "tools/memory/rag.py")
+        mod = importlib.util.module_from_spec(spec)
+        sys.argv = ["nova-rag"] + args
+        spec.loader.exec_module(mod)
+        mod.main()
+
+    elif cmd == "attention":
+        args = sys.argv[2:]
+        spec = importlib.util.spec_from_file_location("attention", BASE / "tools/inner/attention.py")
+        mod = importlib.util.module_from_spec(spec)
+        sys.argv = ["nova-attention"] + args
+        spec.loader.exec_module(mod)
+        mod.main()
+
+    elif cmd == "health":
+        args = sys.argv[2:]
+        spec = importlib.util.spec_from_file_location("health", BASE / "tools/inner/health.py")
+        mod = importlib.util.module_from_spec(spec)
+        sys.argv = ["nova-health"] + args
+        spec.loader.exec_module(mod)
+        mod.main()
+
+    elif cmd == "router":
+        args = sys.argv[2:]
+        spec = importlib.util.spec_from_file_location("router", BASE / "tools/llm/router.py")
+        mod = importlib.util.module_from_spec(spec)
+        sys.argv = ["nova-router"] + args
+        spec.loader.exec_module(mod)
+        mod.main()
+
+    elif cmd == "self-code":
+        args = sys.argv[2:]
+        spec = importlib.util.spec_from_file_location("self_coder", BASE / "tools/creative/self_coder.py")
+        mod = importlib.util.module_from_spec(spec)
+        sys.argv = ["nova-self-code"] + args
+        spec.loader.exec_module(mod)
+        mod.main()
+
+    elif cmd == "stt":
+        args = sys.argv[2:]
+        spec = importlib.util.spec_from_file_location("stt", BASE / "tools/notify/stt.py")
+        mod = importlib.util.module_from_spec(spec)
+        sys.argv = ["nova-stt"] + args
+        spec.loader.exec_module(mod)
+        mod.main()
+
+    elif cmd == "dream-viz":
+        args = sys.argv[2:]
+        spec = importlib.util.spec_from_file_location("dream_visualizer", BASE / "tools/creative/dream_visualizer.py")
+        mod = importlib.util.module_from_spec(spec)
+        sys.argv = ["nova-dream-viz"] + args
+        spec.loader.exec_module(mod)
+        mod.main()
+
+    elif cmd == "site":
+        args = sys.argv[2:]
+        spec = importlib.util.spec_from_file_location("site_generator", BASE / "tools/web/site_generator.py")
+        mod = importlib.util.module_from_spec(spec)
+        sys.argv = ["nova-site"] + args
+        spec.loader.exec_module(mod)
+        mod.main()
+
+    elif cmd == "strategy":
+        args = sys.argv[2:]
+        spec = importlib.util.spec_from_file_location("strategy_engine", BASE / "tools/markets/strategy_engine.py")
+        mod = importlib.util.module_from_spec(spec)
+        sys.argv = ["nova-strategy"] + args
+        spec.loader.exec_module(mod)
+        mod.main()
+
+    elif cmd == "conv-memory":
+        args = sys.argv[2:]
+        spec = importlib.util.spec_from_file_location("conv_memory", BASE / "tools/memory/conversation_memory.py")
+        mod = importlib.util.module_from_spec(spec)
+        sys.argv = ["nova-conv-memory"] + args
         spec.loader.exec_module(mod)
         mod.main()
 

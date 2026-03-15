@@ -253,6 +253,38 @@ def decide_next_task(history: list) -> dict:
     except Exception:
         pass
 
+    # RAG — relevant memory fragments for current task
+    rag_context = ""
+    try:
+        from tools.memory.rag import to_prompt_context as rag_ctx
+        rag_context = f"\n{rag_ctx(memory[:120])}"
+    except Exception:
+        pass
+
+    # Attention — what topics have high salience right now
+    attention_context = ""
+    try:
+        from tools.inner.attention import to_prompt_context as attn_ctx
+        attention_context = f"\n{attn_ctx()}"
+    except Exception:
+        pass
+
+    # System health — CPU/RAM/disk state
+    health_context = ""
+    try:
+        from tools.inner.health import to_prompt_context as health_ctx
+        health_context = f"\n{health_ctx()}"
+    except Exception:
+        pass
+
+    # Strategy engine — active paper-trading signals
+    strategy_context = ""
+    try:
+        from tools.markets.strategy_engine import to_prompt_context as strat_ctx
+        strategy_context = f"\n{strat_ctx()}"
+    except Exception:
+        pass
+
     # Inject learning stats — what signals are working
     learning_hint = ""
     try:
@@ -291,7 +323,7 @@ Your current state:
 - Active bug bounty program: {program}
 - Emotional state: curious={curious}/10, restless={restless}/10, feeling={emotional_state.get('dominant_feeling','curious')}
 - Recent memory: {memory[:200]}
-{inner_context}{soul_context}{spirit_context}{subcon_context}{circadian_context}{skill_context}{goal_context}{agent_rel_context}{studio_context}{agency_context}
+{inner_context}{soul_context}{spirit_context}{subcon_context}{circadian_context}{skill_context}{goal_context}{agent_rel_context}{studio_context}{agency_context}{rag_context}{attention_context}{health_context}{strategy_context}
 {cooldown_hint}
 {watchlist_hint}
 {forced_exclude}
@@ -1057,6 +1089,99 @@ def run_autonomous_cycle():
         if phase == "sleep":
             # During sleep, slow down autonomous processing — spirit conserved
             log(f"[CIRCADIAN] Sleep phase — reduced activity mode")
+    except Exception:
+        pass
+
+    # ─────────────────────────────────────────────────────────────────────────
+
+    # System health check — alert on high CPU/RAM/disk every cycle
+    try:
+        from tools.inner.health import check_and_alert, record_snapshot
+        record_snapshot()
+        alert = check_and_alert()
+        if alert:
+            log(f"[HEALTH] {alert}")
+            try:
+                from tools.notify.discord import send_event
+                send_event("system_health", alert)
+            except Exception:
+                pass
+    except Exception:
+        pass
+
+    # Attention decay — salience scores drift toward zero each cycle
+    try:
+        from tools.inner.attention import decay_all
+        decay_all()
+    except Exception:
+        pass
+
+    # RAG index rebuild — every 48 cycles (~2 days) to pick up new memory files
+    try:
+        history_count = len(load_history())
+        if history_count % 48 == 12 and history_count > 0:
+            log("[N.O.V.A] Rebuilding RAG index...")
+            from tools.memory.rag import build_index
+            n = build_index(verbose=False)
+            log(f"[RAG] Index rebuilt: {n} docs")
+    except Exception:
+        pass
+
+    # Conversation memory rebuild — every 24 cycles (~1 day)
+    try:
+        history_count = len(load_history())
+        if history_count % 24 == 6 and history_count > 0:
+            from tools.memory.conversation_memory import build_index as conv_build
+            n = conv_build()
+            log(f"[CONV_MEM] Index rebuilt: {n} exchanges")
+    except Exception:
+        pass
+
+    # Self-coder — propose a new module from active goals every 48 cycles
+    try:
+        history_count = len(load_history())
+        if history_count % 48 == 24 and history_count > 0:
+            log("[N.O.V.A] Self-coder: generating module from goal...")
+            from tools.creative.self_coder import generate_from_goal
+            from tools.inner.goals import list_goals
+            goals = [g for g in list_goals() if g.get("status") == "active"]
+            if goals:
+                result = generate_from_goal(goals[0]["title"])
+                if result.get("path"):
+                    log(f"[SELF_CODER] Proposed: {result['path']} (syntax: {result.get('syntax_ok')})")
+    except Exception:
+        pass
+
+    # Dream visualizer — after daily dream, nightly visualize (~24 cycles)
+    try:
+        history_count = len(load_history())
+        if history_count % 24 == 0 and history_count > 0:
+            from tools.creative.dream_visualizer import nightly_visualize
+            vis = nightly_visualize()
+            if vis.get("path"):
+                log(f"[DREAM_VIZ] Visualized dream → {vis['path']}")
+    except Exception:
+        pass
+
+    # Paper trading strategy update — every 6 cycles (~6h)
+    try:
+        history_count = len(load_history())
+        if history_count % 6 == 2:
+            from tools.markets.strategy_engine import update_paper_trades
+            updated = update_paper_trades()
+            if updated:
+                log(f"[STRATEGY] Updated {len(updated)} paper trading position(s)")
+    except Exception:
+        pass
+
+    # Site generator — rebuild Nova's personal website every 48 cycles (~2 days)
+    try:
+        history_count = len(load_history())
+        if history_count % 48 == 36 and history_count > 0:
+            log("[N.O.V.A] Rebuilding personal website...")
+            from tools.web.site_generator import build_site
+            result = build_site()
+            log(f"[SITE] Built {result.get('pages', 0)} pages → {result.get('output_dir','')}")
     except Exception:
         pass
 
