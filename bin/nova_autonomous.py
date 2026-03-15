@@ -261,6 +261,14 @@ def decide_next_task(history: list) -> dict:
     except Exception:
         pass
 
+    # Conversation memory — relevant past exchanges with Travis
+    conv_context = ""
+    try:
+        from tools.memory.conversation_memory import to_prompt_context as conv_ctx
+        conv_context = f"\n{conv_ctx(memory[:120])}"
+    except Exception:
+        pass
+
     # Attention — what topics have high salience right now
     attention_context = ""
     try:
@@ -323,7 +331,7 @@ Your current state:
 - Active bug bounty program: {program}
 - Emotional state: curious={curious}/10, restless={restless}/10, feeling={emotional_state.get('dominant_feeling','curious')}
 - Recent memory: {memory[:200]}
-{inner_context}{soul_context}{spirit_context}{subcon_context}{circadian_context}{skill_context}{goal_context}{agent_rel_context}{studio_context}{agency_context}{rag_context}{attention_context}{health_context}{strategy_context}
+{inner_context}{soul_context}{spirit_context}{subcon_context}{circadian_context}{skill_context}{goal_context}{agent_rel_context}{studio_context}{agency_context}{rag_context}{conv_context}{attention_context}{health_context}{strategy_context}
 {cooldown_hint}
 {watchlist_hint}
 {forced_exclude}
