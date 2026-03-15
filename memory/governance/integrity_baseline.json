@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-15T08:31:11.753148+00:00",
+  "timestamp": "2026-03-15T08:41:31.191796+00:00",
   "files": {
     "bin/auto_scan.py": "fe93a79f146c8868cd1dcca3100d71bb7082ee865ceb71de31678a065b3a3350",
     "bin/nova_agents.py": "e22af9f7fbd36596755463ba5a808e699df98056031f928f5886a1c59de6b7eb",
@@ -19,6 +19,7 @@
     "bin/nova_market_brief.py": "3892bb7dd6566f0d267d2b403ecf522bb527b55561868db48e7d05294a6d431c",
     "bin/nova_markets.py": "ef4f7a7f2fd920a091bc14e661404ac70c984a73dcbeb10834607706642455e0",
     "bin/nova_memory_summarize.py": "5a82d64287f7ee924fd911ce7ba61bf128dfd80a54642c0a9354c05080e2a41e",
+    "bin/nova_moltbook.py": "585aaf2816bb6327e5a47913fc77eedab40fa2d7812b41d6f7a45a34f1db29a0",
     "bin/nova_report.py": "f139f6eaef4d716c883ab32267497b6ac4781eac466ff88afcb15985db2cc060",
     "bin/nova_research.py": "f0de2fc31aec1260418d991b5f63f44f2203f9a33b121268aa72e6054724ee2f",
     "bin/nova_selfportrait.py": "599e33e36e05be338db87928a5fe2638452441b8a1e2bb3c5f8397c29e5e1f5a",

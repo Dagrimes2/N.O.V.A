@@ -813,8 +813,17 @@ def main():
         subprocess.run(["python3", str(BASE / "tools/social/mastodon_client.py")] + args)
 
     elif cmd == "moltbook":
-        args = sys.argv[2:] if len(sys.argv) > 2 else ["status"]
-        subprocess.run(["python3", str(BASE / "tools/social/moltbook_client.py")] + args)
+        sub  = sys.argv[2] if len(sys.argv) > 2 else "status"
+        rest = sys.argv[3:] if len(sys.argv) > 3 else []
+        # Daemon sub-commands route to nova_moltbook.py
+        if sub in ("daemon", "read", "engage", "cycle"):
+            daemon_cmd = "cycle" if sub == "daemon" else sub
+            subprocess.run(["python3", str(BASE / "bin/nova_moltbook.py"), daemon_cmd] + rest)
+        elif sub == "daemon-status":
+            subprocess.run(["python3", str(BASE / "bin/nova_moltbook.py"), "status"])
+        else:
+            args = sys.argv[2:] if len(sys.argv) > 2 else ["status"]
+            subprocess.run(["python3", str(BASE / "tools/social/moltbook_client.py")] + args)
 
     elif cmd == "security":
         sub  = sys.argv[2] if len(sys.argv) > 2 else "cve"
