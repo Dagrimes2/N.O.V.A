@@ -257,11 +257,11 @@ INTELLIGENCE
   nova multilang --inject          inject multilang findings into research queue
 
 RELATIONSHIP
-  nova travis                      Travis model — his interests, patterns, profile
-  nova travis status               full Travis profile status
-  nova travis context              prompt-ready Travis context
-  nova travis log                  recent interaction log
-  nova travis observe "msg"        record an observation about Travis
+  nova profile                     Travis model — his interests, patterns, profile
+  nova profile status              full Travis profile status
+  nova profile context             prompt-ready Travis context
+  nova profile log                 recent interaction log
+  nova profile observe "msg"       record an observation about Travis
   nova letter                      write a letter to Travis (if due)
   nova letter --force              write letter regardless of schedule
   nova letter --list               list all letters written
@@ -992,11 +992,11 @@ def main():
         spec.loader.exec_module(mod)
         mod.main()
 
-    elif cmd == "travis":
+    elif cmd == "profile":
         args = sys.argv[2:]
         spec = importlib.util.spec_from_file_location("travis_model", BASE / "tools/symbiosis/travis_model.py")
         mod = importlib.util.module_from_spec(spec)
-        sys.argv = ["nova-travis"] + args
+        sys.argv = ["nova-profile"] + args
         spec.loader.exec_module(mod)
         mod.main()
 

@@ -47,7 +47,7 @@ _nova() {
                 # Relationship
                 'letter:write a letter to Travis'
                 'teach:prepare a lesson for Travis'
-                'travis:Travis model and profile'
+                'profile:Travis model and profile'
                 # Knowledge / memory
                 'memory:search and manage memory'
                 'palace:memory palace navigation'
