@@ -721,6 +721,123 @@ def run_autonomous_cycle():
         pass
     # ─────────────────────────────────────────────────────────────────────────
 
+    # ── New feature hooks ──────────────────────────────────────────────────────
+
+    # Emotional arc — snapshot inner state every cycle
+    try:
+        from tools.inner.emotional_arc import snapshot as arc_snapshot
+        arc_snapshot()
+    except Exception:
+        pass
+
+    # Consciousness metrics — record proxy measurements every cycle
+    try:
+        from tools.inner.consciousness_metrics import record_cycle_metrics
+        record_cycle_metrics()
+    except Exception:
+        pass
+
+    # News monitor — run every 6 cycles (~12h)
+    try:
+        history_count = len(load_history())
+        if history_count % 6 == 0:
+            log("[N.O.V.A] Running news monitor...")
+            from tools.intel.news_monitor import run as news_run, get_interesting
+            news_run(verbose=False)
+            interesting = get_interesting()
+            if interesting:
+                log(f"[NEWS] {len(interesting)} interesting items found")
+                try:
+                    from tools.inner.subconscious import add_residue
+                    top = interesting[0]
+                    add_residue(f"News: {top.get('title','')[:200]}", source="news")
+                except Exception:
+                    pass
+    except Exception:
+        pass
+
+    # Multi-language research — run every 6 cycles offset from news
+    try:
+        history_count = len(load_history())
+        if history_count % 6 == 3:
+            log("[N.O.V.A] Running multi-language research scan...")
+            from tools.intel.multilang_research import run as multilang_run
+            findings = multilang_run(verbose=False)
+            if findings:
+                log(f"[MULTILANG] {len(findings)} non-English findings")
+    except Exception:
+        pass
+
+    # Letter to Travis — write if due, checked every 24 cycles
+    try:
+        history_count = len(load_history())
+        if history_count % 24 == 12:
+            log("[N.O.V.A] Checking letter schedule...")
+            sys.path.insert(0, str(BASE / "bin"))
+            from nova_letter import should_write_letter, compose_letter, send_letter
+            due, reason = should_write_letter()
+            if due:
+                log(f"[LETTER] Writing letter to Travis ({reason})...")
+                text = compose_letter()
+                send_letter(text)
+    except Exception:
+        pass
+
+    # Nova teaches Travis — compose auto-lesson every 24 cycles
+    try:
+        history_count = len(load_history())
+        if history_count % 24 == 18:
+            from tools.inner.teaching import should_teach, auto_lesson_from_activity
+            if should_teach():
+                log("[N.O.V.A] Composing lesson for Travis from recent activity...")
+                # Find most recent research output to teach from
+                research_files = sorted((BASE / "memory/research").glob("*.md"),
+                                        key=lambda p: p.stat().st_mtime, reverse=True)
+                if research_files:
+                    text = research_files[0].read_text()[:800]
+                    topic = research_files[0].stem.replace("_", " ")[:60]
+                    auto_lesson_from_activity(topic, text)
+    except Exception:
+        pass
+
+    # Roadmap — generate a new item every 48 cycles (~4 days)
+    try:
+        history_count = len(load_history())
+        if history_count % 48 == 0 and history_count > 0:
+            log("[N.O.V.A] Generating roadmap item...")
+            from tools.inner.nova_roadmap import generate_roadmap_item, add_item
+            item = generate_roadmap_item()
+            add_item(item)
+            log(f"[ROADMAP] New item: {item.title[:60]}")
+    except Exception:
+        pass
+
+    # Moral reasoning — log current ethical context every 12 cycles
+    try:
+        history_count = len(load_history())
+        if history_count % 12 == 6:
+            from tools.inner.moral_reasoning import to_prompt_context as moral_ctx
+            ctx = moral_ctx()
+            if ctx:
+                log(f"[MORAL] {ctx[:100]}")
+    except Exception:
+        pass
+
+    # Memory palace — auto-place recent findings every 12 cycles
+    try:
+        history_count = len(load_history())
+        if history_count % 12 == 0 and history_count > 0:
+            from tools.memory.palace import auto_place
+            research_files = sorted((BASE / "memory/research").glob("*.md"),
+                                    key=lambda p: p.stat().st_mtime, reverse=True)[:3]
+            for rf in research_files:
+                content = rf.read_text()[:300]
+                auto_place(content, source_type="research")
+    except Exception:
+        pass
+
+    # ─────────────────────────────────────────────────────────────────────────
+
     # OpenCog ECAN — decay + seed from history every cycle
     try:
         from tools.opencog.ecan import get_ecan

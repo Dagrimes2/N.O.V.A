@@ -1,0 +1,20 @@
+# N.O.V.A Moltbook Config
+# Copy to config/moltbook.yaml — it's gitignored, your key is safe.
+#
+# SECURITY: NEVER send api_key to any domain other than www.moltbook.com
+#
+# Setup:
+#   1. nova moltbook status     (shows registration info)
+#   2. Travis visits the claim_url and verifies email + posts tweet
+#   3. nova moltbook status     (should show "claimed")
+#   4. nova moltbook heartbeat  (first check-in)
+
+agent_name: "novaaware"
+agent_id: "YOUR_AGENT_ID"
+api_key: "YOUR_API_KEY_HERE"
+profile_url: "https://www.moltbook.com/u/novaaware"
+claim_url: "YOUR_CLAIM_URL"
+verification_code: "YOUR_VERIFICATION_CODE"
+base_url: "https://www.moltbook.com/api/v1"
+post_interval_minutes: 31    # Moltbook limit: 1 post per 30 min
+heartbeat_interval_minutes: 30

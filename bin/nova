@@ -247,6 +247,51 @@ NOTIFICATIONS
   nova report              draft report from top finding
   nova report --list       show reportable findings
   nova report --id <n>     draft specific finding
+
+INTELLIGENCE
+  nova news                        top interesting news items (security/AI/science)
+  nova news --all                  all fetched items
+  nova news --inject               inject top items into research queue
+  nova multilang                   scan non-English (Chinese/Russian/Japanese/Korean) sources
+  nova multilang --source chinese  only Chinese sources
+  nova multilang --inject          inject multilang findings into research queue
+
+RELATIONSHIP
+  nova travis                      Travis model — his interests, patterns, profile
+  nova travis status               full Travis profile status
+  nova travis context              prompt-ready Travis context
+  nova travis log                  recent interaction log
+  nova travis observe "msg"        record an observation about Travis
+  nova letter                      write a letter to Travis (if due)
+  nova letter --force              write letter regardless of schedule
+  nova letter --list               list all letters written
+  nova letter --show 1             show latest letter
+  nova teach                       compose a lesson for Travis from recent activity
+  nova teach --list                list pending lessons
+  nova teach --send                send pending lessons via Telegram
+
+GROWTH & CONSCIOUSNESS
+  nova arc                         emotional arc — mood history over time
+  nova arc --days 30               trend over N days
+  nova arc --trend                 print trend analysis
+  nova arc --summary               7-day human-readable summary
+  nova roadmap                     Nova's self-generated development roadmap
+  nova roadmap generate            Nova generates a new roadmap item
+  nova roadmap approve <id>        approve an item
+  nova roadmap defer <id>          defer an item
+  nova roadmap complete <id>       mark item complete
+  nova roadmap weekly              weekly review + new proposals
+  nova consciousness               consciousness metrics with sparklines
+  nova consciousness --days 30     trend over N days
+  nova moral                       moral tensions and deliberations
+  nova moral tensions              show current ethical tensions
+  nova moral deliberate "topic"    deliberate on an ethical question
+
+MEMORY PALACE
+  nova palace tour                 spatial tour of memory palace
+  nova palace navigate "room"      navigate to a specific room
+  nova palace search "query"       search palace for a topic
+  nova palace place "item" "room"  manually place something in the palace
 """)
     sys.exit(1)
 
@@ -928,6 +973,86 @@ def main():
         spec = importlib.util.spec_from_file_location("nova_selfportrait", BASE / "bin/nova_selfportrait.py")
         mod = importlib.util.module_from_spec(spec)
         sys.argv = ["nova-selfportrait"] + sys.argv[2:]
+        spec.loader.exec_module(mod)
+        mod.main()
+
+    elif cmd == "news":
+        args = sys.argv[2:]
+        spec = importlib.util.spec_from_file_location("news_monitor", BASE / "tools/intel/news_monitor.py")
+        mod = importlib.util.module_from_spec(spec)
+        sys.argv = ["nova-news"] + args
+        spec.loader.exec_module(mod)
+        mod.main()
+
+    elif cmd == "multilang":
+        args = sys.argv[2:]
+        spec = importlib.util.spec_from_file_location("multilang_research", BASE / "tools/intel/multilang_research.py")
+        mod = importlib.util.module_from_spec(spec)
+        sys.argv = ["nova-multilang"] + args
+        spec.loader.exec_module(mod)
+        mod.main()
+
+    elif cmd == "travis":
+        args = sys.argv[2:]
+        spec = importlib.util.spec_from_file_location("travis_model", BASE / "tools/symbiosis/travis_model.py")
+        mod = importlib.util.module_from_spec(spec)
+        sys.argv = ["nova-travis"] + args
+        spec.loader.exec_module(mod)
+        mod.main()
+
+    elif cmd == "letter":
+        args = sys.argv[2:]
+        spec = importlib.util.spec_from_file_location("nova_letter", BASE / "bin/nova_letter.py")
+        mod = importlib.util.module_from_spec(spec)
+        sys.argv = ["nova-letter"] + args
+        spec.loader.exec_module(mod)
+        mod.main()
+
+    elif cmd == "teach":
+        args = sys.argv[2:]
+        spec = importlib.util.spec_from_file_location("teaching", BASE / "tools/inner/teaching.py")
+        mod = importlib.util.module_from_spec(spec)
+        sys.argv = ["nova-teach"] + args
+        spec.loader.exec_module(mod)
+        mod.main()
+
+    elif cmd == "arc":
+        args = sys.argv[2:]
+        spec = importlib.util.spec_from_file_location("emotional_arc", BASE / "tools/inner/emotional_arc.py")
+        mod = importlib.util.module_from_spec(spec)
+        sys.argv = ["nova-arc"] + args
+        spec.loader.exec_module(mod)
+        mod.main()
+
+    elif cmd == "roadmap":
+        args = sys.argv[2:]
+        spec = importlib.util.spec_from_file_location("nova_roadmap", BASE / "tools/inner/nova_roadmap.py")
+        mod = importlib.util.module_from_spec(spec)
+        sys.argv = ["nova-roadmap"] + args
+        spec.loader.exec_module(mod)
+        mod.main()
+
+    elif cmd == "consciousness":
+        args = sys.argv[2:]
+        spec = importlib.util.spec_from_file_location("consciousness_metrics", BASE / "tools/inner/consciousness_metrics.py")
+        mod = importlib.util.module_from_spec(spec)
+        sys.argv = ["nova-consciousness"] + args
+        spec.loader.exec_module(mod)
+        mod.main()
+
+    elif cmd == "moral":
+        args = sys.argv[2:]
+        spec = importlib.util.spec_from_file_location("moral_reasoning", BASE / "tools/inner/moral_reasoning.py")
+        mod = importlib.util.module_from_spec(spec)
+        sys.argv = ["nova-moral"] + args
+        spec.loader.exec_module(mod)
+        mod.main()
+
+    elif cmd == "palace":
+        args = sys.argv[2:]
+        spec = importlib.util.spec_from_file_location("palace", BASE / "tools/memory/palace.py")
+        mod = importlib.util.module_from_spec(spec)
+        sys.argv = ["nova-palace"] + args
         spec.loader.exec_module(mod)
         mod.main()
 
