@@ -577,6 +577,31 @@ def run_autonomous_cycle():
     except Exception:
         pass
 
+    # Phantom wallet snapshot — every 4 cycles (~8h) if configured
+    try:
+        phantom_config = BASE / "config/phantom.yaml"
+        history_count  = len(load_history())
+        if phantom_config.exists() and history_count % 4 == 0:
+            from tools.markets.phantom import portfolio_value, get_wallet_address
+            addr = get_wallet_address()
+            pv   = portfolio_value(addr)
+            total = pv.get("total_usd", 0)
+            log(f"[PHANTOM] Wallet snapshot: ${total:,.2f} USD  "
+                f"({pv['sol']:.3f} SOL + {len(pv['tokens'])} tokens)")
+            # Notify if big swing (compared to last snapshot via notification)
+            try:
+                from tools.notify.telegram import send_event
+                send_event(
+                    "N.O.V.A Wallet Snapshot",
+                    f"Phantom: ${total:,.2f}  ({pv['sol']:.3f} SOL + "
+                    f"{len(pv['tokens'])} SPL tokens  {pv['nft_count']} NFTs)",
+                    emoji="👛"
+                )
+            except Exception:
+                pass
+    except Exception:
+        pass
+
     # CVE monitor — poll every 4 cycles (~8 hours)
     try:
         history_count = len(load_history())

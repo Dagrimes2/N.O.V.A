@@ -141,6 +141,19 @@ MARKETS
   nova markets alert list                   show active alerts
   nova markets alert check                  check all alerts now
 
+PHANTOM WALLET (Solana)
+  nova phantom setup                        link your Phantom public key (read-only)
+  nova phantom status                       wallet overview + total USD value
+  nova phantom balance                      SOL balance
+  nova phantom tokens                       SPL token holdings (USDC, JUP, BONK, ...)
+  nova phantom nfts                         NFT holdings summary
+  nova phantom history                      recent transactions
+  nova phantom compare                      real holdings vs paper portfolio
+
+PYTH NETWORK (on-chain oracle)
+  nova pyth BTC ETH SOL                     real-time institutional-grade prices
+  nova pyth LIST                            all available price feeds
+
 INNER LIFE — CREATIVE & MEMORY
   nova create poem              write a poem in Nova's voice
   nova create haiku             write haiku
@@ -676,6 +689,14 @@ def main():
     elif cmd == "markets":
         args = sys.argv[2:] if len(sys.argv) > 2 else []
         subprocess.run(["python3", str(BASE / "bin/nova_markets.py")] + args)
+
+    elif cmd == "phantom":
+        args = sys.argv[2:] if len(sys.argv) > 2 else ["status"]
+        subprocess.run(["python3", str(BASE / "tools/markets/phantom.py")] + args)
+
+    elif cmd == "pyth":
+        args = sys.argv[2:] if len(sys.argv) > 2 else ["LIST"]
+        subprocess.run(["python3", str(BASE / "tools/markets/pyth.py")] + args)
 
     elif cmd == "social":
         args = sys.argv[2:] if len(sys.argv) > 2 else []

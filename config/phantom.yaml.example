@@ -1,0 +1,22 @@
+# N.O.V.A Phantom Wallet Configuration
+# Copy to config/phantom.yaml and fill in your wallet address.
+#
+# IMPORTANT: Only your PUBLIC key goes here.
+# Nova never needs your seed phrase or private key.
+# Your public key is safe to share — it only allows reading, not spending.
+#
+# To find your public key:
+#   1. Open Phantom
+#   2. Click your wallet name at the top
+#   3. Copy the displayed address (~44 characters)
+#
+# Or run: nova phantom setup
+
+# Your Phantom wallet public address
+address: ""
+
+# Solana RPC endpoint (free options):
+#   https://api.mainnet-beta.solana.com   — official (rate limited)
+#   https://rpc.ankr.com/solana           — Ankr free tier (better rate limits)
+#   https://solana-mainnet.g.alchemy.com/v2/YOUR_KEY  — Alchemy (best, free tier)
+rpc_url: https://api.mainnet-beta.solana.com

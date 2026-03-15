@@ -20,6 +20,7 @@ memory/graphql_findings.json
 config/telegram.yaml
 config/mastodon.yaml
 config/quantum.yaml
+config/phantom.yaml
 
 # Autonomous runtime data (large, generated)
 memory/research/

@@ -96,6 +96,18 @@ def analyze_asset(symbol: str, asset_type: str = "auto", horizon: int = 7) -> di
         print(f"  {R}[{sym}] Data unavailable: {price_data.get('error','')}{NC}")
         return None
 
+    # Augment with Pyth oracle price if available (more accurate for Solana tokens)
+    try:
+        from tools.markets.pyth import get_pyth_price, PYTH_FEED_IDS
+        if sym in PYTH_FEED_IDS:
+            pyth_info = get_pyth_price(sym)
+            if pyth_info.get("price", 0) > 0 and pyth_info.get("age_seconds", 999) < 120:
+                price_data["price_usd"]   = pyth_info["price"]
+                price_data["pyth_conf"]   = pyth_info.get("conf", 0)
+                price_data["price_source"] = "pyth"
+    except Exception:
+        pass
+
     # Technical analysis
     tech = tech_analyze(df)
 

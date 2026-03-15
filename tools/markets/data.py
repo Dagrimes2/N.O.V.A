@@ -37,10 +37,17 @@ TTL = {
 }
 
 CRYPTO_IDS = {
-    "BTC":  "bitcoin",   "ETH":  "ethereum",   "SOL":  "solana",
-    "BNB":  "binancecoin", "XRP": "ripple",     "DOGE": "dogecoin",
-    "ADA":  "cardano",   "AVAX": "avalanche-2", "DOT":  "polkadot",
-    "LINK": "chainlink", "MATIC":"matic-network","UNI":  "uniswap",
+    "BTC":  "bitcoin",      "ETH":  "ethereum",      "SOL":  "solana",
+    "BNB":  "binancecoin",  "XRP":  "ripple",         "DOGE": "dogecoin",
+    "ADA":  "cardano",      "AVAX": "avalanche-2",    "DOT":  "polkadot",
+    "LINK": "chainlink",    "MATIC":"matic-network",   "UNI":  "uniswap",
+    # Solana ecosystem (Phantom wallet tokens)
+    "JUP":  "jupiter-exchange-solana",
+    "BONK": "bonk",
+    "WIF":  "dogwifcoin",
+    "ORCA": "orca",
+    "RAY":  "raydium",
+    "MSOL": "msol",
 }
 
 

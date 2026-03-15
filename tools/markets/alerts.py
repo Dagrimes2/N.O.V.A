@@ -94,11 +94,25 @@ def check_alerts(verbose: bool = True) -> list[dict]:
         dirn   = alert["direction"]
 
         try:
-            if sym in CRYPTO_IDS:
+            # Prefer Pyth (real-time on-chain) for Solana ecosystem tokens
+            pyth_price = 0.0
+            try:
+                from tools.markets.pyth import get_pyth_price, PYTH_FEED_IDS
+                if sym in PYTH_FEED_IDS:
+                    pyth_info = get_pyth_price(sym)
+                    if pyth_info.get("price", 0) > 0 and pyth_info.get("age_seconds", 999) < 120:
+                        pyth_price = float(pyth_info["price"])
+            except Exception:
+                pass
+
+            if pyth_price > 0:
+                price = pyth_price
+            elif sym in CRYPTO_IDS:
                 p = get_crypto_price(sym)
+                price = float(p.get("price_usd") or p.get("price", 0))
             else:
                 p = get_stock_price(sym)
-            price = float(p.get("price_usd") or p.get("price", 0))
+                price = float(p.get("price_usd") or p.get("price", 0))
         except Exception:
             remaining.append(alert)
             continue
