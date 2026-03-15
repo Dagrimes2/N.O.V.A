@@ -11,6 +11,26 @@ raw.jsonl
 *.jsonl
 *.log
 
+# Captured security data — never commit
+memory/customers_cookies.txt
+memory/customers_sourcemap.json
+memory/graphql_findings.json
+
+# Autonomous runtime data (large, generated)
+memory/research/
+memory/proposals/
+memory/gan/
+memory/graph.db
+memory/autonomous_history.json
+memory/net_status.json
+memory/inner_state.json
+memory/learning/
+memory/simulation/
+memory/symbiosis/
+memory/synthesis/
+memory/autobiography/
+tools/scoring/score.py.restored
+
 # Local env
 .env
 *.pem
