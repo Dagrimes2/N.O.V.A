@@ -572,6 +572,10 @@ def main():
         args = sys.argv[2:] if len(sys.argv) > 2 else []
         subprocess.run(["python3", str(BASE / "bin/nova_agents.py")] + args)
 
+    elif cmd == "simulate":
+        args = sys.argv[2:] if len(sys.argv) > 2 else []
+        subprocess.run(["python3", str(BASE / "bin/nova_simulate.py")] + args)
+
     elif cmd == "storage":
         args = sys.argv[2:] if len(sys.argv) > 2 else []
         subprocess.run(["python3", str(BASE / "tools/storage/pi_storage.py")] + args)
