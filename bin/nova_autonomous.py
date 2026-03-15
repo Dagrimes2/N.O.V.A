@@ -152,20 +152,32 @@ def decide_next_task(history: list) -> dict:
     if len(recent_actions) >= 3 and len(set(recent_actions[-3:])) == 1:
         forced_exclude = f"\nYou have done '{recent_actions[-1]}' 3 times in a row. You MUST choose a different action type this time."
 
+    # Tick inner state and inject into prompt
+    inner_context = ""
+    try:
+        from tools.inner.inner_state import InnerState
+        _inner = InnerState()
+        _inner.tick()
+        inner_context = f"\nInner state: {_inner.to_prompt_context()}"
+        emotional_state["dominant_feeling"] = _inner.snapshot().get("mood_label", "curious")
+    except Exception:
+        pass
+
     # Inject episodic memory context
     episode_context = ""
     try:
         from tools.learning.episodic_memory import emotional_context, emotional_summary
         episode_context = f"\nRecent experiences:\n{emotional_context(n=4)}"
-        es = emotional_summary()
-        emotional_state["dominant_feeling"] = es.get("dominant_emotion", "curious")
+        if not emotional_state.get("dominant_feeling"):
+            es = emotional_summary()
+            emotional_state["dominant_feeling"] = es.get("dominant_emotion", "curious")
     except Exception:
         pass
 
     # Inject learning stats — what signals are working
     learning_hint = ""
     try:
-        from tools.learning.outcome_tracker import learning_stats, get_all_weights
+        from tools.learning.outcome_tracker import learning_stats
         stats = learning_stats()
         if stats["total"] > 0:
             acc = f"{stats['accuracy']:.0%}" if stats["accuracy"] else "n/a"
@@ -190,6 +202,7 @@ Your current state:
 - Active bug bounty program: {program}
 - Emotional state: curious={curious}/10, restless={restless}/10, feeling={emotional_state.get('dominant_feeling','curious')}
 - Recent memory: {memory[:200]}
+{inner_context}
 {cooldown_hint}
 {watchlist_hint}
 {forced_exclude}

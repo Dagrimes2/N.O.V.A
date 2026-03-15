@@ -87,6 +87,15 @@ def _update_weights(signals: list[str], outcome_value: float):
 
 # ── Episodic memory bridge ────────────────────────────────────────────────────
 
+def _reinforce_instinct(signals: list[str], outcome: str):
+    """Propagate outcome to instinct layer — closes the feedback loop."""
+    try:
+        from tools.inner.instinct import reinforce
+        reinforce(signals, outcome)
+    except Exception:
+        pass
+
+
 def _record_episode(outcome_id: str, host: str, signals: list, outcome: str,
                     confidence: float, note: str):
     """Push significant outcomes into episodic memory."""
@@ -178,6 +187,7 @@ def mark_outcome(outcome_id: str, outcome: str, note: str = "") -> bool:
         OUTCOMES_FILE.write_text("\n".join(new_lines) + "\n")
         value = VALID_OUTCOMES[outcome]
         _update_weights(signals, value)
+        _reinforce_instinct(signals, outcome)
         _record_episode(outcome_id, host, signals, outcome, confidence, note)
 
     return updated

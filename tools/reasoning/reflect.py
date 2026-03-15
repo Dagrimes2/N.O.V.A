@@ -31,6 +31,23 @@ def reflect(record: dict) -> dict:
     signals = record.get("signals", [])
     top_hyp = hyps[0].get("title", "none") if hyps else "none"
 
+    # ── Instinct gate — check before calling LLM ──────────────────────────────
+    try:
+        from tools.inner.instinct import check_finding
+        instinct_result = check_finding(record)
+        if instinct_result and instinct_result.get("instinct", {}).get("source") == "strong_instinct":
+            # Strong instinct fires — skip LLM, return immediately
+            # Still tick inner state for the act
+            try:
+                from tools.inner.inner_state import InnerState
+                InnerState().satisfy("purpose", 0.3)
+            except Exception:
+                pass
+            return instinct_result
+    except Exception:
+        pass
+    # ─────────────────────────────────────────────────────────────────────────
+
     prompt = f"""You are a security researcher triaging a finding.
 
 Target: {host}{path}

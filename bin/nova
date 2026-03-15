@@ -93,6 +93,15 @@ MULTI-AGENT
   nova agents bus [N]              show recent message bus entries
   nova agents clear                clear completed agent history
 
+INNER LIFE
+  nova feel status                 current mood, valence, arousal, needs
+  nova feel tick [--action TYPE]   advance one cycle (builds needs with time)
+  nova feel satisfy NEED AMOUNT    manually satisfy a need (0.0-1.0)
+  nova feel tone "message"         read emotional tone, adjust empathically
+  nova feel context                prompt-ready inner state narrative
+  nova feel instincts              show all learned instincts
+  nova feel check signal1 signal2  check signals against instinct layer
+
 LEARNING & MEMORY
   nova learn stats                 accuracy, confirmed vs false positives
   nova learn weights               learned signal confidence (Bayesian)
@@ -556,6 +565,16 @@ def main():
     elif cmd == "agents":
         args = sys.argv[2:] if len(sys.argv) > 2 else []
         subprocess.run(["python3", str(BASE / "bin/nova_agents.py")] + args)
+
+    elif cmd == "feel":
+        sub = sys.argv[2] if len(sys.argv) > 2 else "status"
+        rest = sys.argv[3:] if len(sys.argv) > 3 else []
+        if sub == "instincts":
+            subprocess.run(["python3", str(BASE / "tools/inner/instinct.py"), "list"])
+        elif sub == "check":
+            subprocess.run(["python3", str(BASE / "tools/inner/instinct.py"), "check"] + rest)
+        else:
+            subprocess.run(["python3", str(BASE / "tools/inner/inner_state.py"), sub] + rest)
 
     elif cmd == "learn":
         sub = sys.argv[2] if len(sys.argv) > 2 else "stats"
